@@ -1,0 +1,44 @@
+{
+  "type": "module",
+  "name": "typescript-telegram-bot-api",
+  "version": "0.1.1",
+  "description": "typescript-telegram-bot-api",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint 'src/**/*.ts'",
+    "format": "prettier --write 'src/**/*.ts'",
+    "format:check": "prettier --check 'src/**/*.ts'",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.14.2",
+    "dotenv": "^16.4.5",
+    "eslint": "^8.57.0",
+    "prettier": "^3.3.2",
+    "ts-jest": "^29.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.13.0"
+  },
+  "dependencies": {
+    "form-data": "^4.0.0"
+  },
+  "jest": {
+    "preset": "ts-jest"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "directories": {
+    "test": "tests"
+  }
+}
