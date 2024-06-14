@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { createReadStream } from 'fs';
+import { readFile } from 'fs/promises';
 import { TelegramBot } from '../src';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
@@ -208,12 +209,22 @@ describe('.sendPhoto()', () => {
     ).resolves.toHaveProperty('photo');
   });
 
-  it('should send photo from file', async () => {
+  it('should send photo from stream', async () => {
     await expect(
       bot.sendPhoto({
         chat_id: USERID,
         photo: createReadStream('tests/data/photo.jpg'),
-        caption: 'Photo from file (ReadStream)',
+        caption: 'Photo from stream',
+      }),
+    ).resolves.toHaveProperty('photo');
+  });
+
+  it('should send photo from buffer', async () => {
+    await expect(
+      bot.sendPhoto({
+        chat_id: USERID,
+        photo: await readFile('tests/data/photo.jpg'),
+        caption: 'Photo from buffer',
       }),
     ).resolves.toHaveProperty('photo');
   });

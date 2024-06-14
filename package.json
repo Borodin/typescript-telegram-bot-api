@@ -7,9 +7,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "lint": "eslint 'src/**/*.ts'",
-    "format": "prettier --write 'src/**/*.ts'",
-    "format:check": "prettier --check 'src/**/*.ts'",
+    "lint": "eslint '{src,tests}/**/*.ts'",
+    "format": "prettier --write '{src,tests}/**/*.ts'",
+    "format:check": "prettier --check '{src,tests}/**/*.ts'",
     "build": "tsc"
   },
   "keywords": [],
