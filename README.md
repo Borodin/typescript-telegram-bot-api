@@ -1,4 +1,11 @@
-# typescript-telegram-bot-api
+# 📦 typescript-telegram-bot-api
+[![CI](https://github.com/Borodin/typescript-telegram-bot-api/actions/workflows/ci.yml/badge.svg)](https://github.com/Borodin/typescript-telegram-bot-api/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
+[![npm](https://img.shields.io/npm/dt/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
+[![GitHub](https://img.shields.io/badge/Bot_API-v7.4-0088cc)](https://core.telegram.org/bots/api#may-28-2024)
+
+
+
 This is a TypeScript wrapper for the [Telegram Bot API](https://core.telegram.org/bots/api). It allows you to easily interact with the Telegram Bot API using TypeScript.
 
 ## Installation
@@ -75,4 +82,4 @@ npm test
 ```
 CI/CD is set up with GitHub Actions. Tests and linters are run on every pull request.
 
-If you want to run tests locally, follow the instructions in [tests/README.md](tests/README.md).
+If you want to run tests locally, follow the instructions in [tests/README.md](tests/).

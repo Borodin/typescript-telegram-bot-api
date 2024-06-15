@@ -1,8 +1,9 @@
 {
   "type": "module",
   "name": "typescript-telegram-bot-api",
-  "version": "0.1.1",
-  "description": "typescript-telegram-bot-api",
+  "version": "0.1.2",
+  "description": "Telegram Bot API wrapper for Node.js written in TypeScript",
+  "repository": "github:Borodin/typescript-telegram-bot-api",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -12,8 +13,17 @@
     "format:check": "prettier --check '{src,tests}/**/*.ts'",
     "build": "tsc"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "telegram",
+    "bot",
+    "api",
+    "typescript"
+  ],
+  "author": {
+    "name": "Maxim Borodin",
+    "email": "hi@maximborodin.ru",
+    "url": "https://maximborodin.ru"
+  },
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.4.0",
