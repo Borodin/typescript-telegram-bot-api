@@ -5,6 +5,6 @@ export type VideoNote = {
   file_unique_id: string;
   length: number;
   duration: number;
-  thumb?: PhotoSize;
+  thumbnail?: PhotoSize;
   file_size?: number;
 };

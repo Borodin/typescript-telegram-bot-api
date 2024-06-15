@@ -1391,7 +1391,10 @@ export class TelegramBot extends EventEmitter {
    * Use this method to change the bot's name. Returns True on success.
    * @see https://core.telegram.org/bots/api#setmyname
    */
-  async setMyName(options: { name: string }): Promise<true> {
+  async setMyName(options: {
+    name?: string;
+    language_code?: string;
+  }): Promise<true> {
     return await this.callApi('setMyName', options);
   }
 
