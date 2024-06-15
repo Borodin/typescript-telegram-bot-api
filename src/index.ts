@@ -765,8 +765,8 @@ export class TelegramBot extends EventEmitter {
   async setMessageReaction(options: {
     chat_id: number | string;
     message_id: number;
-    reaction: ReactionType[];
-    is_big: boolean;
+    reaction?: ReactionType[];
+    is_big?: boolean;
   }): Promise<true> {
     return await this.callApi('setMessageReaction', {
       ...options,
