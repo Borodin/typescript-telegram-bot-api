@@ -375,7 +375,7 @@ export class TelegramBot extends EventEmitter {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): Promise<MessageId> {
+  }): Promise<Message> {
     return await this.callApi('sendAudio', {
       ...options,
       caption_entities: JSON.stringify(options.caption_entities),
@@ -406,7 +406,7 @@ export class TelegramBot extends EventEmitter {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): Promise<MessageId> {
+  }): Promise<Message> {
     return await this.callApi('sendDocument', {
       ...options,
       caption_entities: JSON.stringify(options.caption_entities),
@@ -443,7 +443,7 @@ export class TelegramBot extends EventEmitter {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): Promise<MessageId> {
+  }): Promise<Message> {
     return await this.callApi('sendVideo', {
       ...options,
       caption_entities: JSON.stringify(options.caption_entities),
@@ -479,7 +479,7 @@ export class TelegramBot extends EventEmitter {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): Promise<MessageId> {
+  }): Promise<Message> {
     return await this.callApi('sendAnimation', {
       ...options,
       caption_entities: JSON.stringify(options.caption_entities),
@@ -510,7 +510,7 @@ export class TelegramBot extends EventEmitter {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): Promise<MessageId> {
+  }): Promise<Message> {
     return await this.callApi('sendVoice', {
       ...options,
       caption_entities: JSON.stringify(options.caption_entities),
@@ -540,7 +540,7 @@ export class TelegramBot extends EventEmitter {
       | ReplyKeyboardMarkup
       | ReplyKeyboardRemove
       | ForceReply;
-  }): Promise<MessageId> {
+  }): Promise<Message> {
     return await this.callApi('sendVideoNote', {
       ...options,
       reply_markup: JSON.stringify(options.reply_markup),
@@ -1413,7 +1413,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#setmydescription
    */
   async setMyDescription(options: {
-    description: string;
+    description?: string;
     language_code?: string;
   }): Promise<true> {
     return await this.callApi('setMyDescription', options);
@@ -1436,7 +1436,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#setmyshortdescription
    */
   async setMyShortDescription(options: {
-    short_description: string;
+    short_description?: string;
     language_code?: string;
   }): Promise<true> {
     return await this.callApi('setMyShortDescription', options);
