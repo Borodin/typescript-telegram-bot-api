@@ -5,6 +5,7 @@
     "rootDir": "./src",
     "types": ["node", "jest"],
     "moduleResolution": "node",
+    "module": "ESNext",
     "target": "esnext",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
