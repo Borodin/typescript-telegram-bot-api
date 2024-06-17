@@ -11,7 +11,7 @@
     "lint": "eslint '{src,tests}/**/*.ts'",
     "format": "prettier --write '{src,tests}/**/*.ts'",
     "format:check": "prettier --check '{src,tests}/**/*.ts'",
-    "build": "tsc && rename 's/\\.js$/.mjs/' dist/**/*.js"
+    "build": "tsc && find dist -type f -name '*.js' -exec sh -c 'mv \"$0\" \"${0%.js}.mjs\"' {} \\;"
   },
   "keywords": [
     "telegram",
