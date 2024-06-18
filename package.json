@@ -1,7 +1,7 @@
 {
-  "type": "module",
+  "type": "commonjs",
   "name": "typescript-telegram-bot-api",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Telegram Bot API wrapper for Node.js written in TypeScript",
   "repository": "github:Borodin/typescript-telegram-bot-api",
   "main": "dist/index.js",
@@ -11,8 +11,12 @@
     "lint": "eslint '{src,tests}/**/*.ts'",
     "format": "prettier --write '{src,tests}/**/*.ts'",
     "format:check": "prettier --check '{src,tests}/**/*.ts'",
-    "build": "tsc --module commonjs"
+    "build": "tsc"
   },
+  "pre-commit": [
+    "lint",
+    "format"
+  ],
   "keywords": [
     "telegram",
     "bot",
