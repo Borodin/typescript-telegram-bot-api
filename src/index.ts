@@ -55,6 +55,7 @@ import {
   ErrorResponse,
   ParseMode,
   Response,
+  EventTypes,
 } from './types/';
 
 import { TelegramError } from './errors';
@@ -1992,7 +1993,7 @@ export class TelegramBot extends EventEmitter {
     prices: LabeledPrice[];
     max_tip_amount?: number;
     suggested_tip_amounts?: number[];
-    provider_data: string;
+    provider_data?: string;
     photo_url?: string;
     photo_size?: number;
     photo_width?: number;
@@ -2129,5 +2130,19 @@ export class TelegramBot extends EventEmitter {
     ),
   ): Promise<GameHighScore[]> {
     return await this.callApi('getGameHighScores', options);
+  }
+
+  on<U extends keyof EventTypes>(
+    event: U,
+    listener: (eventData: NonNullable<EventTypes[U]>) => void,
+  ): this {
+    return super.on(event, listener) as this;
+  }
+
+  emit<U extends keyof EventTypes>(
+    event: U,
+    eventData: NonNullable<EventTypes[U]>,
+  ): boolean {
+    return super.emit(event, eventData);
   }
 }

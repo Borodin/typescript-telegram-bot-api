@@ -1,5 +1,5 @@
 import { TelegramBot } from './index';
-import { UpdateType, UpdateTypeMap } from './types/';
+import { UpdateType, EventTypes } from './types/';
 
 export class Polling {
   private readonly abortController = new AbortController();
@@ -22,9 +22,15 @@ export class Polling {
           this.abortController,
         );
         for (const update of updates) {
-          (Object.keys(UpdateTypeMap) as UpdateType[]).forEach((key) => {
-            if (update[key]) {
-              this.telegramBot.emit(key, update[key]);
+          Object.keys(update).forEach((key) => {
+            if (key !== 'update_id') {
+              const eventType = key as keyof EventTypes;
+              const eventData = update[
+                eventType
+              ] as EventTypes[typeof eventType];
+              if (eventData !== undefined) {
+                this.telegramBot.emit(eventType, eventData);
+              }
             }
           });
           this.offset = update.update_id + 1;

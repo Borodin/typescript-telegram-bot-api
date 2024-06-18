@@ -234,7 +234,7 @@ describe('.sendPhoto()', () => {
       bot.sendPhoto({
         chat_id: USERID,
         photo:
-          'AgACAgIAAxkDAAIF62Zq431wDZn6ddGJauzr35UDnc0eAAKf2zEbWP1YSw7ya9P-Yhl_AQADAgADcwADNQQ',
+          'AgACAgIAAxkDAAM1ZnG8LabTxno661-KX9W17Je_uekAArXgMRtNXZFLifTnv9tqCs8BAAMCAANzAAM1BA',
         caption: 'Photo from file_id',
       }),
     ).resolves.toHaveProperty('photo');
@@ -274,7 +274,7 @@ describe('.sendAudio()', () => {
       bot.sendAudio({
         chat_id: USERID,
         audio:
-          'CQACAgIAAxkDAAIGEWZq5cLttqeK39P50aO9SKAJHLXrAAKeSwACWP1YS2NlPag2z37fNQQ',
+          'CQACAgIAAxkDAAOBZnG8knE9iWcIt2j3iRMZfmw1OLMAAilRAAJNXZFLlcKgtkw7etQ1BA',
         caption: 'Audio from file_id',
       }),
     ).resolves.toHaveProperty('audio');
@@ -532,7 +532,7 @@ describe('.getFile()', () => {
     await expect(
       bot.getFile({
         file_id:
-          'AgACAgIAAxkDAAIF62Zq431wDZn6ddGJauzr35UDnc0eAAKf2zEbWP1YSw7ya9P-Yhl_AQADAgADcwADNQQ',
+          'AgACAgIAAxkDAAM1ZnG8LabTxno661-KX9W17Je_uekAArXgMRtNXZFLifTnv9tqCs8BAAMCAANzAAM1BA',
       }),
     ).resolves.toHaveProperty('file_unique_id');
   });
