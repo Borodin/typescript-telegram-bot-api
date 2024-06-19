@@ -17,7 +17,16 @@ export class Polling {
     private readonly allowedUpdates: UpdateType[],
   ) {}
 
-  private emit(update: Update) {
+
+  private emitMessage(message: Message) {
+    messageTypes.forEach((key) => {
+      if (key in message) {
+        this.telegramBot.emit(key as keyof MessageTypes, message);
+      }
+    });
+  }
+
+  private emitUpdate(update: Update) {
     Object.keys(update).forEach((key) => {
       if (key !== 'update_id' && key !== 'poll') {
         const eventType = key as Exclude<keyof EventTypes, 'poll'>;
@@ -25,14 +34,7 @@ export class Polling {
         if (eventData !== undefined) {
           this.telegramBot.emit(eventType, eventData);
           if (eventType === 'message') {
-            const message = eventData as Message;
-            for (const messageType of Object.keys(messageTypes)) {
-              if (messageType in message)
-                this.telegramBot.emit(
-                  messageType as keyof MessageTypes,
-                  message,
-                );
-            }
+            this.emitMessage(eventData as Message);
           }
         }
       }
@@ -51,7 +53,7 @@ export class Polling {
           this.abortController,
         );
         for (const update of updates) {
-          this.emit(update);
+          this.emitUpdate(update);
           this.offset = update.update_id + 1;
         }
       } catch (error) {
