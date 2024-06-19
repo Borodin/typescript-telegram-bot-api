@@ -1,5 +1,12 @@
 import { TelegramBot } from './index';
-import { UpdateType, EventTypes } from './types/';
+import {
+  UpdateType,
+  EventTypes,
+  Message,
+  messageTypes,
+  MessageTypes,
+  Update,
+} from './types/';
 
 export class Polling {
   private readonly abortController = new AbortController();
@@ -9,6 +16,28 @@ export class Polling {
     private readonly telegramBot: TelegramBot,
     private readonly allowedUpdates: UpdateType[],
   ) {}
+
+  private emit(update: Update) {
+    Object.keys(update).forEach((key) => {
+      if (key !== 'update_id' && key !== 'poll') {
+        const eventType = key as Exclude<keyof EventTypes, 'poll'>;
+        const eventData = update[eventType] as EventTypes[typeof eventType];
+        if (eventData !== undefined) {
+          this.telegramBot.emit(eventType, eventData);
+          if (eventType === 'message') {
+            const message = eventData as Message;
+            for (const messageType of Object.keys(messageTypes)) {
+              if (messageType in message)
+                this.telegramBot.emit(
+                  messageType as keyof MessageTypes,
+                  message,
+                );
+            }
+          }
+        }
+      }
+    });
+  }
 
   private async poll() {
     while (!this.abortController.signal.aborted) {
@@ -22,17 +51,7 @@ export class Polling {
           this.abortController,
         );
         for (const update of updates) {
-          Object.keys(update).forEach((key) => {
-            if (key !== 'update_id') {
-              const eventType = key as keyof EventTypes;
-              const eventData = update[
-                eventType
-              ] as EventTypes[typeof eventType];
-              if (eventData !== undefined) {
-                this.telegramBot.emit(eventType, eventData);
-              }
-            }
-          });
+          this.emit(update);
           this.offset = update.update_id + 1;
         }
       } catch (error) {

@@ -56,12 +56,15 @@ import {
   ParseMode,
   Response,
   EventTypes,
+  MessageTypes,
 } from './types/';
 
 import { TelegramError } from './errors';
 import { Polling } from './pooling';
 
 const wait = promisify(setTimeout);
+
+type allEmittedTypes = Omit<EventTypes, 'poll'> & MessageTypes;
 
 export class TelegramBot extends EventEmitter {
   private readonly polling: Polling;
@@ -2132,16 +2135,16 @@ export class TelegramBot extends EventEmitter {
     return await this.callApi('getGameHighScores', options);
   }
 
-  on<U extends keyof EventTypes>(
+  on<U extends keyof allEmittedTypes>(
     event: U,
-    listener: (eventData: NonNullable<EventTypes[U]>) => void,
+    listener: (eventData: NonNullable<allEmittedTypes[U]>) => void,
   ): this {
     return super.on(event, listener) as this;
   }
 
-  emit<U extends keyof EventTypes>(
+  emit<U extends keyof allEmittedTypes>(
     event: U,
-    eventData: NonNullable<EventTypes[U]>,
+    eventData: NonNullable<allEmittedTypes[U]>,
   ): boolean {
     return super.emit(event, eventData);
   }

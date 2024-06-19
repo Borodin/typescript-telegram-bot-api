@@ -135,3 +135,44 @@ export type Message = {
   web_app_data?: WebAppData;
   reply_markup?: InlineKeyboardMarkup;
 };
+
+export const messageTypes = [
+  'text',
+  'animation',
+  'audio',
+  'contact',
+  'dice',
+  'document',
+  'game',
+  'invoice',
+  'location',
+  'passport_data',
+  'photo',
+  'pinned_message',
+  'poll',
+  'sticker',
+  'video',
+  'video_note',
+  'voice',
+  'successful_payment',
+  'migrate_from_chat_id',
+  'migrate_to_chat_id',
+  'new_chat_members',
+  'new_chat_photo',
+  'new_chat_title',
+  'left_chat_member',
+  'delete_chat_photo',
+  'group_chat_created',
+  'supergroup_chat_created',
+  'channel_chat_created',
+  'message_auto_delete_timer_changed',
+  'video_chat_scheduled',
+  'video_chat_started',
+  'video_chat_ended',
+  'video_chat_participants_invited',
+  'web_app_data',
+] as const;
+
+export type MessageTypes = Required<
+  Record<keyof Pick<Message, (typeof messageTypes)[number]>, Message>
+>;
