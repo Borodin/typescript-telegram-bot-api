@@ -7,7 +7,7 @@ export type InputMediaAudio = {
   caption?: string;
   parse_mode?: ParseMode;
   caption_entities?: MessageEntity[];
-  duration: number;
+  duration?: number;
   performer?: string;
   title?: string;
 };
