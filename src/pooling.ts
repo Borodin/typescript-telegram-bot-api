@@ -17,7 +17,6 @@ export class Polling {
     private readonly allowedUpdates: UpdateType[],
   ) {}
 
-
   private emitMessage(message: Message) {
     messageTypes.forEach((key) => {
       if (key in message) {
