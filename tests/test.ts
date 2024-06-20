@@ -60,6 +60,23 @@ describe('.sendMessage()', () => {
     ).resolves.toHaveProperty('text', 'sendMessage');
   });
 
+  it('should send message reply', async () => {
+    const message = await bot.sendMessage({
+      chat_id: USERID,
+      text: 'Original message',
+    });
+
+    await expect(
+      bot.sendMessage({
+        chat_id: USERID,
+        text: 'Reply message',
+        reply_parameters: {
+          message_id: message.message_id,
+        },
+      }),
+    ).resolves.toHaveProperty('text', 'Reply message');
+  });
+
   it('should fail when chat_id is 1', async () => {
     await expect(
       bot.sendMessage({
@@ -341,6 +358,15 @@ describe('.sendVoice()', () => {
       bot.sendVoice({
         chat_id: USERID,
         voice: createReadStream('tests/data/voice.ogg'),
+      }),
+    ).resolves.toHaveProperty('voice');
+  });
+
+  it('should send voice from buffer', async () => {
+    await expect(
+      bot.sendVoice({
+        chat_id: USERID,
+        voice: await readFile('tests/data/voice.ogg'),
       }),
     ).resolves.toHaveProperty('voice');
   });

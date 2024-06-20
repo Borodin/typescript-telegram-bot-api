@@ -2,6 +2,7 @@ import { EventEmitter } from 'events';
 import https from 'https';
 import FormData from 'form-data';
 import { promisify } from 'util';
+import { Readable } from 'stream';
 
 import {
   Update,
@@ -105,22 +106,7 @@ export class TelegramBot extends EventEmitter {
     abortController?: AbortController,
   ): Promise<Response> {
     return new Promise((resolve, reject) => {
-      const formData = new FormData();
-      if (options)
-        Object.keys(options).forEach((key) => {
-          if (options[key] !== undefined) {
-            if (typeof options[key] === 'boolean') {
-              formData.append(key, String(options[key]));
-            } else if (options[key] instanceof Buffer) {
-              formData.append(key, options[key], {
-                filename: 'file',
-                contentType: 'application/octet-stream',
-              });
-            } else {
-              formData.append(key, options[key]);
-            }
-          }
-        });
+      const formData = this.createFormData(options);
       const request = https.request(
         url,
         {
@@ -150,6 +136,33 @@ export class TelegramBot extends EventEmitter {
       });
       formData.pipe(request);
     });
+  }
+
+  private createFormData(options?: Record<string, unknown>): FormData {
+    const formData = new FormData();
+    if (options) {
+      for (const [key, value] of Object.entries(options)) {
+        if (value !== undefined) {
+          if (typeof options[key] === 'boolean') {
+            formData.append(key, String(options[key]));
+          } else if (options[key] instanceof Buffer) {
+            formData.append(key, options[key], {
+              filename: 'file',
+              contentType: 'application/octet-stream',
+            });
+          } else if (
+            typeof options[key] === 'object' &&
+            !Array.isArray(options[key]) &&
+            !(options[key] instanceof Readable)
+          ) {
+            formData.append(key, JSON.stringify(options[key]));
+          } else {
+            formData.append(key, options[key]);
+          }
+        }
+      }
+    }
+    return formData;
   }
 
   private async callApi<T>(
