@@ -2,7 +2,7 @@
 [![CI](https://github.com/Borodin/typescript-telegram-bot-api/actions/workflows/ci.yml/badge.svg)](https://github.com/Borodin/typescript-telegram-bot-api/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
 [![npm](https://img.shields.io/npm/dt/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
-[![GitHub](https://img.shields.io/badge/Bot_API-v7.4-0088cc)](https://core.telegram.org/bots/api#may-28-2024)
+[![GitHub](https://img.shields.io/badge/Bot_API-v7.5-0088cc)](https://core.telegram.org/bots/api#may-28-2024)
 
 
 

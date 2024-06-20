@@ -10,5 +10,6 @@ TEST_GROUP_ID=your_group_id
 
 ```bash
 npm test
-npm lint
+npm run lint
+npm run format:check
 ```

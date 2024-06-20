@@ -62,6 +62,7 @@ import {
 
 import { TelegramError } from './errors';
 import { Polling } from './pooling';
+import { StarTransactions } from './types/StarTransactions';
 
 const wait = promisify(setTimeout);
 
@@ -84,7 +85,7 @@ export class TelegramBot extends EventEmitter {
     this.testEnvironment = options.testEnvironment || false;
     this.botToken = options.botToken;
     this.baseURL = options.baseURL || 'https://api.telegram.org';
-    this.autoRetry = options.autoRetry || true;
+    this.autoRetry = options.autoRetry ?? true;
     this.polling = new Polling(this, []);
   }
 
@@ -105,6 +106,9 @@ export class TelegramBot extends EventEmitter {
     options?: Record<string, unknown>,
     abortController?: AbortController,
   ): Promise<Response> {
+    if (!abortController) {
+      abortController = new AbortController();
+    }
     return new Promise((resolve, reject) => {
       const formData = this.createFormData(options);
       const request = https.request(
@@ -131,6 +135,10 @@ export class TelegramBot extends EventEmitter {
           });
         },
       );
+      formData.on('error', (error) => {
+        abortController.abort();
+        reject(error);
+      });
       request.on('error', (error) => {
         reject(error);
       });
@@ -1202,7 +1210,7 @@ export class TelegramBot extends EventEmitter {
    */
   async editForumTopic(options: {
     chat_id: number | string;
-    message_thread_id: string;
+    message_thread_id: number;
     name?: string;
     icon_custom_emoji_id?: string;
   }): Promise<true> {
@@ -1216,7 +1224,7 @@ export class TelegramBot extends EventEmitter {
    */
   async closeForumTopic(options: {
     chat_id: number | string;
-    message_thread_id: string;
+    message_thread_id: number;
   }): Promise<true> {
     return await this.callApi('closeForumTopic', options);
   }
@@ -1228,7 +1236,7 @@ export class TelegramBot extends EventEmitter {
    */
   async reopenForumTopic(options: {
     chat_id: number | string;
-    message_thread_id: string;
+    message_thread_id: number;
   }): Promise<true> {
     return await this.callApi('reopenForumTopic', options);
   }
@@ -1240,7 +1248,7 @@ export class TelegramBot extends EventEmitter {
    */
   async deleteForumTopic(options: {
     chat_id: number | string;
-    message_thread_id: string;
+    message_thread_id: number;
   }): Promise<true> {
     return await this.callApi('deleteForumTopic', options);
   }
@@ -1252,7 +1260,7 @@ export class TelegramBot extends EventEmitter {
    */
   async unpinAllForumTopicMessages(options: {
     chat_id: number | string;
-    message_thread_id: string;
+    message_thread_id: number;
   }): Promise<true> {
     return await this.callApi('unpinAllForumTopicMessages', options);
   }
@@ -1344,7 +1352,10 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.
    * @see https://core.telegram.org/bots/api#getuserchatboosts
    */
-  async getUserChatBoosts(options: { user_id: number }): Promise<ChatBoost[]> {
+  async getUserChatBoosts(options: {
+    chat_id: number | string;
+    user_id: number;
+  }): Promise<ChatBoost[]> {
     return await this.callApi('getUserChatBoosts', options);
   }
 
@@ -1527,6 +1538,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#editmessagetext
    */
   async editMessageText(options: {
+    business_connection_id?: string;
     chat_id?: number | string;
     message_id?: number;
     inline_message_id?: string;
@@ -1549,6 +1561,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#editmessagecaption
    */
   async editMessageCaption(options: {
+    business_connection_id?: string;
     chat_id?: number | string;
     message_id?: number;
     inline_message_id?: string;
@@ -1571,6 +1584,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
   async editMessageMedia(options: {
+    business_connection_id?: string;
     chat_id?: number | string;
     message_id?: number;
     inline_message_id?: string;
@@ -1590,6 +1604,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#editmessagelivelocation
    */
   async editMessageLiveLocation(options: {
+    business_connection_id?: string;
     chat_id?: number | string;
     message_id?: number;
     inline_message_id?: string;
@@ -1613,6 +1628,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#stopmessagelivelocation
    */
   async stopMessageLiveLocation(options: {
+    business_connection_id?: string;
     chat_id?: number | string;
     message_id?: number;
     inline_message_id?: string;
@@ -1630,6 +1646,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#editmessagereplymarkup
    */
   async editMessageReplyMarkup(options: {
+    business_connection_id?: string;
     chat_id?: number | string;
     message_id?: number;
     inline_message_id?: string;
@@ -1647,6 +1664,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#stoppoll
    */
   async stopPoll(options: {
+    business_connection_id?: string;
     chat_id: number | string;
     message_id: number;
     reply_markup?: InlineKeyboardMarkup;
@@ -2060,6 +2078,18 @@ export class TelegramBot extends EventEmitter {
     ),
   ): Promise<true> {
     return await this.callApi('answerPreCheckoutQuery', options);
+  }
+
+  /**
+   * ## getStarTransactions
+   * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
+   * @see https://core.telegram.org/bots/api#getstartransactions
+   */
+  async getStarTransactions(options: {
+    offset?: number;
+    limit?: number;
+  }): Promise<StarTransactions> {
+    return await this.callApi('getStarTransactions', options);
   }
 
   /**
