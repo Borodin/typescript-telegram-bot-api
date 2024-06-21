@@ -23,6 +23,7 @@ jobs:
         env:
           TEST_TELEGRAM_TOKEN: ${{ secrets.TEST_TELEGRAM_TOKEN }}
           TEST_USER_ID: ${{ secrets.TEST_USER_ID }}
+          TEST_GROUP_MEMBER_ID: ${{ secrets.TEST_GROUP_MEMBER_ID }}
         run: npm test
 
       - name: Lint code
@@ -34,14 +35,14 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Publish to npm
         if: ${{ github.ref == 'refs/heads/main' && success() }}
         run: npm publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
