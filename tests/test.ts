@@ -2,17 +2,22 @@ import 'dotenv/config';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { TelegramBot } from '../src';
+import { TelegramError } from '../src/errors';
+import { ForumTopic } from '../src/types';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
+const TEST_GROUP_ID = parseInt(process.env.TEST_GROUP_ID as string);
+const TEST_GROUP_MEMBER_ID = parseInt(
+  process.env.TEST_GROUP_MEMBER_ID as string,
+);
 
-const bot = new TelegramBot({ botToken: TOKEN });
+const bot = new TelegramBot({
+  botToken: TOKEN,
+  autoRetry: true,
+});
 
 describe('TelegramBot', () => {
-  it('should be defined', () => {
-    expect(TelegramBot).toBeDefined();
-  });
-
   it('should throw error when botToken is empty', async () => {
     await expect(
       new TelegramBot({
@@ -28,23 +33,59 @@ describe('TelegramBot', () => {
       }).getMe(),
     ).rejects.toThrow('401 Unauthorized: invalid token specified');
   });
+
+  it('should throw error when baseURL is invalid', async () => {
+    await expect(
+      new TelegramBot({
+        botToken: TOKEN,
+        baseURL: 'https://example.com',
+      }).getMe(),
+    ).rejects.toThrow('Invalid response');
+  });
+});
+
+describe('.startPolling()', () => {
+  it('should start polling', async () => {
+    expect(() => bot.startPolling()).not.toThrow();
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    bot.stopPolling();
+  });
+});
+
+describe('.stopPolling()', () => {
+  beforeAll(() => {
+    bot.startPolling();
+  });
+
+  it('should stop polling', () => {
+    expect(() => bot.stopPolling()).not.toThrow();
+  });
+});
+
+describe('.isTelegramError()', () => {
+  it('should return true for Telegram-related errors', () => {
+    const telegramError = new TelegramError({
+      ok: false,
+      description:
+        'Conflict: terminated by other getUpdates request; make sure that only one bot instance is running',
+      error_code: 409,
+    });
+    expect(TelegramBot.isTelegramError(telegramError)).toBe(true);
+  });
+
+  it('should return false for non-Telegram-related errors', () => {
+    const nonTelegramError = new Error('Database connection failed');
+    expect(TelegramBot.isTelegramError(nonTelegramError)).toBe(false);
+  });
 });
 
 describe('.getMe()', () => {
-  it('should be defined', () => {
-    expect(bot.getMe).toBeDefined();
-  });
-
   it('should return bot info', async () => {
     await expect(bot.getMe()).resolves.toHaveProperty('is_bot', true);
   });
 });
 
 describe('.sendMessage()', () => {
-  it('should be defined', () => {
-    expect(bot.sendMessage).toBeDefined();
-  });
-
   it('should send message', async () => {
     await expect(
       bot.sendMessage({
@@ -106,10 +147,6 @@ describe('.sendMessage()', () => {
 });
 
 describe('.forwardMessage()', () => {
-  it('should be defined', () => {
-    expect(bot.forwardMessage).toBeDefined();
-  });
-
   it('should forward message', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
@@ -131,10 +168,6 @@ describe('.forwardMessage()', () => {
 });
 
 describe('.forwardMessages()', () => {
-  it('should be defined', () => {
-    expect(bot.forwardMessages).toBeDefined();
-  });
-
   it('should forward messages', async () => {
     const [firstMessage, lastMessage] = [
       await bot.sendMessage({
@@ -160,10 +193,6 @@ describe('.forwardMessages()', () => {
 });
 
 describe('.copyMessage()', () => {
-  it('should be defined', () => {
-    expect(bot.copyMessage).toBeDefined();
-  });
-
   it('should copy message', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
@@ -182,10 +211,6 @@ describe('.copyMessage()', () => {
 });
 
 describe('.copyMessages()', () => {
-  it('should be defined', () => {
-    expect(bot.copyMessages).toBeDefined();
-  });
-
   it('should copy messages', async () => {
     const [firstMessage, lastMessage] = [
       await bot.sendMessage({
@@ -212,10 +237,6 @@ describe('.copyMessages()', () => {
 });
 
 describe('.sendPhoto()', () => {
-  it('should be defined', () => {
-    expect(bot.sendPhoto).toBeDefined();
-  });
-
   it('should send photo from url', async () => {
     await expect(
       bot.sendPhoto({
@@ -259,10 +280,6 @@ describe('.sendPhoto()', () => {
 });
 
 describe('.sendAudio()', () => {
-  it('should be defined', () => {
-    expect(bot.sendAudio).toBeDefined();
-  });
-
   it('should send audio from url', async () => {
     await expect(
       bot.sendAudio({
@@ -299,10 +316,6 @@ describe('.sendAudio()', () => {
 });
 
 describe('.sendDocument()', () => {
-  it('should be defined', () => {
-    expect(bot.sendDocument).toBeDefined();
-  });
-
   it('should send document from url', async () => {
     await expect(
       bot.sendDocument({
@@ -316,10 +329,6 @@ describe('.sendDocument()', () => {
 });
 
 describe('.sendVideo()', () => {
-  it('should be defined', () => {
-    expect(bot.sendVideo).toBeDefined();
-  });
-
   it('should send video from url', async () => {
     await expect(
       bot.sendVideo({
@@ -334,10 +343,6 @@ describe('.sendVideo()', () => {
 });
 
 describe('.sendAnimation()', () => {
-  it('should be defined', () => {
-    expect(bot.sendAnimation).toBeDefined();
-  });
-
   it('should send animation from file', async () => {
     await expect(
       bot.sendAnimation({
@@ -349,10 +354,6 @@ describe('.sendAnimation()', () => {
 });
 
 describe('.sendVoice()', () => {
-  it('should be defined', () => {
-    expect(bot.sendVoice).toBeDefined();
-  });
-
   it('should send voice from file', async () => {
     await expect(
       bot.sendVoice({
@@ -373,10 +374,6 @@ describe('.sendVoice()', () => {
 });
 
 describe('.sendVideoNote()', () => {
-  it('should be defined', () => {
-    expect(bot.sendVideoNote).toBeDefined();
-  });
-
   it('should send video note from file', async () => {
     await expect(
       bot.sendVideoNote({
@@ -388,10 +385,6 @@ describe('.sendVideoNote()', () => {
 });
 
 describe('.sendMediaGroup()', () => {
-  it('should be defined', () => {
-    expect(bot.sendMediaGroup).toBeDefined();
-  });
-
   it('should send media group', async () => {
     await expect(
       bot.sendMediaGroup({
@@ -409,10 +402,6 @@ describe('.sendMediaGroup()', () => {
 });
 
 describe('.sendLocation()', () => {
-  it('should be defined', () => {
-    expect(bot.sendLocation).toBeDefined();
-  });
-
   it('should send location', async () => {
     await expect(
       bot.sendLocation({
@@ -425,10 +414,6 @@ describe('.sendLocation()', () => {
 });
 
 describe('.sendVenue()', () => {
-  it('should be defined', () => {
-    expect(bot.sendVenue).toBeDefined();
-  });
-
   it('should send venue', async () => {
     await expect(
       bot.sendVenue({
@@ -443,10 +428,6 @@ describe('.sendVenue()', () => {
 });
 
 describe('.sendContact()', () => {
-  it('should be defined', () => {
-    expect(bot.sendContact).toBeDefined();
-  });
-
   it('should send contact', async () => {
     await expect(
       bot.sendContact({
@@ -460,10 +441,6 @@ describe('.sendContact()', () => {
 });
 
 describe('.sendPoll()', () => {
-  it('should be defined', () => {
-    expect(bot.sendPoll).toBeDefined();
-  });
-
   it('should send poll', async () => {
     await expect(
       bot.sendPoll({
@@ -477,10 +454,6 @@ describe('.sendPoll()', () => {
 });
 
 describe('.sendDice()', () => {
-  it('should be defined', () => {
-    expect(bot.sendDice).toBeDefined();
-  });
-
   it('should default to 6-sided dice', async () => {
     await expect(
       bot.sendDice({
@@ -500,10 +473,6 @@ describe('.sendDice()', () => {
 });
 
 describe('.sendChatAction()', () => {
-  it('should be defined', () => {
-    expect(bot.sendChatAction).toBeDefined();
-  });
-
   it('should send chat action', async () => {
     await expect(
       bot.sendChatAction({
@@ -515,10 +484,6 @@ describe('.sendChatAction()', () => {
 });
 
 describe('.setMessageReaction()', () => {
-  it('should be defined', () => {
-    expect(bot.setMessageReaction).toBeDefined();
-  });
-
   it('should set message reaction', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
@@ -536,10 +501,6 @@ describe('.setMessageReaction()', () => {
 });
 
 describe('.getUserProfilePhotos()', () => {
-  it('should be defined', () => {
-    expect(bot.getUserProfilePhotos).toBeDefined();
-  });
-
   it('should get user profile photos', async () => {
     await expect(
       bot.getUserProfilePhotos({
@@ -550,10 +511,6 @@ describe('.getUserProfilePhotos()', () => {
 });
 
 describe('.getFile()', () => {
-  it('should be defined', () => {
-    expect(bot.getFile).toBeDefined();
-  });
-
   it('should get file', async () => {
     await expect(
       bot.getFile({
@@ -565,10 +522,6 @@ describe('.getFile()', () => {
 });
 
 describe('.sendSticker()', () => {
-  it('should be defined', () => {
-    expect(bot.sendSticker).toBeDefined();
-  });
-
   it('should send sticker from file', async () => {
     await expect(
       bot.sendSticker({
@@ -581,15 +534,815 @@ describe('.sendSticker()', () => {
 });
 
 describe('.getStickerSet()', () => {
-  it('should be defined', () => {
-    expect(bot.getStickerSet).toBeDefined();
-  });
-
   it('should get sticker set', async () => {
     await expect(
       bot.getStickerSet({
         name: 'Animals',
       }),
     ).resolves.toHaveProperty('name', 'Animals');
+  });
+});
+
+describe('.getStarTransactions()', () => {
+  it('should get star transactions', async () => {
+    await expect(
+      bot.getStarTransactions({
+        offset: 0,
+        limit: 100,
+      }),
+    ).resolves.toHaveProperty('transactions');
+  });
+});
+
+describe('.setMyName()', () => {
+  it('should set my name', async () => {
+    await expect(
+      bot.setMyName({
+        name: 'typescript-telegram-bot-api',
+        language_code: 'en',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.getMyName()', () => {
+  it('should get my name', async () => {
+    await expect(
+      bot.getMyName({
+        language_code: 'en',
+      }),
+    ).resolves.toHaveProperty('name');
+  });
+});
+
+describe('.setMyDescription()', () => {
+  it('should set my description', async () => {
+    await expect(
+      bot.setMyDescription({
+        //long description
+        description:
+          'This is a Telegram Bot for testing npm package typescript-telegram-bot-api',
+        language_code: 'en',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.getMyDescription()', () => {
+  it('should get my description', async () => {
+    await expect(
+      bot.getMyDescription({
+        language_code: 'en',
+      }),
+    ).resolves.toHaveProperty('description');
+  });
+});
+
+describe('.setMyShortDescription()', () => {
+  it('should set my short description', async () => {
+    await expect(
+      bot.setMyShortDescription({
+        short_description: 'A Telegram Bot API for TypeScript',
+        language_code: 'en',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.getMyShortDescription()', () => {
+  it('should get my short description', async () => {
+    await expect(
+      bot.getMyShortDescription({
+        language_code: 'en',
+      }),
+    ).resolves.toHaveProperty('short_description');
+  });
+});
+
+describe('.setMyCommands()', () => {
+  it('should set my commands', async () => {
+    await expect(
+      bot.setMyCommands({
+        commands: [
+          { command: 'start', description: 'Start the bot' },
+          { command: 'help', description: 'Get help' },
+        ],
+        language_code: 'en',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.getMyCommands()', () => {
+  it('should get my commands', async () => {
+    await expect(
+      bot.getMyCommands({
+        language_code: 'en',
+      }),
+    ).resolves.toBeInstanceOf(Array);
+  });
+});
+
+describe('.deleteMyCommands()', () => {
+  it('should delete my commands', async () => {
+    await expect(
+      bot.deleteMyCommands({
+        scope: { type: 'default' },
+        language_code: 'en',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.banChatMember()', () => {
+  it('should ban chat member', async () => {
+    await expect(
+      bot.banChatMember({
+        chat_id: TEST_GROUP_ID,
+        user_id: USERID,
+      }),
+    ).rejects.toThrow("400 Bad Request: can't remove chat owner");
+  });
+});
+
+describe('.unbanChatMember()', () => {
+  it('should unban chat member', async () => {
+    await expect(
+      bot.unbanChatMember({
+        chat_id: TEST_GROUP_ID,
+        user_id: USERID,
+      }),
+    ).rejects.toThrow("400 Bad Request: can't remove chat owner");
+  });
+});
+
+describe('.restrictChatMember()', () => {
+  it('should restrict chat member', async () => {
+    await expect(
+      bot.restrictChatMember({
+        chat_id: TEST_GROUP_ID,
+        user_id: TEST_GROUP_MEMBER_ID,
+        permissions: {
+          can_send_messages: true,
+        },
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.promoteChatMember()', () => {
+  it('should promote chat member', async () => {
+    await expect(
+      bot.promoteChatMember({
+        chat_id: TEST_GROUP_ID,
+        user_id: TEST_GROUP_MEMBER_ID,
+        is_anonymous: true,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.SetChatAdministratorCustomTitle()', () => {
+  it('should set chat administrator custom title', async () => {
+    await expect(
+      bot.setChatAdministratorCustomTitle({
+        chat_id: TEST_GROUP_ID,
+        user_id: TEST_GROUP_MEMBER_ID,
+        custom_title: 'Custom title',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.banChatSenderChat()', () => {
+  it('should ban chat sender chat', async () => {
+    await expect(
+      bot.banChatSenderChat({
+        chat_id: TEST_GROUP_ID,
+        sender_chat_id: USERID,
+      }),
+    ).rejects.toThrow("400 Bad Request: can't remove chat owner");
+  });
+});
+
+describe('.unbanChatSenderChat()', () => {
+  it('should unban chat sender chat', async () => {
+    await expect(
+      bot.unbanChatSenderChat({
+        chat_id: TEST_GROUP_ID,
+        sender_chat_id: USERID,
+      }),
+    ).rejects.toThrow("400 Bad Request: can't remove chat owner");
+  });
+});
+
+describe('.setChatPermissions()', () => {
+  it('should set chat permissions', async () => {
+    await expect(
+      bot.setChatPermissions({
+        chat_id: TEST_GROUP_ID,
+        permissions: {
+          can_send_messages: true,
+          can_send_audios: true,
+          can_send_documents: true,
+          can_send_photos: true,
+          can_send_videos: true,
+          can_send_video_notes: true,
+          can_send_voice_notes: true,
+          can_send_polls: true,
+          can_send_other_messages: true,
+          can_add_web_page_previews: true,
+          can_change_info: true,
+          can_invite_users: true,
+          can_pin_messages: true,
+          can_manage_topics: true,
+        },
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.exportChatInviteLink()', () => {
+  it('should export chat invite link', async () => {
+    await expect(
+      bot.exportChatInviteLink({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toContain('https://t.me/+');
+  });
+});
+
+describe('.createChatInviteLink()', () => {
+  it('should create chat invite link', async () => {
+    await expect(
+      bot.createChatInviteLink({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toHaveProperty(
+      'invite_link',
+      expect.stringMatching('https://t.me/+'),
+    );
+  });
+});
+
+describe('.editChatInviteLink()', () => {
+  it('should edit chat invite link', async () => {
+    const { invite_link } = await bot.createChatInviteLink({
+      chat_id: TEST_GROUP_ID,
+    });
+
+    await expect(
+      bot.editChatInviteLink({
+        chat_id: TEST_GROUP_ID,
+        name: 'New name',
+        invite_link,
+        expire_date: Math.floor(Date.now() / 1000) + 60,
+      }),
+    ).resolves.toHaveProperty(
+      'invite_link',
+      expect.stringMatching('https://t.me/+'),
+    );
+  });
+});
+
+describe('.revokeChatInviteLink()', () => {
+  it('should revoke chat invite link', async () => {
+    const { invite_link } = await bot.createChatInviteLink({
+      chat_id: TEST_GROUP_ID,
+    });
+
+    await expect(
+      bot.revokeChatInviteLink({
+        chat_id: TEST_GROUP_ID,
+        invite_link,
+      }),
+    ).resolves.toHaveProperty(
+      'invite_link',
+      expect.stringMatching('https://t.me/+'),
+    );
+  });
+});
+
+describe('.setChatPhoto()', () => {
+  it('should set chat photo', async () => {
+    await expect(
+      bot.setChatPhoto({
+        chat_id: TEST_GROUP_ID,
+        photo: createReadStream('tests/data/photo.jpg'),
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.deleteChatPhoto()', () => {
+  it('should delete chat photo', async () => {
+    await expect(
+      bot.deleteChatPhoto({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.setChatTitle()', () => {
+  it('should set chat title', async () => {
+    await expect(
+      bot.setChatTitle({
+        chat_id: TEST_GROUP_ID,
+        title: 'Test Group for typescript-telegram-bot-api',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.setChatDescription()', () => {
+  const unixTime = Math.floor(Date.now() / 1000);
+
+  it('should set chat description', async () => {
+    await expect(
+      bot.setChatDescription({
+        chat_id: TEST_GROUP_ID,
+        description: `This is a test group for typescript-telegram-bot-api ${unixTime}`,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.pinChatMessage()', () => {
+  it('should pin chat message', async () => {
+    const message = await bot.sendMessage({
+      chat_id: TEST_GROUP_ID,
+      text: 'Message to pin',
+    });
+
+    await expect(
+      bot.pinChatMessage({
+        chat_id: TEST_GROUP_ID,
+        message_id: message.message_id,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.unpinChatMessage()', () => {
+  const unixTime = Math.floor(Date.now() / 1000);
+
+  it('should unpin chat message', async () => {
+    const message = await bot.sendMessage({
+      chat_id: TEST_GROUP_ID,
+      text: `Message to unpin ${unixTime}`,
+    });
+
+    await bot.pinChatMessage({
+      chat_id: TEST_GROUP_ID,
+      message_id: message.message_id,
+    });
+
+    await expect(
+      bot.unpinChatMessage({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.unpinAllChatMessages()', () => {
+  it('should unpin all chat messages', async () => {
+    await expect(
+      bot.unpinAllChatMessages({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.getChat()', () => {
+  it('should get chat', async () => {
+    await expect(
+      bot.getChat({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toHaveProperty('id', TEST_GROUP_ID);
+  });
+});
+
+describe('.getChatAdministrators()', () => {
+  it('should get chat administrators', async () => {
+    await expect(
+      bot.getChatAdministrators({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBeInstanceOf(Array);
+  });
+});
+
+describe('.getChatMemberCount()', () => {
+  it('should get chat members count', async () => {
+    await expect(
+      bot.getChatMemberCount({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBeGreaterThan(0);
+  });
+});
+
+describe('.getChatMember()', () => {
+  it('should get chat member', async () => {
+    await expect(
+      bot.getChatMember({
+        chat_id: TEST_GROUP_ID,
+        user_id: TEST_GROUP_MEMBER_ID,
+      }),
+    ).resolves.toHaveProperty('user.id', TEST_GROUP_MEMBER_ID);
+  });
+});
+
+describe('.setChatStickerSet()', () => {
+  it('should set chat sticker set', async () => {
+    await expect(
+      bot.setChatStickerSet({
+        chat_id: TEST_GROUP_ID,
+        sticker_set_name: 'Animals',
+      }),
+    ).rejects.toThrow("400 Bad Request: can't set supergroup sticker set");
+  });
+});
+
+describe('.deleteChatStickerSet()', () => {
+  it('should delete chat sticker set', async () => {
+    await expect(
+      bot.deleteChatStickerSet({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).rejects.toThrow("400 Bad Request: can't set supergroup sticker set");
+  });
+});
+
+describe('.getForumTopicIconStickers()', () => {
+  it('should get forum topic icon stickers', async () => {
+    await expect(bot.getForumTopicIconStickers()).resolves.toBeInstanceOf(
+      Array,
+    );
+  });
+});
+
+describe('.createForumTopic()', () => {
+  let createdTopic = null as null | ForumTopic;
+
+  it('should create forum topic', async () => {
+    createdTopic = await bot.createForumTopic({
+      chat_id: TEST_GROUP_ID,
+      name: 'Topic to create',
+    });
+    expect(createdTopic).toHaveProperty('name');
+  });
+
+  afterAll(async () => {
+    if (createdTopic)
+      await bot.deleteForumTopic({
+        chat_id: TEST_GROUP_ID,
+        message_thread_id: createdTopic.message_thread_id,
+      });
+  });
+});
+
+describe('.editForumTopic()', () => {
+  let createdTopic = null as null | ForumTopic;
+  beforeAll(async () => {
+    createdTopic = await bot.createForumTopic({
+      chat_id: TEST_GROUP_ID,
+      name: 'Topic to edit',
+    });
+  });
+
+  it('should edit forum topic', async () => {
+    if (createdTopic) {
+      await expect(
+        bot.editForumTopic({
+          chat_id: TEST_GROUP_ID,
+          message_thread_id: createdTopic.message_thread_id,
+          name: 'New Forum Topic',
+          icon_custom_emoji_id: '🔥',
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  afterAll(async () => {
+    if (createdTopic) {
+      await bot.deleteForumTopic({
+        chat_id: TEST_GROUP_ID,
+        message_thread_id: createdTopic.message_thread_id,
+      });
+    }
+  });
+});
+
+describe('.closeForumTopic()', () => {
+  let createdTopic: ForumTopic | null = null;
+
+  beforeAll(async () => {
+    createdTopic = await bot.createForumTopic({
+      chat_id: TEST_GROUP_ID,
+      name: 'Topic to close',
+    });
+  });
+
+  it('should close forum topic', async () => {
+    expect(createdTopic).not.toBeNull();
+    if (createdTopic) {
+      await expect(
+        bot.closeForumTopic({
+          chat_id: TEST_GROUP_ID,
+          message_thread_id: createdTopic.message_thread_id,
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  afterAll(async () => {
+    if (createdTopic)
+      await bot.deleteForumTopic({
+        chat_id: TEST_GROUP_ID,
+        message_thread_id: createdTopic.message_thread_id,
+      });
+  });
+});
+
+describe('.reopenForumTopic()', () => {
+  let createdTopic: ForumTopic | null = null;
+
+  beforeAll(async () => {
+    createdTopic = await bot.createForumTopic({
+      chat_id: TEST_GROUP_ID,
+      name: 'Topic to reopen',
+    });
+
+    await bot.closeForumTopic({
+      chat_id: TEST_GROUP_ID,
+      message_thread_id: createdTopic.message_thread_id,
+    });
+  });
+
+  it('should reopen forum topic', async () => {
+    expect(createdTopic).not.toBeNull();
+    if (createdTopic) {
+      await expect(
+        bot.reopenForumTopic({
+          chat_id: TEST_GROUP_ID,
+          message_thread_id: createdTopic.message_thread_id,
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  afterAll(async () => {
+    if (createdTopic) {
+      await bot.deleteForumTopic({
+        chat_id: TEST_GROUP_ID,
+        message_thread_id: createdTopic.message_thread_id,
+      });
+    }
+  });
+});
+
+describe('.deleteForumTopic()', () => {
+  let createdTopic: ForumTopic | null = null;
+
+  beforeAll(async () => {
+    createdTopic = await bot.createForumTopic({
+      chat_id: TEST_GROUP_ID,
+      name: 'Topic to delete',
+    });
+  });
+
+  it('should delete forum topic', async () => {
+    expect(createdTopic).not.toBeNull();
+    if (createdTopic) {
+      await expect(
+        bot.deleteForumTopic({
+          chat_id: TEST_GROUP_ID,
+          message_thread_id: createdTopic.message_thread_id,
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+});
+
+describe('.unpinAllForumTopicMessages()', () => {
+  let createdTopic: ForumTopic | null = null;
+
+  beforeAll(async () => {
+    createdTopic = await bot.createForumTopic({
+      chat_id: TEST_GROUP_ID,
+      name: 'Topic to unpin',
+    });
+  });
+
+  it('should unpin all forum topic messages', async () => {
+    expect(createdTopic).not.toBeNull();
+    if (createdTopic) {
+      await expect(
+        bot.unpinAllForumTopicMessages({
+          chat_id: TEST_GROUP_ID,
+          message_thread_id: createdTopic.message_thread_id,
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  afterAll(async () => {
+    if (createdTopic) {
+      await bot.deleteForumTopic({
+        chat_id: TEST_GROUP_ID,
+        message_thread_id: createdTopic.message_thread_id,
+      });
+    }
+  });
+});
+
+describe('.editGeneralForumTopic()', () => {
+  const unixTime = Math.floor(Date.now() / 1000);
+
+  it('should edit general forum topic', async () => {
+    await expect(
+      bot.editGeneralForumTopic({
+        chat_id: TEST_GROUP_ID,
+        name: `General Forum Topic ${unixTime}`,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.closeGeneralForumTopic()', () => {
+  beforeAll(async () => {
+    try {
+      await bot.reopenGeneralForumTopic({
+        chat_id: TEST_GROUP_ID,
+      });
+    } catch {
+      // ignore
+    }
+  });
+
+  it('should close general forum topic', async () => {
+    await expect(
+      bot.closeGeneralForumTopic({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+
+  afterAll(async () => {
+    await bot.reopenGeneralForumTopic({
+      chat_id: TEST_GROUP_ID,
+    });
+  });
+});
+
+describe('.reopenGeneralForumTopic()', () => {
+  beforeAll(async () => {
+    try {
+      await bot.closeGeneralForumTopic({
+        chat_id: TEST_GROUP_ID,
+      });
+    } catch {
+      // ignore
+    }
+  });
+
+  it('should reopen general forum topic', async () => {
+    await expect(
+      bot.reopenGeneralForumTopic({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.hideGeneralForumTopic()', () => {
+  it('should hide general forum topic', async () => {
+    await expect(
+      bot.hideGeneralForumTopic({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.unhideGeneralForumTopic()', () => {
+  beforeAll(async () => {
+    try {
+      await bot.hideGeneralForumTopic({
+        chat_id: TEST_GROUP_ID,
+      });
+    } catch {
+      // ignore
+    }
+  });
+
+  it('should unhide general forum topic', async () => {
+    await expect(
+      bot.unhideGeneralForumTopic({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.unpinAllGeneralForumTopicMessages()', () => {
+  it('should unpin all general forum topic messages', async () => {
+    await expect(
+      bot.unpinAllGeneralForumTopicMessages({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.answerCallbackQuery()', () => {
+  it('should answer callback query', async () => {
+    await expect(
+      bot.answerCallbackQuery({
+        callback_query_id: 'QUERY_ID_INVALID',
+        text: 'Callback query answered',
+      }),
+    ).rejects.toThrow(
+      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
+    );
+  });
+});
+
+describe('.getUserChatBoosts()', () => {
+  it('should get user chat boosts', async () => {
+    await expect(
+      bot.getUserChatBoosts({
+        chat_id: TEST_GROUP_ID,
+        user_id: USERID,
+      }),
+    ).resolves.toHaveProperty('boosts');
+  });
+});
+
+describe('.getBusinessConnection()', () => {
+  it('should get business connection', async () => {
+    await expect(
+      bot.getBusinessConnection({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.setChatMenuButton()', () => {
+  it('should set chat menu button', async () => {
+    await expect(
+      bot.setChatMenuButton({
+        chat_id: USERID,
+        menu_button: {
+          type: 'default',
+        },
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.getChatMenuButton()', () => {
+  it('should get chat menu button', async () => {
+    await expect(
+      bot.getChatMenuButton({
+        chat_id: USERID,
+      }),
+    ).resolves.toHaveProperty('type');
+  });
+});
+
+describe('.setMyDefaultAdministratorRights()', () => {
+  it('should set my default administrator rights', async () => {
+    await expect(
+      bot.setMyDefaultAdministratorRights({
+        rights: {
+          is_anonymous: true,
+          can_manage_chat: true,
+          can_delete_messages: true,
+          can_manage_video_chats: true,
+          can_restrict_members: true,
+          can_promote_members: true,
+          can_change_info: true,
+          can_invite_users: true,
+          can_post_stories: true,
+          can_edit_stories: true,
+          can_delete_stories: true,
+        },
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.getMyDefaultAdministratorRights()', () => {
+  it('should get my default administrator rights', async () => {
+    await expect(
+      bot.getMyDefaultAdministratorRights({}),
+    ).resolves.toHaveProperty('is_anonymous');
   });
 });

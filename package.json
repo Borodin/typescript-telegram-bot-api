@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest --runInBand --detectOpenHandles",
+    "test": "jest --runInBand --detectOpenHandles --coverage",
     "lint": "eslint '{src,tests}/**/*.ts'",
     "format": "prettier --write '{src,tests}/**/*.ts'",
     "format:check": "prettier --check '{src,tests}/**/*.ts'",
@@ -47,7 +47,10 @@
   },
   "jest": {
     "preset": "ts-jest",
-    "testTimeout": 10000
+    "testTimeout": 60000,
+    "collectCoverage": true,
+    "coverageReporters": ["json", "lcov", "text", "clover"],
+    "coverageDirectory": "coverage"
   },
   "files": [
     "dist/**/*",

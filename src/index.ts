@@ -130,7 +130,7 @@ export class TelegramBot extends EventEmitter {
               const response = JSON.parse(responseData.toString()) as Response;
               resolve(response);
             } catch (error) {
-              reject(error);
+              reject(new Error(`Invalid response`));
             }
           });
         },
@@ -140,7 +140,9 @@ export class TelegramBot extends EventEmitter {
         reject(error);
       });
       request.on('error', (error) => {
-        reject(error);
+        if (error.name !== 'AbortError') {
+          reject(error);
+        }
       });
       formData.pipe(request);
     });
