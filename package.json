@@ -1,13 +1,13 @@
 {
   "type": "commonjs",
   "name": "typescript-telegram-bot-api",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Telegram Bot API wrapper for Node.js written in TypeScript",
   "repository": "github:Borodin/typescript-telegram-bot-api",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest --runInBand --detectOpenHandles --coverage",
+    "test": "jest --runInBand --coverage",
     "lint": "eslint '{src,tests}/**/*.ts'",
     "format": "prettier --write '{src,tests}/**/*.ts'",
     "format:check": "prettier --check '{src,tests}/**/*.ts'",
@@ -36,6 +36,7 @@
     "@types/node": "^20.14.2",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
+    "jest-fetch-mock": "^3.0.3",
     "prettier": "^3.3.2",
     "ts-jest": "^29.1.4",
     "ts-node": "^10.9.2",
@@ -49,7 +50,12 @@
     "preset": "ts-jest",
     "testTimeout": 60000,
     "collectCoverage": true,
-    "coverageReporters": ["json", "lcov", "text", "clover"],
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover"
+    ],
     "coverageDirectory": "coverage"
   },
   "files": [
