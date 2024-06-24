@@ -42,24 +42,17 @@ export class Polling {
 
   private async poll() {
     while (!this.abortController.signal.aborted) {
-      try {
-        const updates = await this.telegramBot.getUpdates(
-          {
-            offset: this.offset,
-            allowed_updates: this.allowedUpdates,
-            timeout: 50,
-          },
-          this.abortController,
-        );
-        for (const update of updates) {
-          this.emitUpdate(update);
-          this.offset = update.update_id + 1;
-        }
-      } catch (error) {
-        if (error instanceof Error && error.name === 'AbortError') {
-          break;
-        }
-        throw error;
+      const updates = await this.telegramBot.getUpdates(
+        {
+          offset: this.offset,
+          allowed_updates: this.allowedUpdates,
+          timeout: 50,
+        },
+        this.abortController,
+      );
+      for (const update of updates) {
+        this.emitUpdate(update);
+        this.offset = update.update_id + 1;
       }
     }
   }

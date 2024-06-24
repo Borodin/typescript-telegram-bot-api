@@ -49,7 +49,7 @@ describe('TelegramBot', () => {
         botToken: 'TOKEN',
         baseURL: 'https://INVALID_URL',
       }).getMe(),
-    ).rejects.toThrow('getaddrinfo ENOTFOUND invalid_url');
+    ).rejects.toThrow(/getaddrinfo (ENOTFOUND|EAI_AGAIN) invalid_url/);
   });
 });
 
