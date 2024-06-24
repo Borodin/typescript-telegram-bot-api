@@ -23,6 +23,7 @@ jobs:
         env:
           TEST_TELEGRAM_TOKEN: ${{ secrets.TEST_TELEGRAM_TOKEN }}
           TEST_USER_ID: ${{ secrets.TEST_USER_ID }}
+          TEST_GROUP_ID: ${{ secrets.TEST_GROUP_ID }}
           TEST_GROUP_MEMBER_ID: ${{ secrets.TEST_GROUP_MEMBER_ID }}
         run: npm test
 
