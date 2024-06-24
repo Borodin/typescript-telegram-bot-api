@@ -74,18 +74,21 @@ export class TelegramBot extends EventEmitter {
   testEnvironment: boolean;
   baseURL: string;
   autoRetry: boolean;
+  autoRetryLimit: number;
 
   constructor(options: {
     botToken: string;
     testEnvironment?: boolean;
     baseURL?: string;
     autoRetry?: boolean;
+    autoRetryLimit?: number;
   }) {
     super();
     this.testEnvironment = options.testEnvironment || false;
     this.botToken = options.botToken;
     this.baseURL = options.baseURL || 'https://api.telegram.org';
     this.autoRetry = options.autoRetry ?? true;
+    this.autoRetryLimit = options.autoRetryLimit || 0;
     this.polling = new Polling(this, []);
   }
 
@@ -186,7 +189,11 @@ export class TelegramBot extends EventEmitter {
       return response.result as T;
     } else {
       const error = response as ErrorResponse;
-      if (this.autoRetry && error.parameters?.retry_after) {
+      if (
+        this.autoRetry &&
+        error.parameters?.retry_after &&
+        error.parameters?.retry_after < this.autoRetryLimit
+      ) {
         await wait(error.parameters.retry_after * 1000);
         return await this.callApi(method, options);
       } else {
