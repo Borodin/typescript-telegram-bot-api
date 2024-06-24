@@ -853,6 +853,13 @@ describe('.setChatPhoto()', () => {
 });
 
 describe('.deleteChatPhoto()', () => {
+  beforeAll(async () => {
+    await bot.setChatPhoto({
+      chat_id: TEST_GROUP_ID,
+      photo: createReadStream('tests/data/photo.jpg'),
+    });
+  });
+
   it('should delete chat photo', async () => {
     await expect(
       bot.deleteChatPhoto({

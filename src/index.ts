@@ -140,13 +140,11 @@ export class TelegramBot extends EventEmitter {
         reject(error);
       });
       request.on('error', (error) => {
-        request.end();
         if (error.name !== 'AbortError') {
           reject(error);
         }
       });
       formData.pipe(request);
-      request.end();
     });
   }
 
@@ -183,7 +181,6 @@ export class TelegramBot extends EventEmitter {
     abortController?: AbortController,
   ): Promise<T> {
     const url = `${this.baseURL}/bot${this.botToken}${this.testEnvironment ? '/test' : ''}/${method}`;
-    console.log(`Calling API: ${url} with params: ${JSON.stringify(options)}`);
     const response = await this.request(url, options, abortController);
     if (response.ok) {
       return response.result as T;
