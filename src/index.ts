@@ -1983,7 +1983,7 @@ export class TelegramBot extends EventEmitter {
     title: string;
     description: string;
     payload: string;
-    provider_token: string;
+    provider_token?: string;
     currency: string;
     prices: LabeledPrice[];
     max_tip_amount?: number;
@@ -2054,15 +2054,25 @@ export class TelegramBot extends EventEmitter {
    * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned.
    * @see https://core.telegram.org/bots/api#answershippingquery
    */
-  async answerShippingQuery(options: {
-    shipping_query_id: string;
-    ok: boolean;
-    shipping_options?: ShippingOption[];
-    error_message?: string;
-  }): Promise<true> {
+  async answerShippingQuery(
+    options:
+      | {
+          shipping_query_id: string;
+          ok: true;
+          shipping_options: ShippingOption[];
+        }
+      | {
+          shipping_query_id: string;
+          ok: false;
+          error_message: string;
+        },
+  ): Promise<true> {
     return await this.callApi('answerShippingQuery', {
       ...options,
-      shipping_options: JSON.stringify(options.shipping_options),
+      shipping_options:
+        'shipping_options' in options
+          ? JSON.stringify(options.shipping_options)
+          : undefined,
     });
   }
 

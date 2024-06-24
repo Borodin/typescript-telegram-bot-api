@@ -34,13 +34,22 @@ describe('TelegramBot', () => {
     ).rejects.toThrow('401 Unauthorized: invalid token specified');
   });
 
-  it('should throw error when baseURL is invalid', async () => {
+  it('should throw "Invalid response" error with a valid baseURL', async () => {
     await expect(
       new TelegramBot({
-        botToken: TOKEN,
+        botToken: 'TOKEN',
         baseURL: 'https://example.com',
       }).getMe(),
     ).rejects.toThrow('Invalid response');
+  });
+
+  it('should throw "getaddrinfo ENOTFOUND" error with an invalid baseURL', async () => {
+    await expect(
+      new TelegramBot({
+        botToken: 'TOKEN',
+        baseURL: 'https://INVALID_URL',
+      }).getMe(),
+    ).rejects.toThrow('getaddrinfo ENOTFOUND invalid_url');
   });
 });
 
@@ -276,6 +285,15 @@ describe('.sendPhoto()', () => {
         caption: 'Photo from file_id',
       }),
     ).resolves.toHaveProperty('photo');
+  });
+
+  it('should fail when photo is invalid', async () => {
+    await expect(
+      bot.sendPhoto({
+        chat_id: USERID,
+        photo: createReadStream('invalid/path'),
+      }),
+    ).rejects.toThrow('ENOENT: no such file or directory');
   });
 });
 
@@ -1344,5 +1362,350 @@ describe('.getMyDefaultAdministratorRights()', () => {
     await expect(
       bot.getMyDefaultAdministratorRights({}),
     ).resolves.toHaveProperty('is_anonymous');
+  });
+});
+
+describe('.approveChatJoinRequest()', () => {
+  it('should approve chat join request', async () => {
+    await expect(
+      bot.approveChatJoinRequest({
+        chat_id: TEST_GROUP_ID,
+        user_id: 10000,
+      }),
+    ).rejects.toThrow('400 Bad Request: HIDE_REQUESTER_MISSING');
+  });
+});
+
+describe('.declineChatJoinRequest()', () => {
+  it('should decline chat join request', async () => {
+    await expect(
+      bot.declineChatJoinRequest({
+        chat_id: TEST_GROUP_ID,
+        user_id: 10000,
+      }),
+    ).rejects.toThrow('400 Bad Request: HIDE_REQUESTER_MISSING');
+  });
+});
+
+describe('.leaveChat()', () => {
+  it('should leave chat', async () => {
+    await expect(
+      bot.leaveChat({
+        chat_id: 1,
+      }),
+    ).rejects.toThrow('400 Bad Request: chat not found');
+  });
+});
+
+describe('.editMessageText()', () => {
+  it('should edit message text', async () => {
+    const message = await bot.sendMessage({
+      chat_id: USERID,
+      text: 'Message to edit',
+    });
+
+    await expect(
+      bot.editMessageText({
+        chat_id: USERID,
+        message_id: message.message_id,
+        text: 'Edited message',
+      }),
+    ).resolves.toHaveProperty('text', 'Edited message');
+  });
+});
+
+describe('.editMessageCaption()', () => {
+  it('should edit message caption', async () => {
+    const message = await bot.sendPhoto({
+      chat_id: USERID,
+      photo: 'https://unsplash.it/640/480',
+      caption: 'Caption',
+    });
+
+    await expect(
+      bot.editMessageCaption({
+        chat_id: USERID,
+        message_id: message.message_id,
+        caption: 'Edited caption',
+      }),
+    ).resolves.toHaveProperty('caption', 'Edited caption');
+  });
+});
+
+describe('.editMessageMedia()', () => {
+  it('should edit message media', async () => {
+    const message = await bot.sendPhoto({
+      chat_id: USERID,
+      photo: 'https://unsplash.it/640/480',
+      caption: 'Caption',
+    });
+
+    await expect(
+      bot.editMessageMedia({
+        chat_id: USERID,
+        message_id: message.message_id,
+        media: {
+          type: 'photo',
+          media: 'https://unsplash.it/480/640',
+        },
+      }),
+    ).resolves.toHaveProperty('photo');
+  });
+});
+
+describe('.editMessageLiveLocation()', () => {
+  it('should edit message live location', async () => {
+    const message = await bot.sendLocation({
+      chat_id: USERID,
+      latitude: 40.76799,
+      longitude: -73.98129,
+      live_period: 60,
+    });
+
+    await expect(
+      bot.editMessageLiveLocation({
+        chat_id: USERID,
+        message_id: message.message_id,
+        latitude: 40.76899,
+        longitude: -73.98229,
+      }),
+    ).resolves.toHaveProperty('location');
+  });
+});
+
+describe('.stopMessageLiveLocation()', () => {
+  it('should stop message live location', async () => {
+    const message = await bot.sendLocation({
+      chat_id: USERID,
+      latitude: 40.76799,
+      longitude: -73.98129,
+      live_period: 60,
+    });
+
+    await expect(
+      bot.stopMessageLiveLocation({
+        chat_id: USERID,
+        message_id: message.message_id,
+      }),
+    ).resolves.toHaveProperty('location');
+  });
+});
+
+describe('.editMessageReplyMarkup()', () => {
+  it('should edit message reply markup', async () => {
+    const message = await bot.sendMessage({
+      chat_id: USERID,
+      text: 'Message to edit',
+      reply_markup: {
+        inline_keyboard: [[{ text: 'Button', callback_data: 'button' }]],
+      },
+    });
+
+    await expect(
+      bot.editMessageReplyMarkup({
+        chat_id: USERID,
+        message_id: message.message_id,
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: 'Edited button', callback_data: 'edited_button' }],
+          ],
+        },
+      }),
+    ).resolves.toHaveProperty('reply_markup');
+  });
+});
+
+describe('.stopPoll()', () => {
+  it('should stop poll', async () => {
+    const message = await bot.sendPoll({
+      chat_id: USERID,
+      question: 'Do you like polls?',
+      options: [{ text: 'Yes' }, { text: 'No' }],
+      is_anonymous: true,
+    });
+
+    await expect(
+      bot.stopPoll({
+        chat_id: USERID,
+        message_id: message.message_id,
+      }),
+    ).resolves.toHaveProperty('question');
+  });
+});
+
+describe('.deleteMessage()', () => {
+  it('should delete message', async () => {
+    const message = await bot.sendMessage({
+      chat_id: USERID,
+      text: 'Message to delete',
+    });
+
+    await expect(
+      bot.deleteMessage({
+        chat_id: USERID,
+        message_id: message.message_id,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.deleteMessages()', () => {
+  it('should delete messages', async () => {
+    const [message1, message2] = await Promise.all([
+      bot.sendMessage({
+        chat_id: USERID,
+        text: 'Message 1 to delete',
+      }),
+      bot.sendMessage({
+        chat_id: USERID,
+        text: 'Message 2 to delete',
+      }),
+    ]);
+
+    await expect(
+      bot.deleteMessages({
+        chat_id: USERID,
+        message_ids: [message1.message_id, message2.message_id],
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.answerInlineQuery()', () => {
+  it('should answer inline query', async () => {
+    await expect(
+      bot.answerInlineQuery({
+        inline_query_id: 'QUERY_ID',
+        results: [
+          {
+            type: 'article',
+            id: '1',
+            title: 'Article',
+            input_message_content: {
+              message_text: 'Article content',
+            },
+          },
+        ],
+      }),
+    ).rejects.toThrow('400 Bad Request: USER_BOT_INVALID');
+  });
+});
+
+describe('.answerWebAppQuery()', () => {
+  it('should answer web app query', async () => {
+    await expect(
+      bot.answerWebAppQuery({
+        web_app_query_id: 'QUERY_ID',
+        result: {
+          type: 'article',
+          id: '1',
+          title: 'Article',
+          input_message_content: {
+            message_text: 'Article content',
+          },
+        },
+      }),
+    ).rejects.toThrow(
+      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
+    );
+  });
+});
+
+describe('.sendInvoice()', () => {
+  it('should send invoice', async () => {
+    await expect(
+      bot.sendInvoice({
+        chat_id: USERID,
+        title: 'Invoice',
+        description: 'Invoice description',
+        payload: 'payload',
+        currency: 'XTR',
+        prices: [{ label: 'Price', amount: 100 }],
+        start_parameter: 'start_parameter',
+      }),
+    ).resolves.toHaveProperty('invoice');
+  });
+});
+
+describe('.createInvoiceLink()', () => {
+  it('should create invoice link', async () => {
+    await expect(
+      bot.createInvoiceLink({
+        title: 'Invoice',
+        description: 'Invoice description',
+        payload: 'payload',
+        // provider_token: 'PROVIDER_TOKEN',
+        currency: 'XTR',
+        prices: [{ label: 'Price', amount: 100 }],
+      }),
+    ).resolves.toContain('https://t.me/$');
+  });
+});
+
+describe('.answerShippingQuery()', () => {
+  it('should throw an error for outdated or invalid query ID on error response', async () => {
+    await expect(
+      bot.answerShippingQuery({
+        shipping_query_id: 'QUERY_ID',
+        ok: false,
+        error_message: 'Error message',
+      }),
+    ).rejects.toThrow(
+      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
+    );
+  });
+
+  it('should throw an error for outdated or invalid query ID on success response', async () => {
+    await expect(
+      bot.answerShippingQuery({
+        shipping_query_id: 'QUERY_ID',
+        ok: true,
+        shipping_options: [
+          {
+            id: '1',
+            title: 'Shipping option',
+            prices: [{ label: 'Price', amount: 100 }],
+          },
+        ],
+      }),
+    ).rejects.toThrow(
+      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
+    );
+  });
+});
+
+describe('.answerPreCheckoutQuery()', () => {
+  it('should throw an error for outdated or invalid query ID on error response', async () => {
+    await expect(
+      bot.answerPreCheckoutQuery({
+        pre_checkout_query_id: 'QUERY_ID',
+        ok: false,
+        error_message: 'Error message',
+      }),
+    ).rejects.toThrow(
+      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
+    );
+  });
+
+  it('should throw an error for outdated or invalid query ID on success response', async () => {
+    await expect(
+      bot.answerPreCheckoutQuery({
+        pre_checkout_query_id: 'QUERY_ID',
+        ok: true,
+      }),
+    ).rejects.toThrow(
+      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
+    );
+  });
+});
+
+describe('.refundStarPayment()', () => {
+  it('should refund star payment', async () => {
+    await expect(
+      bot.refundStarPayment({
+        user_id: USERID,
+        telegram_payment_charge_id: 'PAYMENT_ID',
+      }),
+    ).rejects.toThrow('400 Bad Request: CHARGE_NOT_FOUND');
   });
 });
