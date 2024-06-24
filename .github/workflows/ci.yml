@@ -26,6 +26,11 @@ jobs:
           TEST_GROUP_MEMBER_ID: ${{ secrets.TEST_GROUP_MEMBER_ID }}
         run: npm test
 
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Lint code
         run: npm run lint
 
@@ -34,11 +39,6 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.0.1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Publish to npm
         if: ${{ github.ref == 'refs/heads/main' && success() }}
