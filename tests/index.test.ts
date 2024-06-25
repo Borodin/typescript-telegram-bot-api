@@ -15,7 +15,7 @@ const TEST_GROUP_MEMBER_ID = parseInt(
 const bot = new TelegramBot({
   botToken: TOKEN,
   autoRetry: true,
-  autoRetryLimit: 30,
+  autoRetryLimit: 120,
 });
 
 describe('TelegramBot', () => {

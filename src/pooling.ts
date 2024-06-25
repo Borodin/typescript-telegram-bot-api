@@ -20,15 +20,15 @@ export class Polling {
   private emitMessage(message: Message) {
     messageTypes.forEach((key) => {
       if (key in message) {
-        this.telegramBot.emit(key as keyof MessageTypes, message);
+        this.telegramBot.emit(`message:${key}` as keyof MessageTypes, message as Message & Required<Pick<Message, typeof key>>);
       }
     });
   }
 
   private emitUpdate(update: Update) {
     Object.keys(update).forEach((key) => {
-      if (key !== 'update_id' && key !== 'poll') {
-        const eventType = key as Exclude<keyof EventTypes, 'poll'>;
+      if (key !== 'update_id') {
+        const eventType = key as keyof EventTypes;
         const eventData = update[eventType] as EventTypes[typeof eventType];
         if (eventData !== undefined) {
           this.telegramBot.emit(eventType, eventData);

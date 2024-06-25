@@ -26,12 +26,12 @@ jobs:
           TEST_GROUP_ID: ${{ secrets.TEST_GROUP_ID }}
           TEST_GROUP_MEMBER_ID: ${{ secrets.TEST_GROUP_MEMBER_ID }}
         run: npm test
-        continue-on-error: true
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+        continue-on-error: true
 
       - name: Lint code
         run: npm run lint

@@ -28,7 +28,7 @@ describe('Polling', () => {
 
     await expect(
       new Promise<Message>((resolve) => {
-        bot.on('text', (msg) => {
+        bot.on('message:text', (msg) => {
           bot.stopPolling();
           resolve(msg);
         });

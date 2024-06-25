@@ -173,6 +173,7 @@ export const messageTypes = [
   'web_app_data',
 ] as const;
 
-export type MessageTypes = Required<
-  Record<keyof Pick<Message, (typeof messageTypes)[number]>, Message>
->;
+export type MessageTypes = {
+  [P in (typeof messageTypes)[number] as `message:${P}`]: Message &
+    Required<Pick<Message, P>>;
+};

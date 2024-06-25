@@ -48,7 +48,7 @@ import {readFile} from 'fs/promises';
 
 await bot.sendPhoto({
   chat_id: chat_id,
-  photo: 'AgACAgIAAxkDAAIF62Zq431wDZn6ddGJauzr35UDnc0eAAKf2zEbWP1YSw7ya9P-Yhl_AQADAgADcwADNQQ',
+  photo: 'AgACAgIAAxkDAAIF62Zq43...AgADcwADNQQ',
   caption: 'file_id',
 });
 

@@ -66,7 +66,7 @@ import { StarTransactions } from './types/StarTransactions';
 
 const wait = promisify(setTimeout);
 
-type allEmittedTypes = Omit<EventTypes, 'poll'> & MessageTypes;
+type allEmittedTypes = EventTypes & MessageTypes;
 
 export class TelegramBot extends EventEmitter {
   private readonly polling: Polling;
