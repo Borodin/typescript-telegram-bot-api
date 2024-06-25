@@ -20,7 +20,10 @@ export class Polling {
   private emitMessage(message: Message) {
     messageTypes.forEach((key) => {
       if (key in message) {
-        this.telegramBot.emit(`message:${key}` as keyof MessageTypes, message as Message & Required<Pick<Message, typeof key>>);
+        this.telegramBot.emit(
+          `message:${key}` as keyof MessageTypes,
+          message as Message & Required<Pick<Message, typeof key>>,
+        );
       }
     });
   }

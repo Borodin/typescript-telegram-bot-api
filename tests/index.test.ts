@@ -3,7 +3,7 @@ import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { TelegramBot } from '../src';
 import { TelegramError } from '../src/errors';
-import { ForumTopic } from '../src/types';
+import { ForumTopic, File, User } from '../src/types';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
@@ -1715,5 +1715,124 @@ describe('.refundStarPayment()', () => {
         telegram_payment_charge_id: 'PAYMENT_ID',
       }),
     ).rejects.toThrow('400 Bad Request: CHARGE_NOT_FOUND');
+  });
+});
+
+describe('.getStickerSet()', () => {
+  it('should get custom emoji stickers', async () => {
+    await expect(
+      bot.getStickerSet({ name: 'Animals' }),
+    ).resolves.toHaveProperty('name', 'Animals');
+  });
+});
+
+describe('.getCustomEmojiStickers()', () => {
+  it('should get custom emoji stickers', async () => {
+    await expect(
+      bot.getCustomEmojiStickers({
+        custom_emoji_ids: ['5380109565226391871'],
+      }),
+    ).resolves.toBeInstanceOf(Array);
+  });
+});
+
+describe('.uploadStickerFile()', () => {
+  it('should upload sticker file', async () => {
+    await expect(
+      bot.uploadStickerFile({
+        user_id: USERID,
+        sticker: createReadStream('tests/data/sticker.webp'),
+        sticker_format: 'static',
+      }),
+    ).resolves.toHaveProperty('file_id');
+  });
+});
+
+describe('.createNewStickerSet()', () => {
+  let stickerFile = null as null | File;
+  let me = null as null | User;
+
+  beforeAll(async () => {
+    stickerFile = await bot.uploadStickerFile({
+      user_id: USERID,
+      sticker: createReadStream('tests/data/sticker.webp'),
+      sticker_format: 'static',
+    });
+    me = await bot.getMe();
+  });
+
+  it('should create new sticker set', async () => {
+    expect(stickerFile).not.toBeNull();
+    if (stickerFile && me) {
+      await expect(
+        bot.createNewStickerSet({
+          user_id: USERID,
+          name: `new_sticker_set_by_${me.username}`,
+          title: 'NewStickerSet',
+          stickers: [
+            {
+              emoji_list: ['🐶'],
+              sticker: stickerFile.file_id,
+              format: 'static',
+            },
+          ],
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  afterAll(async () => {
+    if (me) {
+      await bot.deleteStickerSet({
+        name: `new_sticker_set_by_${me.username}`,
+      });
+    }
+  });
+});
+
+describe('.addStickerToSet()', () => {
+  let stickerFile = null as null | File;
+  let me = null as null | User;
+
+  beforeAll(async () => {
+    stickerFile = await bot.uploadStickerFile({
+      user_id: USERID,
+      sticker: createReadStream('tests/data/sticker.webp'),
+      sticker_format: 'static',
+    });
+    me = await bot.getMe();
+  });
+
+  it('should add sticker to set', async () => {
+    expect(stickerFile).not.toBeNull();
+    if (stickerFile && me) {
+      await expect(
+        bot.addStickerToSet({
+          user_id: USERID,
+          name: `sticker_set_by_${me.username}`,
+          sticker: {
+            emoji_list: ['🐶'],
+            sticker: stickerFile.file_id,
+            format: 'static',
+          },
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  afterAll(async () => {
+    if (stickerFile && me) {
+      const stickerSet = await bot.getStickerSet({
+        name: `sticker_set_by_${me.username}`,
+      });
+
+      await Promise.all(
+        stickerSet.stickers.map(async (sticker) => {
+          await bot.deleteStickerFromSet({
+            sticker: sticker.file_id,
+          });
+        }),
+      );
+    }
   });
 });

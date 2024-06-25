@@ -1790,11 +1790,14 @@ export class TelegramBot extends EventEmitter {
     user_id: number;
     name: string;
     title: string;
-    stickers: Sticker[];
+    stickers: InputSticker[];
     sticker_type?: InputSticker['format'];
     needs_repainting?: boolean;
   }): Promise<true> {
-    return await this.callApi('createNewStickerSet', options);
+    return await this.callApi('createNewStickerSet', {
+      ...options,
+      stickers: JSON.stringify(options.stickers),
+    });
   }
 
   /**
