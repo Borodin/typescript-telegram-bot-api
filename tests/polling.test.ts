@@ -3,6 +3,14 @@ import { Message, Update } from '../src/types/';
 import { TelegramBot } from '../src';
 import nock from 'nock';
 
+afterEach(() => {
+  nock.cleanAll();
+});
+
+afterAll(() => {
+  nock.restore();
+});
+
 describe('Polling', () => {
   it('should handle delayed response in private chat', async () => {
     const botToken = 'token';
