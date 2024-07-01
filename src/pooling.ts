@@ -70,7 +70,7 @@ export class Polling {
   }
 
   async start() {
-    return this.poll()
+    return this.poll();
   }
 
   async stop() {
