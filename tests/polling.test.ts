@@ -3,15 +3,17 @@ import { Message, Update } from '../src/types/';
 import { TelegramBot } from '../src';
 import nock from 'nock';
 
-afterEach(() => {
-  nock.cleanAll();
-});
-
-afterAll(() => {
-  nock.restore();
-});
+const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 
 describe('Polling', () => {
+  afterEach(() => {
+    nock.cleanAll();
+  });
+
+  afterAll(() => {
+    nock.restore();
+  });
+
   it('should handle delayed response in private chat', async () => {
     const botToken = 'token';
     const bot = new TelegramBot({ botToken });
@@ -32,7 +34,7 @@ describe('Polling', () => {
       .delay(1000)
       .reply(200, { ok: true, result });
 
-    bot.startPolling();
+    await bot.startPolling();
 
     await expect(
       new Promise<Message>((resolve) => {
@@ -43,5 +45,21 @@ describe('Polling', () => {
       }),
     ).resolves.toHaveProperty('text', '/start');
     expect(nock.isDone()).toBeTruthy();
+  });
+});
+
+describe('Parallel Polling', () => {
+  const bot1 = new TelegramBot({ botToken: TOKEN, pollingTimeout: 1 });
+  const bot2 = new TelegramBot({ botToken: TOKEN, pollingTimeout: 1 });
+
+  it('should handle parallel polling without errors', async () => {
+    await expect(bot1.startPolling()).resolves.not.toThrow();
+    await expect(bot2.startPolling()).resolves.not.toThrow();
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+  });
+
+  afterAll(async () => {
+    await bot1.stopPolling();
+    await bot2.stopPolling();
   });
 });

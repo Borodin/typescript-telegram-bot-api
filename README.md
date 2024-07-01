@@ -22,7 +22,11 @@ const bot = new TelegramBot({ botToken: 'YOUR_BOT_TOKEN' });
 bot.startPolling();
 
 bot.on('message', (message) => {
-  console.log(message);
+  console.log('Received message:', message.text);
+});
+
+bot.on('message:sticker', (message) => {
+  console.log('Received sticker:', message.sticker.emoji);
 });
 
 api.getMe()
@@ -76,6 +80,23 @@ await bot.sendPhoto({
   caption: 'buffer',
 });
 ```
+## Events
+TelegramBot is an EventEmitter that emits the [Update](https://core.telegram.org/bots/api#update) event and also emits events for each type of [Message](https://core.telegram.org/bots/api#message), such as `message:audio`, when the `audio` field is present in the message object.
+```typescript
+bot.on('message', (message) => {
+  console.log('Received message:', message.text);
+});
+
+bot.on('message_reaction', (messageReactionUpdated) => {
+  console.log('Received message_reaction:', messageReactionUpdated);
+});
+
+bot.on('message:audio', (message) => {
+  console.log('Received audio:', message.audio.file_id);
+});
+```
+
+
 ## Tests
 ```bash
 npm test

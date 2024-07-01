@@ -1,21 +1,18 @@
 import { TelegramBot } from './index';
 import {
-  UpdateType,
   EventTypes,
   Message,
   messageTypes,
   MessageTypes,
   Update,
 } from './types/';
+import { TelegramError } from './errors';
 
 export class Polling {
   private readonly abortController = new AbortController();
   private offset = 0;
 
-  constructor(
-    private readonly telegramBot: TelegramBot,
-    private readonly allowedUpdates: UpdateType[],
-  ) {}
+  constructor(private readonly telegramBot: TelegramBot) {}
 
   private emitMessage(message: Message) {
     messageTypes.forEach((key) => {
@@ -45,26 +42,38 @@ export class Polling {
 
   private async poll() {
     while (!this.abortController.signal.aborted) {
-      const updates = await this.telegramBot.getUpdates(
-        {
-          offset: this.offset,
-          allowed_updates: this.allowedUpdates,
-          timeout: 50,
-        },
-        this.abortController,
-      );
-      for (const update of updates) {
-        this.emitUpdate(update);
-        this.offset = update.update_id + 1;
+      try {
+        const updates = await this.telegramBot.getUpdates(
+          {
+            offset: this.offset,
+            allowed_updates: this.telegramBot.allowedUpdates,
+            timeout: this.telegramBot.pollingTimeout,
+          },
+          this.abortController,
+        );
+        for (const update of updates) {
+          this.emitUpdate(update);
+          this.offset = update.update_id + 1;
+        }
+      } catch (error) {
+        if (error instanceof TelegramError) {
+          if (error.response.error_code === 409) {
+            /* eslint-disable no-console */
+            console.warn(error.message);
+            /* eslint-enable no-console */
+          } else {
+            throw error;
+          }
+        }
       }
     }
   }
 
-  start() {
-    this.poll().catch();
+  async start() {
+    return this.poll()
   }
 
-  stop() {
+  async stop() {
     this.abortController.abort();
   }
 }

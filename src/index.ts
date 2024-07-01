@@ -75,6 +75,8 @@ export class TelegramBot extends EventEmitter {
   baseURL: string;
   autoRetry: boolean;
   autoRetryLimit: number;
+  allowedUpdates: UpdateType[];
+  pollingTimeout: number;
 
   constructor(options: {
     botToken: string;
@@ -82,6 +84,8 @@ export class TelegramBot extends EventEmitter {
     baseURL?: string;
     autoRetry?: boolean;
     autoRetryLimit?: number;
+    allowedUpdates?: UpdateType[];
+    pollingTimeout?: number;
   }) {
     super();
     this.testEnvironment = options.testEnvironment || false;
@@ -89,18 +93,20 @@ export class TelegramBot extends EventEmitter {
     this.baseURL = options.baseURL || 'https://api.telegram.org';
     this.autoRetry = options.autoRetry ?? true;
     this.autoRetryLimit = options.autoRetryLimit || 0;
-    this.polling = new Polling(this, []);
+    this.allowedUpdates = options.allowedUpdates || [];
+    this.pollingTimeout = options.pollingTimeout || 50;
+    this.polling = new Polling(this);
   }
 
   public static isTelegramError(error: unknown): error is TelegramError {
     return error instanceof TelegramError;
   }
 
-  startPolling() {
+  async startPolling() {
     this.polling.start();
   }
 
-  stopPolling() {
+  async stopPolling() {
     this.polling.stop();
   }
 
