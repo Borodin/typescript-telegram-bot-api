@@ -629,12 +629,22 @@ describe('.getStarTransactions()', () => {
 
 describe('.setMyName()', () => {
   it('should set my name', async () => {
-    await expect(
-      bot.setMyName({
+    try {
+      const result = await bot.setMyName({
         name: 'typescript-telegram-bot-api',
         language_code: 'en',
-      }),
-    ).resolves.toBe(true);
+      });
+      expect(result).toBe(true);
+    } catch (error) {
+      if (
+        TelegramBot.isTelegramError(error) &&
+        error.response.error_code === 429
+      ) {
+        expect(error.message).toMatch(/Too Many Requests/);
+      } else {
+        throw error;
+      }
+    }
   });
 });
 
