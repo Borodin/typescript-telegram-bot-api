@@ -25,6 +25,7 @@ jobs:
           TEST_USER_ID: ${{ secrets.TEST_USER_ID }}
           TEST_GROUP_ID: ${{ secrets.TEST_GROUP_ID }}
           TEST_GROUP_MEMBER_ID: ${{ secrets.TEST_GROUP_MEMBER_ID }}
+          TEST_CHANNEL_ID: ${{ secrets.TEST_CHANNEL_ID }}
         run: npm test
 
       - name: Upload coverage reports to Codecov
