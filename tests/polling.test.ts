@@ -51,15 +51,24 @@ describe('Polling', () => {
 describe('Parallel Polling', () => {
   const bot1 = new TelegramBot({ botToken: TOKEN, pollingTimeout: 1 });
   const bot2 = new TelegramBot({ botToken: TOKEN, pollingTimeout: 1 });
+  let warnSpy: jest.SpyInstance;
+
+  beforeAll(() => {
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+  });
 
   it('should handle parallel polling without errors', async () => {
     await expect(bot1.startPolling()).resolves.not.toThrow();
     await expect(bot2.startPolling()).resolves.not.toThrow();
     await new Promise((resolve) => setTimeout(resolve, 3000));
+    expect(warnSpy).toHaveBeenCalledWith(
+      '409 Conflict: terminated by other getUpdates request; make sure that only one bot instance is running',
+    );
   });
 
   afterAll(async () => {
     await bot1.stopPolling();
     await bot2.stopPolling();
+    warnSpy.mockRestore();
   });
 });
