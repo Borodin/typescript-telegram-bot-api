@@ -58,11 +58,12 @@ import {
   Response,
   EventTypes,
   MessageTypes,
+  StarTransactions,
+  InputPaidMedia,
 } from './types/';
 
 import { TelegramError } from './errors';
 import { Polling } from './pooling';
-import { StarTransactions } from './types/StarTransactions';
 
 const wait = promisify(setTimeout);
 
@@ -288,7 +289,7 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## forwardMessages
-   * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
+   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
    * @see https://core.telegram.org/bots/api#forwardmessages
    */
   async forwardMessages(options: {
@@ -307,7 +308,7 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## copyMessage
-   * Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+   * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
    * @see https://core.telegram.org/bots/api#copymessage
    */
   async copyMessage(options: {
@@ -583,6 +584,36 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVideoNote', {
       ...options,
+      reply_markup: JSON.stringify(options.reply_markup),
+    });
+  }
+
+  /**
+   * ## sendPaidMedia
+   * Use this method to send paid media to channel chats. On success, the sent Message is returned.
+   * @see https://core.telegram.org/bots/api#sendpaidmedia
+   */
+  async sendPaidMedia(options: {
+    chat_id: number | string;
+    star_count: number;
+    media: InputPaidMedia[];
+    caption?: string;
+    parse_mode?: ParseMode;
+    caption_entities?: MessageEntity[];
+    show_caption_above_media?: boolean;
+    disable_notification?: boolean;
+    protect_content?: boolean;
+    reply_parameters?: ReplyParameters;
+    reply_markup?:
+      | InlineKeyboardMarkup
+      | ReplyKeyboardMarkup
+      | ReplyKeyboardRemove
+      | ForceReply;
+  }): Promise<Message> {
+    return await this.callApi('sendPaidMedia', {
+      ...options,
+      media: JSON.stringify(options.media),
+      caption_entities: JSON.stringify(options.caption_entities),
       reply_markup: JSON.stringify(options.reply_markup),
     });
   }

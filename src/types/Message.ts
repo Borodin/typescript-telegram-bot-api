@@ -48,6 +48,7 @@ import {
   Contact,
   ChatShared,
   ChatBoostAdded,
+  PaidMediaInfo,
 } from './';
 
 export type Message = {
@@ -80,6 +81,7 @@ export type Message = {
   animation?: Animation;
   audio?: Audio;
   document?: Document;
+  paid_media?: PaidMediaInfo;
   photo?: PhotoSize[];
   sticker?: Sticker;
   story?: Story;

@@ -43,6 +43,7 @@ export type ChatFullInfo = {
   invite_link?: string;
   pinned_message?: Message;
   permissions?: ChatPermissions;
+  can_send_paid_media?: boolean;
   slow_mode_delay?: number;
   unrestrict_boost_count?: number;
   message_auto_delete_time?: number;

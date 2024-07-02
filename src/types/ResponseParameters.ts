@@ -1,6 +1,7 @@
 /**
  * ## ResponseParameters
  * Describes why a request was unsuccessful.
+ * @see https://core.telegram.org/bots/api#responseparameters
  */
 
 export type ResponseParameters = {

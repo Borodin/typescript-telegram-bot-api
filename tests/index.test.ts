@@ -8,6 +8,7 @@ import { ForumTopic, File, User } from '../src/types';
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
 const TEST_GROUP_ID = parseInt(process.env.TEST_GROUP_ID as string);
+const TEST_CHANNEL_ID = parseInt(process.env.TEST_CHANNEL_ID as string);
 const TEST_GROUP_MEMBER_ID = parseInt(
   process.env.TEST_GROUP_MEMBER_ID as string,
 );
@@ -400,6 +401,59 @@ describe('.sendVideoNote()', () => {
         video_note: createReadStream('tests/data/video_note.mp4'),
       }),
     ).resolves.toHaveProperty('video_note');
+  });
+});
+
+describe('.sendPaidMedia()', () => {
+  it('should send paid media: photo', async () => {
+    await expect(
+      bot.sendPaidMedia({
+        chat_id: TEST_CHANNEL_ID,
+        star_count: 1,
+        media: [
+          {
+            type: 'photo',
+            media: 'https://unsplash.it/640/480',
+          },
+        ],
+        caption: 'Paid media: photo',
+      }),
+    ).resolves.toHaveProperty('paid_media');
+  });
+
+  it('should send paid media: video', async () => {
+    await expect(
+      bot.sendPaidMedia({
+        chat_id: TEST_CHANNEL_ID,
+        star_count: 1,
+        media: [
+          {
+            type: 'video',
+            media:
+              'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
+          },
+        ],
+        caption: 'Paid media: video',
+      }),
+    ).resolves.toHaveProperty('paid_media');
+  });
+
+  it('should send paid media: photo and video', async () => {
+    await expect(
+      bot.sendPaidMedia({
+        chat_id: TEST_CHANNEL_ID,
+        star_count: 1,
+        media: [
+          { type: 'photo', media: 'https://unsplash.it/640/480' },
+          {
+            type: 'video',
+            media:
+              'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
+          },
+        ],
+        caption: 'Paid media: photo and video',
+      }),
+    ).resolves.toHaveProperty('paid_media');
   });
 });
 

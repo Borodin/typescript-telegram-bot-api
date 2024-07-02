@@ -20,6 +20,7 @@ import {
   Contact,
   Dice,
   Invoice,
+  PaidMediaInfo,
 } from './';
 
 export type ExternalReplyInfo = {
@@ -30,6 +31,7 @@ export type ExternalReplyInfo = {
   animation?: Animation;
   audio?: Audio;
   document?: Document;
+  paid_media?: PaidMediaInfo;
   photo?: PhotoSize[];
   sticker?: Sticker;
   story?: Story;
