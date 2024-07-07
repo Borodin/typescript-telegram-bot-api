@@ -32,6 +32,7 @@ import {
   VideoChatEnded,
   VideoChatParticipantsInvited,
   SuccessfulPayment,
+  RefundedPayment,
   Video,
   UsersShared,
   MessageOrigin,
@@ -112,6 +113,7 @@ export type Message = {
   pinned_message?: MaybeInaccessibleMessage;
   invoice?: Invoice;
   successful_payment?: SuccessfulPayment;
+  refunded_payment?: RefundedPayment;
   users_shared?: UsersShared;
   chat_shared?: ChatShared;
   connected_website?: string;
@@ -157,6 +159,7 @@ export const messageTypes = [
   'video_note',
   'voice',
   'successful_payment',
+  'refunded_payment',
   'migrate_from_chat_id',
   'migrate_to_chat_id',
   'new_chat_members',

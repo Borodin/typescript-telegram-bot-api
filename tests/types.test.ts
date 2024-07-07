@@ -14,6 +14,10 @@ describe('Types', () => {
       message.audio.file_id.toUpperCase();
     });
 
+    bot.on('message:refunded_payment', (message) => {
+      message.refunded_payment.currency;
+    });
+
     bot.on('message', (message) => {
       message.message_id.toFixed();
     });

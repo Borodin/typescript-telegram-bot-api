@@ -192,6 +192,7 @@ export * from './Sticker';
 export * from './StickerSet';
 export * from './Story';
 export * from './SuccessfulPayment';
+export * from './RefundedPayment';
 export * from './SwitchInlineQueryChosenChat';
 export * from './TextQuote';
 export * from './PaidMedia';
