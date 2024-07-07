@@ -1,3 +1,3 @@
 import { ReadStream } from 'fs';
 
-export type InputFile = ReadStream | Buffer;
+export type InputFile = ReadStream | Buffer | File;

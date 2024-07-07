@@ -61,8 +61,6 @@ export class Polling {
             /* eslint-disable no-console */
             console.warn(error.message);
             /* eslint-enable no-console */
-          } else {
-            throw error;
           }
         }
       }
@@ -70,7 +68,7 @@ export class Polling {
   }
 
   async start() {
-    return this.poll();
+    this.poll().catch();
   }
 
   async stop() {

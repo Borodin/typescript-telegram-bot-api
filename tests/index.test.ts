@@ -4,6 +4,7 @@ import { readFile } from 'fs/promises';
 import { TelegramBot } from '../src';
 import { TelegramError } from '../src/errors';
 import { ForumTopic, File, User } from '../src/types';
+import * as TelegramTypes from '../src/types';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
@@ -1813,7 +1814,7 @@ describe('.uploadStickerFile()', () => {
 });
 
 describe('.createNewStickerSet()', () => {
-  let stickerFile = null as null | File;
+  let stickerFile = null as null | TelegramTypes.File;
   let me = null as null | User;
 
   beforeAll(async () => {

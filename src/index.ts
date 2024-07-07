@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import https from 'https';
+import axios from 'axios';
 import FormData from 'form-data';
 import { promisify } from 'util';
 import { Readable } from 'stream';
@@ -24,7 +24,6 @@ import {
   InputMediaVideo,
   InputPollOption,
   UserProfilePhotos,
-  File,
   ChatPermissions,
   ChatInviteLink,
   ChatFullInfo,
@@ -61,11 +60,11 @@ import {
   StarTransactions,
   InputPaidMedia,
 } from './types/';
-
+import * as TelegramTypes from './types/';
 import { TelegramError } from './errors';
 import { Polling } from './pooling';
 
-const wait = promisify(setTimeout);
+const wait: (ms: number) => Promise<void> = promisify(setTimeout);
 
 type allEmittedTypes = EventTypes & MessageTypes;
 
@@ -104,11 +103,11 @@ export class TelegramBot extends EventEmitter {
   }
 
   async startPolling() {
-    this.polling.start();
+    await this.polling.start();
   }
 
   async stopPolling() {
-    this.polling.stop();
+    await this.polling.stop();
   }
 
   private async request(
@@ -116,46 +115,24 @@ export class TelegramBot extends EventEmitter {
     options?: Record<string, unknown>,
     abortController?: AbortController,
   ): Promise<Response> {
-    if (!abortController) {
-      abortController = new AbortController();
-    }
-    return new Promise((resolve, reject) => {
-      const formData = this.createFormData(options);
-      const request = https.request(
-        url,
-        {
-          method: 'POST',
-          headers: {
-            ...formData.getHeaders(),
-          },
-          signal: abortController?.signal,
-        },
-        (response) => {
-          let responseData = '';
-          response.on('data', (chunk) => {
-            responseData += chunk.toString();
-          });
-          response.on('end', () => {
-            try {
-              const response = JSON.parse(responseData.toString()) as Response;
-              resolve(response);
-            } catch (error) {
-              reject(new Error(`Invalid response`));
-            }
-          });
-        },
-      );
-      formData.on('error', (error) => {
-        abortController.abort();
-        reject(error);
-      });
-      request.on('error', (error) => {
-        if (error.name !== 'AbortError') {
-          reject(error);
-        }
-      });
-      formData.pipe(request);
+    const formData = this.createFormData(options);
+    const response = await axios({
+      method: 'POST',
+      url,
+      data: formData,
+      signal: abortController?.signal,
+      responseType: 'text',
+      transitional: {
+        silentJSONParsing: false,
+        forcedJSONParsing: false,
+      },
+      validateStatus: () => true,
     });
+    try {
+      return JSON.parse(response.data.toString()) as Response;
+    } catch (error) {
+      throw new Error(`Invalid response`);
+    }
   }
 
   private createFormData(options?: Record<string, unknown>): FormData {
@@ -163,24 +140,24 @@ export class TelegramBot extends EventEmitter {
     if (options) {
       for (const [key, value] of Object.entries(options)) {
         if (value !== undefined) {
-          if (typeof options[key] === 'boolean') {
-            formData.append(key, String(options[key]));
-          } else if (options[key] instanceof Buffer) {
-            formData.append(key, options[key], {
+          if (typeof value === 'boolean') {
+            formData.append(key, String(value));
+          } else if (value instanceof Buffer) {
+            formData.append(key, value, {
               filename: 'file',
               contentType: 'application/octet-stream',
             });
-          } else if (
-            typeof options[key] === 'object' &&
-            !Array.isArray(options[key]) &&
-            !(options[key] instanceof Readable)
-          ) {
-            formData.append(key, JSON.stringify(options[key]));
+          } else if (value instanceof File || value instanceof Readable) {
+            formData.append(key, value);
+          } else if (typeof value === 'object' && !Array.isArray(value)) {
+            formData.append(key, JSON.stringify(value));
           } else {
-            formData.append(key, options[key]);
+            formData.append(key, value);
           }
         }
       }
+    } else {
+      formData.append('empty', 'empty');
     }
     return formData;
   }
@@ -863,7 +840,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link ```https://api.telegram.org/file/bot<token>/<file_path>```, where ```<file_path>``` is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
    * @see https://core.telegram.org/bots/api#getfile
    */
-  async getFile(options: { file_id: string }): Promise<File> {
+  async getFile(options: { file_id: string }): Promise<TelegramTypes.File> {
     return await this.callApi('getFile', options);
   }
 
@@ -1814,7 +1791,7 @@ export class TelegramBot extends EventEmitter {
     user_id: number;
     sticker: InputFile;
     sticker_format?: InputSticker['format'];
-  }): Promise<File> {
+  }): Promise<TelegramTypes.File> {
     return await this.callApi('uploadStickerFile', options);
   }
 

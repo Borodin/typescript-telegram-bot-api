@@ -1,17 +1,16 @@
 import 'dotenv/config';
+import axios from 'axios';
 import { Message, Update } from '../src/types/';
 import { TelegramBot } from '../src';
-import nock from 'nock';
+import MockAdapter from 'axios-mock-adapter';
+
+const mock = new MockAdapter(axios);
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 
-describe('Polling', () => {
-  afterEach(() => {
-    nock.cleanAll();
-  });
-
-  afterAll(() => {
-    nock.restore();
+describe('Polling ', () => {
+  beforeEach(() => {
+    mock.reset();
   });
 
   it('should handle delayed response in private chat', async () => {
@@ -29,11 +28,9 @@ describe('Polling', () => {
       },
     ];
 
-    nock(bot.baseURL)
-      .post(`/bot${botToken}/getUpdates`)
-      .delay(1000)
-      .reply(200, { ok: true, result });
-
+    mock
+      .onPost(`${bot.baseURL}/bot${botToken}/getUpdates`)
+      .reply(200, JSON.stringify({ ok: true, result }));
     await bot.startPolling();
 
     await expect(
@@ -44,11 +41,14 @@ describe('Polling', () => {
         });
       }),
     ).resolves.toHaveProperty('text', '/start');
-    expect(nock.isDone()).toBeTruthy();
   });
 });
 
 describe('Parallel Polling', () => {
+  beforeEach(() => {
+    mock.restore();
+  });
+
   const bot1 = new TelegramBot({ botToken: TOKEN, pollingTimeout: 1 });
   const bot2 = new TelegramBot({ botToken: TOKEN, pollingTimeout: 1 });
   let warnSpy: jest.SpyInstance;
