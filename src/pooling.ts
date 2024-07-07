@@ -25,7 +25,7 @@ export class Polling {
     });
   }
 
-  private emitUpdate(update: Update) {
+  emitUpdate(update: Update) {
     Object.keys(update).forEach((key) => {
       if (key !== 'update_id') {
         const eventType = key as keyof EventTypes;

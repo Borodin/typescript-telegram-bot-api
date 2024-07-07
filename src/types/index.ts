@@ -214,6 +214,7 @@ export * from './VideoNote';
 export * from './Voice';
 export * from './WebAppData';
 export * from './WebAppInfo';
+export * from './WebhookInfo';
 export * from './WriteAccessAllowed';
 
 import { ResponseParameters } from './ResponseParameters';

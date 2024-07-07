@@ -59,6 +59,7 @@ import {
   MessageTypes,
   StarTransactions,
   InputPaidMedia,
+  WebhookInfo,
 } from './types/';
 import * as TelegramTypes from './types/';
 import { TelegramError } from './errors';
@@ -186,6 +187,10 @@ export class TelegramBot extends EventEmitter {
     }
   }
 
+  async processUpdate(update: Update) {
+    this.polling.emitUpdate(update);
+  }
+
   /**
    * ## getUpdates
    * Use this method to receive incoming updates using long polling [wiki](https://en.wikipedia.org/wiki/Push_technology#Long_polling). Returns an Array of Update objects.
@@ -208,6 +213,53 @@ export class TelegramBot extends EventEmitter {
       },
       abortController,
     );
+  }
+
+  /**
+   * ## setWebhook
+   * Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update
+   * for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case
+   * of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.
+   *
+   * If you'd like to make sure that the webhook was set by you, you can specify secret data in the parameter
+   * ```secret_token```. If specified, the request will contain a header ```“X-Telegram-Bot-Api-Secret-Token”``` with
+   * the secret token as content.
+   * @see https://core.telegram.org/bots/api#setwebhook
+   */
+  async setWebhook(options: {
+    url: string;
+    certificate?: InputFile;
+    ip_address?: string;
+    max_connections?: number;
+    allowed_updates?: UpdateType[];
+    drop_pending_updates?: boolean;
+    secret_token?: string;
+  }): Promise<true> {
+    return await this.callApi('setWebhook', {
+      ...options,
+      allowed_updates: JSON.stringify(options?.allowed_updates),
+    });
+  }
+
+  /**
+   * ## deleteWebhook
+   * Use this method to remove webhook integration if you decide to switch back to getUpdates. Returns True on success.
+   * @see https://core.telegram.org/bots/api#deletewebhook
+   */
+  async deleteWebhook(options?: {
+    drop_pending_updates?: boolean;
+  }): Promise<true> {
+    return await this.callApi('deleteWebhook', options);
+  }
+
+  /**
+   * ## getWebhookInfo
+   * Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object.
+   * If the bot is using getUpdates, will return an object with the url field empty.
+   * @see https://core.telegram.org/bots/api#getwebhookinfo
+   */
+  async getWebhookInfo(): Promise<WebhookInfo | { url: '' }> {
+    return await this.callApi('getWebhookInfo');
   }
 
   /**

@@ -104,6 +104,62 @@ bot.on('message:audio', (message) => {
 });
 ```
 
+## Webhooks
+To use webhooks, you need to set up a server that will receive updates from Telegram. You can use the [express](https://www.npmjs.com/package/express) library for this purpose.
+
+This example demonstrates a basic Telegram bot that responds with a reaction to any incoming message using Webhooks. The use of [ngrok](https://www.npmjs.com/package/ngrok) as a tunneling service simplifies the setup, allowing the bot to be easily deployed in various environments without complex network configuration. This approach is ideal for quick testing and development purposes. For production use, you should consider deploying the bot on a server with a public IP address and a valid SSL certificate.
+```typescript
+import 'dotenv/config';
+import * as ngrok from 'ngrok';
+import express from "express";
+import {TelegramBot} from "./src";
+import {Update} from "./src/types";
+
+const port = 3001;
+
+const bot = new TelegramBot({
+  botToken: process.env.TEST_TELEGRAM_TOKEN as string,
+});
+
+bot.on('message', async (message) => {
+  await bot.setMessageReaction({
+    chat_id: message.chat.id,
+    message_id: message.message_id,
+    reaction: [{
+      type: 'emoji', emoji: '👍'
+    }]
+  });
+});
+
+const app = express();
+app.use(express.json());
+app.post('/', async (req, res) => {
+  try {
+    await bot.processUpdate(req.body as Update);
+    res.sendStatus(200);
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+
+(async () => {
+  app.listen(port, async () => {
+    const url = await ngrok.connect({
+      proto: 'http',
+      addr: port,
+    });
+    await bot.setWebhook({url});
+    console.log('Set Webhook to', url);
+  })
+})();
+
+process.on('SIGINT', async () => {
+  await bot.deleteWebhook();
+  await ngrok.disconnect();
+  console.log('Webhook deleted');
+});
+```
+
 
 ## Tests
 ```bash

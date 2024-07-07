@@ -74,6 +74,46 @@ describe('.stopPolling()', () => {
   });
 });
 
+describe('.setWebhook()', () => {
+  it('should set webhook', async () => {
+    await expect(
+      bot.setWebhook({
+        url: 'https://example.com',
+      }),
+    ).resolves.toBe(true);
+  });
+
+  afterAll(async () => {
+    await bot.deleteWebhook();
+  });
+});
+
+describe('.deleteWebhook()', () => {
+  it('should delete webhook', async () => {
+    await expect(bot.deleteWebhook()).resolves.toBe(true);
+  });
+});
+
+describe('.getWebhookInfo()', () => {
+  it('should get webhook info', async () => {
+    await bot.setWebhook({
+      url: 'https://example.com',
+    });
+    await expect(bot.getWebhookInfo()).resolves.toHaveProperty(
+      'url',
+      'https://example.com',
+    );
+  });
+
+  it('should return empty url when webhook is not set', async () => {
+    await expect(bot.getWebhookInfo()).resolves.toHaveProperty('url', '');
+  });
+
+  afterEach(async () => {
+    await bot.deleteWebhook();
+  });
+});
+
 describe('.isTelegramError()', () => {
   it('should return true for Telegram-related errors', () => {
     const telegramError = new TelegramError({
