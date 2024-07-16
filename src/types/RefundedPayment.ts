@@ -1,5 +1,7 @@
+import { Currencies } from './index';
+
 export type RefundedPayment = {
-  currency: string;
+  currency: Currencies | 'XTR';
   total_amount: number;
   invoice_payload: string;
   shipping_option_id?: string;

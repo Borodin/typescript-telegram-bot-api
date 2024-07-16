@@ -1,11 +1,11 @@
-import { LabeledPrice } from './';
+import { Currencies, LabeledPrice } from './';
 
 export type InputInvoiceMessageContent = {
   title: string;
   description: string;
   payload: string;
   provider_token: string;
-  currency: string;
+  currency: Currencies | 'XTR';
   prices: LabeledPrice[]; //TODO: JSON
   max_tip_amount?: number;
   suggested_tip_amounts?: number[]; //TODO: JSON

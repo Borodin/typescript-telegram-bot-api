@@ -1,7 +1,7 @@
-import { OrderInfo } from './';
+import { Currencies, OrderInfo } from './';
 
 export type SuccessfulPayment = {
-  currency: string;
+  currency: Currencies | 'XTR';
   total_amount: number;
   invoice_payload: string;
   shipping_option_id?: string;

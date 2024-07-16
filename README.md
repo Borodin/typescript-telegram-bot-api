@@ -6,7 +6,8 @@
 [![GitHub](https://img.shields.io/badge/Bot_API-v7.7-0088cc)](https://core.telegram.org/bots/api#july-7-2024)
 
 
-This is a TypeScript wrapper for the [Telegram Bot API](https://core.telegram.org/bots/api). It allows you to easily interact with the Telegram Bot API using TypeScript.
+This is a TypeScript wrapper for the [Telegram Bot API](https://core.telegram.org/bots/api) or Node.js and browsers. It allows you to easily interact with the Telegram Bot API using TypeScript.
+Check out the browser live demo here: [StarExplorer](https://borodin.github.io/StarExplorer/).
 
 ## Installation
 

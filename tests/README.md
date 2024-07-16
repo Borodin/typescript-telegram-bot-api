@@ -7,6 +7,8 @@ Create `.env` file in the root directory and add the following environment varia
 TEST_TELEGRAM_TOKEN=your_bot_token
 TEST_USER_ID=your_user_id
 TEST_GROUP_ID=your_group_id
+TEST_GROUP_MEMBER_ID=your_group_member_id
+TEST_CHANNEL_ID=your_channel_id
 ```
 
 ```bash

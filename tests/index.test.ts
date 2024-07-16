@@ -666,6 +666,12 @@ describe('.getStarTransactions()', () => {
       }),
     ).resolves.toHaveProperty('transactions');
   });
+
+  it('should get star transactions without options', async () => {
+    await expect(bot.getStarTransactions()).resolves.toHaveProperty(
+      'transactions',
+    );
+  });
 });
 
 describe('.setMyName()', () => {
@@ -764,6 +770,9 @@ describe('.getMyCommands()', () => {
         language_code: 'en',
       }),
     ).resolves.toBeInstanceOf(Array);
+  });
+  it('should get my commands without options', async () => {
+    await expect(bot.getMyCommands()).resolves.toBeInstanceOf(Array);
   });
 });
 
@@ -1048,12 +1057,28 @@ describe('.unpinAllChatMessages()', () => {
 });
 
 describe('.getChat()', () => {
-  it('should get chat', async () => {
+  it('should get chat (group)', async () => {
     await expect(
       bot.getChat({
         chat_id: TEST_GROUP_ID,
       }),
     ).resolves.toHaveProperty('id', TEST_GROUP_ID);
+  });
+
+  it('should get chat (user)', async () => {
+    await expect(
+      bot.getChat({
+        chat_id: USERID,
+      }),
+    ).resolves.toHaveProperty('id', USERID);
+  });
+
+  it('should get chat (chat not found)', async () => {
+    await expect(
+      bot.getChat({
+        chat_id: 1,
+      }),
+    ).rejects.toThrow('400 Bad Request: chat not found');
   });
 });
 

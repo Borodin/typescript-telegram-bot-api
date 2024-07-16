@@ -60,6 +60,7 @@ import {
   StarTransactions,
   InputPaidMedia,
   WebhookInfo,
+  Currencies,
 } from './types/';
 import * as TelegramTypes from './types/';
 import { TelegramError } from './errors';
@@ -197,7 +198,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#getupdates
    */
   async getUpdates(
-    options: {
+    options?: {
       offset?: number;
       limit?: number;
       timeout?: number;
@@ -209,7 +210,7 @@ export class TelegramBot extends EventEmitter {
       'getUpdates',
       {
         ...options,
-        allowed_updates: JSON.stringify(options.allowed_updates),
+        allowed_updates: JSON.stringify(options?.allowed_updates),
       },
       abortController,
     );
@@ -1466,12 +1467,12 @@ export class TelegramBot extends EventEmitter {
    * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success.
    * @see https://core.telegram.org/bots/api#deletemycommands
    */
-  async deleteMyCommands(options: {
+  async deleteMyCommands(options?: {
     scope?: BotCommandScope;
     language_code?: string;
   }): Promise<true> {
     return await this.callApi('deleteMyCommands', {
-      scope: JSON.stringify(options.scope),
+      scope: JSON.stringify(options?.scope),
     });
   }
 
@@ -1480,12 +1481,12 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
    * @see https://core.telegram.org/bots/api#getmycommands
    */
-  async getMyCommands(options: {
+  async getMyCommands(options?: {
     scope?: BotCommandScope;
     language_code?: string;
   }): Promise<BotCommand[]> {
     return await this.callApi('getMyCommands', {
-      scope: JSON.stringify(options.scope),
+      scope: JSON.stringify(options?.scope),
     });
   }
 
@@ -1494,7 +1495,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to change the bot's name. Returns True on success.
    * @see https://core.telegram.org/bots/api#setmyname
    */
-  async setMyName(options: {
+  async setMyName(options?: {
     name?: string;
     language_code?: string;
   }): Promise<true> {
@@ -1506,7 +1507,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get the current bot name for the given user language. Returns BotName on success.
    * @see https://core.telegram.org/bots/api#getmyname
    */
-  async getMyName(options: { language_code?: string }): Promise<BotName> {
+  async getMyName(options?: { language_code?: string }): Promise<BotName> {
     return await this.callApi('getMyName', options);
   }
 
@@ -1515,7 +1516,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success.
    * @see https://core.telegram.org/bots/api#setmydescription
    */
-  async setMyDescription(options: {
+  async setMyDescription(options?: {
     description?: string;
     language_code?: string;
   }): Promise<true> {
@@ -1527,7 +1528,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get the current bot description for the given user language. Returns BotDescription on success.
    * @see https://core.telegram.org/bots/api#getmydescription
    */
-  async getMyDescription(options: {
+  async getMyDescription(options?: {
     language_code?: string;
   }): Promise<BotDescription> {
     return await this.callApi('getMyDescription', options);
@@ -1538,7 +1539,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success.
    * @see https://core.telegram.org/bots/api#setmyshortdescription
    */
-  async setMyShortDescription(options: {
+  async setMyShortDescription(options?: {
     short_description?: string;
     language_code?: string;
   }): Promise<true> {
@@ -1550,7 +1551,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success.
    * @see https://core.telegram.org/bots/api#getmyshortdescription
    */
-  async getMyShortDescription(options: {
+  async getMyShortDescription(options?: {
     language_code?: string;
   }): Promise<BotShortDescription> {
     return await this.callApi('getMyShortDescription', options);
@@ -1601,7 +1602,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get the current default administrator rights of the bot. Returns ChatAdministratorRights on success.
    * @see https://core.telegram.org/bots/api#getmydefaultadministratorrights
    */
-  async getMyDefaultAdministratorRights(options: {
+  async getMyDefaultAdministratorRights(options?: {
     for_channels?: boolean;
   }): Promise<ChatAdministratorRights> {
     return await this.callApi('getMyDefaultAdministratorRights', options);
@@ -1612,17 +1613,19 @@ export class TelegramBot extends EventEmitter {
    * Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagetext
    */
-  async editMessageText(options: {
-    business_connection_id?: string;
-    chat_id?: number | string;
-    message_id?: number;
-    inline_message_id?: string;
-    text: string;
-    parse_mode?: ParseMode;
-    entities?: MessageEntity[];
-    link_preview_options?: LinkPreviewOptions;
-    reply_markup?: InlineKeyboardMarkup;
-  }): Promise<Message | true> {
+  async editMessageText(
+    options: (
+      | { chat_id: number | string; message_id: number }
+      | { inline_message_id: string }
+    ) & {
+      business_connection_id?: string;
+      text: string;
+      parse_mode?: ParseMode;
+      entities?: MessageEntity[];
+      link_preview_options?: LinkPreviewOptions;
+      reply_markup?: InlineKeyboardMarkup;
+    },
+  ): Promise<Message | true> {
     return await this.callApi('editMessageText', {
       ...options,
       entities: JSON.stringify(options.entities),
@@ -1635,17 +1638,19 @@ export class TelegramBot extends EventEmitter {
    * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagecaption
    */
-  async editMessageCaption(options: {
-    business_connection_id?: string;
-    chat_id?: number | string;
-    message_id?: number;
-    inline_message_id?: string;
-    caption?: string;
-    parse_mode?: ParseMode;
-    caption_entities?: MessageEntity[];
-    show_caption_above_media?: boolean;
-    reply_markup?: InlineKeyboardMarkup;
-  }): Promise<Message | true> {
+  async editMessageCaption(
+    options: (
+      | { chat_id: number | string; message_id: number }
+      | { inline_message_id: string }
+    ) & {
+      business_connection_id?: string;
+      caption?: string;
+      parse_mode?: ParseMode;
+      caption_entities?: MessageEntity[];
+      show_caption_above_media?: boolean;
+      reply_markup?: InlineKeyboardMarkup;
+    },
+  ): Promise<Message | true> {
     return await this.callApi('editMessageCaption', {
       ...options,
       caption_entities: JSON.stringify(options.caption_entities),
@@ -1658,14 +1663,16 @@ export class TelegramBot extends EventEmitter {
    * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
-  async editMessageMedia(options: {
-    business_connection_id?: string;
-    chat_id?: number | string;
-    message_id?: number;
-    inline_message_id?: string;
-    media: InputMedia;
-    reply_markup?: InlineKeyboardMarkup;
-  }): Promise<Message | true> {
+  async editMessageMedia(
+    options: (
+      | { chat_id: number; message_id: number }
+      | { inline_message_id: string }
+    ) & {
+      business_connection_id?: string;
+      media: InputMedia;
+      reply_markup?: InlineKeyboardMarkup;
+    },
+  ): Promise<Message | true> {
     return await this.callApi('editMessageMedia', {
       ...options,
       media: JSON.stringify(options.media),
@@ -1678,19 +1685,21 @@ export class TelegramBot extends EventEmitter {
    * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagelivelocation
    */
-  async editMessageLiveLocation(options: {
-    business_connection_id?: string;
-    chat_id?: number | string;
-    message_id?: number;
-    inline_message_id?: string;
-    latitude: number;
-    longitude: number;
-    live_period?: number;
-    horizontal_accuracy?: number;
-    heading?: number;
-    proximity_alert_radius?: number;
-    reply_markup?: InlineKeyboardMarkup;
-  }): Promise<Message | true> {
+  async editMessageLiveLocation(
+    options: (
+      | { chat_id: number | string; message_id: number }
+      | { inline_message_id: string }
+    ) & {
+      business_connection_id?: string;
+      latitude: number;
+      longitude: number;
+      live_period?: number;
+      horizontal_accuracy?: number;
+      heading?: number;
+      proximity_alert_radius?: number;
+      reply_markup?: InlineKeyboardMarkup;
+    },
+  ): Promise<Message | true> {
     return await this.callApi('editMessageLiveLocation', {
       ...options,
       reply_markup: JSON.stringify(options.reply_markup),
@@ -1702,13 +1711,15 @@ export class TelegramBot extends EventEmitter {
    * se this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#stopmessagelivelocation
    */
-  async stopMessageLiveLocation(options: {
-    business_connection_id?: string;
-    chat_id?: number | string;
-    message_id?: number;
-    inline_message_id?: string;
-    reply_markup?: InlineKeyboardMarkup;
-  }): Promise<Message | true> {
+  async stopMessageLiveLocation(
+    options: (
+      | { chat_id: number | string; message_id: number }
+      | { inline_message_id: string }
+    ) & {
+      business_connection_id?: string;
+      reply_markup?: InlineKeyboardMarkup;
+    },
+  ): Promise<Message | true> {
     return await this.callApi('stopMessageLiveLocation', {
       ...options,
       reply_markup: JSON.stringify(options.reply_markup),
@@ -1720,13 +1731,15 @@ export class TelegramBot extends EventEmitter {
    * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagereplymarkup
    */
-  async editMessageReplyMarkup(options: {
-    business_connection_id?: string;
-    chat_id?: number | string;
-    message_id?: number;
-    inline_message_id?: string;
-    reply_markup?: InlineKeyboardMarkup;
-  }): Promise<Message | true> {
+  async editMessageReplyMarkup(
+    options: (
+      | { chat_id: number | string; message_id: number }
+      | { inline_message_id: string }
+    ) & {
+      business_connection_id?: string;
+      reply_markup?: InlineKeyboardMarkup;
+    },
+  ): Promise<Message | true> {
     return await this.callApi('editMessageReplyMarkup', {
       ...options,
       reply_markup: JSON.stringify(options.reply_markup),
@@ -2053,16 +2066,16 @@ export class TelegramBot extends EventEmitter {
    * Use this method to send invoices. On success, the sent Message is returned.
    * @see https://core.telegram.org/bots/api#sendinvoice
    */
-  async sendInvoice(options: {
+  async sendInvoice<T extends Currencies | 'XTR'>(options: {
     chat_id: number | string;
     message_thread_id?: number;
     title: string;
     description: string;
     payload: string;
-    provider_token?: string;
-    currency: string;
-    prices: LabeledPrice[];
-    max_tip_amount?: number;
+    provider_token?: T extends 'XTR' ? never : string;
+    currency: T;
+    prices: T extends 'XTR' ? [LabeledPrice] : LabeledPrice[];
+    max_tip_amount?: T extends 'XTR' ? never : number;
     suggested_tip_amounts?: number[];
     start_parameter: string;
     provider_data?: string;
@@ -2070,13 +2083,13 @@ export class TelegramBot extends EventEmitter {
     photo_size?: number;
     photo_width?: number;
     photo_height?: number;
-    need_name?: boolean;
-    need_phone_number?: boolean;
-    need_email?: boolean;
-    need_shipping_address?: boolean;
-    send_phone_number_to_provider?: boolean;
-    send_email_to_provider?: boolean;
-    is_flexible?: boolean;
+    need_name?: T extends 'XTR' ? never : boolean;
+    need_phone_number?: T extends 'XTR' ? never : boolean;
+    need_email?: T extends 'XTR' ? never : boolean;
+    need_shipping_address?: T extends 'XTR' ? never : boolean;
+    send_phone_number_to_provider?: T extends 'XTR' ? never : boolean;
+    send_email_to_provider?: T extends 'XTR' ? never : boolean;
+    is_flexible?: T extends 'XTR' ? never : boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
     message_effect_id?: string;
@@ -2096,27 +2109,27 @@ export class TelegramBot extends EventEmitter {
    * Use this method to create a link for an invoice. Returns the created invoice link as String on success.
    * @see https://core.telegram.org/bots/api#createinvoicelink
    */
-  async createInvoiceLink(options: {
+  async createInvoiceLink<T extends Currencies | 'XTR'>(options: {
     title: string;
     description: string;
     payload: string;
     provider_token?: string;
-    currency: string;
-    prices: LabeledPrice[];
-    max_tip_amount?: number;
+    currency: T;
+    prices: T extends 'XTR' ? [LabeledPrice] : LabeledPrice[];
+    max_tip_amount?: T extends 'XTR' ? never : number;
     suggested_tip_amounts?: number[];
     provider_data?: string;
     photo_url?: string;
     photo_size?: number;
     photo_width?: number;
     photo_height?: number;
-    need_name?: boolean;
-    need_phone_number?: boolean;
-    need_email?: boolean;
-    need_shipping_address?: boolean;
-    send_phone_number_to_provider?: boolean;
-    send_email_to_provider?: boolean;
-    is_flexible?: boolean;
+    need_name?: T extends 'XTR' ? never : boolean;
+    need_phone_number?: T extends 'XTR' ? never : boolean;
+    need_email?: T extends 'XTR' ? never : boolean;
+    need_shipping_address?: T extends 'XTR' ? never : boolean;
+    send_phone_number_to_provider?: T extends 'XTR' ? never : boolean;
+    send_email_to_provider?: T extends 'XTR' ? never : boolean;
+    is_flexible?: T extends 'XTR' ? never : boolean;
   }): Promise<string> {
     return await this.callApi('createInvoiceLink', {
       ...options,
@@ -2173,7 +2186,7 @@ export class TelegramBot extends EventEmitter {
    * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
    * @see https://core.telegram.org/bots/api#getstartransactions
    */
-  async getStarTransactions(options: {
+  async getStarTransactions(options?: {
     offset?: number;
     limit?: number;
   }): Promise<StarTransactions> {
@@ -2232,19 +2245,19 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setGameScore
-   * Используйте этот метод, чтобы установить счет указанного пользователя в игровом сообщении. В случае успеха, если сообщение не является встроенным, возвращается Message , в противном случае возвращается True . Возвращает ошибку, если новый балл не превышает текущий балл пользователя в чате и Force имеет значение False .
+   * Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the [Message](https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
    * @see https://core.telegram.org/bots/api#setgamescore
    */
   async setGameScore(
-    options: {
+    options: (
+      | { chat_id: number; message_id: number }
+      | { inline_message_id: string }
+    ) & {
       user_id: number;
       score: number;
       force?: boolean;
       disable_edit_message?: boolean;
-    } & (
-      | { chat_id: number; message_id: number }
-      | { inline_message_id: string }
-    ),
+    },
   ): Promise<Message | true> {
     return await this.callApi('setGameScore', options);
   }
@@ -2256,12 +2269,12 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#getgamehighscores
    */
   async getGameHighScores(
-    options: {
-      user_id: number;
-    } & (
+    options: (
       | { chat_id: number; message_id: number }
       | { inline_message_id: string }
-    ),
+    ) & {
+      user_id: number;
+    },
   ): Promise<GameHighScore[]> {
     return await this.callApi('getGameHighScores', options);
   }
