@@ -30,7 +30,7 @@ bot.on('message:sticker', (message) => {
   console.log('Received sticker:', message.sticker.emoji);
 });
 
-api.getMe()
+bot.getMe()
   .then(console.log)
   .catch(console.error);
 ```

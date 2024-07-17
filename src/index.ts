@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import axios from 'axios';
+import rateLimit from 'axios-rate-limit';
 import FormData from 'form-data';
 import { promisify } from 'util';
 import { Readable } from 'stream';
@@ -72,6 +73,7 @@ type allEmittedTypes = EventTypes & MessageTypes;
 
 export class TelegramBot extends EventEmitter {
   private readonly polling: Polling;
+  private http = rateLimit(axios.create(), { maxRPS: 30 });
   botToken: string;
   testEnvironment: boolean;
   baseURL: string;
@@ -88,6 +90,7 @@ export class TelegramBot extends EventEmitter {
     autoRetryLimit?: number;
     allowedUpdates?: UpdateType[];
     pollingTimeout?: number;
+    maxRPS?: number;
   }) {
     super();
     this.testEnvironment = options.testEnvironment || false;
@@ -98,6 +101,7 @@ export class TelegramBot extends EventEmitter {
     this.allowedUpdates = options.allowedUpdates || [];
     this.pollingTimeout = options.pollingTimeout || 50;
     this.polling = new Polling(this);
+    this.http.setMaxRPS(options.maxRPS || 30);
   }
 
   public static isTelegramError(error: unknown): error is TelegramError {
@@ -118,7 +122,7 @@ export class TelegramBot extends EventEmitter {
     abortController?: AbortController,
   ): Promise<Response> {
     const formData = this.createFormData(options);
-    const response = await axios({
+    const response = await this.http({
       method: 'POST',
       url,
       data: formData,
@@ -1870,7 +1874,7 @@ export class TelegramBot extends EventEmitter {
     name: string;
     title: string;
     stickers: InputSticker[];
-    sticker_type?: InputSticker['format'];
+    sticker_type?: Sticker['type'];
     needs_repainting?: boolean;
   }): Promise<true> {
     return await this.callApi('createNewStickerSet', {
