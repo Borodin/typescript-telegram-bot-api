@@ -70,6 +70,10 @@ const wait: (ms: number) => Promise<void> = promisify(setTimeout);
 
 type allEmittedTypes = EventTypes & MessageTypes;
 
+class JSONSerialized {
+  constructor(public value: object | undefined) {}
+}
+
 export class TelegramBot extends EventEmitter {
   private readonly polling: Polling;
   botToken: string;
@@ -137,27 +141,61 @@ export class TelegramBot extends EventEmitter {
     }
   }
 
+  private serializeJSON(value: unknown, formData: FormData): unknown {
+    if (
+      value instanceof File ||
+      value instanceof Buffer ||
+      value instanceof Readable
+    ) {
+      const name = Math.random().toString(36).substring(7);
+      formData.append(name, value, 'file');
+      return `attach://${name}`;
+    } else if (Array.isArray(value)) {
+      return value.map((item) => this.serializeJSON(item, formData));
+    } else if (typeof value === 'object' && value !== null) {
+      const result: Record<string, unknown> = {};
+      for (const [key, val] of Object.entries(
+        value as Record<string, unknown>,
+      )) {
+        result[key] = this.serializeJSON(val, formData);
+      }
+      return result;
+    } else {
+      return value;
+    }
+  }
+
+  private handleObject(object: unknown, formData: FormData) {
+    for (const [key, value] of Object.entries(
+      object as Record<string, unknown>,
+    )) {
+      if (value === undefined) {
+        // Skip undefined values
+      } else if (value instanceof JSONSerialized) {
+        const json = JSON.stringify(this.serializeJSON(value.value, formData));
+        formData.append(key, json);
+      } else if (
+        value instanceof File ||
+        value instanceof Buffer ||
+        value instanceof Readable
+      ) {
+        formData.append(key, value, 'file');
+      } else if (
+        typeof value === 'object' &&
+        value !== null &&
+        !(value instanceof Date)
+      ) {
+        this.handleObject(value, formData);
+      } else {
+        formData.append(key, value);
+      }
+    }
+  }
+
   private createFormData(options?: Record<string, unknown>): FormData {
     const formData = new FormData();
     if (options) {
-      for (const [key, value] of Object.entries(options)) {
-        if (value !== undefined) {
-          if (typeof value === 'boolean') {
-            formData.append(key, String(value));
-          } else if (value instanceof Buffer) {
-            formData.append(key, value, {
-              filename: 'file',
-              contentType: 'application/octet-stream',
-            });
-          } else if (value instanceof File || value instanceof Readable) {
-            formData.append(key, value);
-          } else if (typeof value === 'object' && !Array.isArray(value)) {
-            formData.append(key, JSON.stringify(value));
-          } else {
-            formData.append(key, value);
-          }
-        }
-      }
+      this.handleObject(options, formData);
     } else {
       formData.append('empty', 'empty');
     }
@@ -210,7 +248,7 @@ export class TelegramBot extends EventEmitter {
       'getUpdates',
       {
         ...options,
-        allowed_updates: JSON.stringify(options?.allowed_updates),
+        allowed_updates: new JSONSerialized(options?.allowed_updates),
       },
       abortController,
     );
@@ -238,7 +276,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('setWebhook', {
       ...options,
-      allowed_updates: JSON.stringify(options?.allowed_updates),
+      allowed_updates: new JSONSerialized(options?.allowed_updates),
     });
   }
 
@@ -297,7 +335,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendMessage', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -332,7 +370,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<MessageId[]> {
     return await this.callApi('forwardMessages', {
       ...options,
-      message_ids: JSON.stringify(options.message_ids),
+      message_ids: new JSONSerialized(options.message_ids),
     });
   }
 
@@ -361,8 +399,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<MessageId> {
     return await this.callApi('copyMessage', {
       ...options,
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -382,7 +420,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<MessageId[]> {
     return await this.callApi('copyMessages', {
       ...options,
-      message_ids: JSON.stringify(options.message_ids),
+      message_ids: new JSONSerialized(options.message_ids),
     });
   }
 
@@ -413,8 +451,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<MessageId> {
     return await this.callApi('sendPhoto', {
       ...options,
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -449,8 +487,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendAudio', {
       ...options,
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -480,8 +518,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendDocument', {
       ...options,
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -517,8 +555,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVideo', {
       ...options,
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -553,8 +591,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendAnimation', {
       ...options,
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -584,8 +622,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVoice', {
       ...options,
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -614,7 +652,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVideoNote', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -642,9 +680,9 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendPaidMedia', {
       ...options,
-      media: JSON.stringify(options.media),
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      media: new JSONSerialized(options.media),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -670,7 +708,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message[]> {
     return await this.callApi('sendMediaGroup', {
       ...options,
-      media: JSON.stringify(options.media),
+      media: new JSONSerialized(options.media),
     });
   }
 
@@ -701,7 +739,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendLocation', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -734,7 +772,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVenue', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -763,7 +801,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendContact', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -802,9 +840,9 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendPoll', {
       ...options,
-      options: JSON.stringify(options.options),
-      explanation_entities: JSON.stringify(options.explanation_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      options: new JSONSerialized(options.options),
+      explanation_entities: new JSONSerialized(options.explanation_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -830,7 +868,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendDice', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -871,7 +909,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('setMessageReaction', {
       ...options,
-      reaction: JSON.stringify(options.reaction),
+      reaction: new JSONSerialized(options.reaction),
     });
   }
 
@@ -938,7 +976,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('restrictChatMember', {
       ...options,
-      permissions: JSON.stringify(options.permissions),
+      permissions: new JSONSerialized(options.permissions),
     });
   }
 
@@ -1018,7 +1056,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('setChatPermissions', {
       ...options,
-      permissions: JSON.stringify(options.permissions),
+      permissions: new JSONSerialized(options.permissions),
     });
   }
 
@@ -1457,8 +1495,8 @@ export class TelegramBot extends EventEmitter {
     language_code?: string;
   }): Promise<true> {
     return await this.callApi('setMyCommands', {
-      commands: JSON.stringify(options.commands),
-      scope: JSON.stringify(options.scope),
+      commands: new JSONSerialized(options.commands),
+      scope: new JSONSerialized(options.scope),
     });
   }
 
@@ -1472,7 +1510,7 @@ export class TelegramBot extends EventEmitter {
     language_code?: string;
   }): Promise<true> {
     return await this.callApi('deleteMyCommands', {
-      scope: JSON.stringify(options?.scope),
+      scope: new JSONSerialized(options?.scope),
     });
   }
 
@@ -1486,7 +1524,7 @@ export class TelegramBot extends EventEmitter {
     language_code?: string;
   }): Promise<BotCommand[]> {
     return await this.callApi('getMyCommands', {
-      scope: JSON.stringify(options?.scope),
+      scope: new JSONSerialized(options?.scope),
     });
   }
 
@@ -1568,7 +1606,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('setChatMenuButton', {
       ...options,
-      menu_button: JSON.stringify(options.menu_button),
+      menu_button: new JSONSerialized(options.menu_button),
     });
   }
 
@@ -1593,7 +1631,7 @@ export class TelegramBot extends EventEmitter {
     for_channels?: boolean;
   }): Promise<true> {
     return await this.callApi('setMyDefaultAdministratorRights', {
-      rights: JSON.stringify(options.rights),
+      rights: new JSONSerialized(options.rights),
     });
   }
 
@@ -1628,8 +1666,8 @@ export class TelegramBot extends EventEmitter {
   ): Promise<Message | true> {
     return await this.callApi('editMessageText', {
       ...options,
-      entities: JSON.stringify(options.entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      entities: new JSONSerialized(options.entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -1653,8 +1691,8 @@ export class TelegramBot extends EventEmitter {
   ): Promise<Message | true> {
     return await this.callApi('editMessageCaption', {
       ...options,
-      caption_entities: JSON.stringify(options.caption_entities),
-      reply_markup: JSON.stringify(options.reply_markup),
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -1675,8 +1713,8 @@ export class TelegramBot extends EventEmitter {
   ): Promise<Message | true> {
     return await this.callApi('editMessageMedia', {
       ...options,
-      media: JSON.stringify(options.media),
-      reply_markup: JSON.stringify(options.reply_markup),
+      media: new JSONSerialized(options.media),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -1702,7 +1740,7 @@ export class TelegramBot extends EventEmitter {
   ): Promise<Message | true> {
     return await this.callApi('editMessageLiveLocation', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -1722,7 +1760,7 @@ export class TelegramBot extends EventEmitter {
   ): Promise<Message | true> {
     return await this.callApi('stopMessageLiveLocation', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -1742,7 +1780,7 @@ export class TelegramBot extends EventEmitter {
   ): Promise<Message | true> {
     return await this.callApi('editMessageReplyMarkup', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -1759,7 +1797,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Poll> {
     return await this.callApi('stopPoll', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -1794,7 +1832,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('deleteMessages', {
       ...options,
-      message_ids: JSON.stringify(options.message_ids),
+      message_ids: new JSONSerialized(options.message_ids),
     });
   }
 
@@ -1821,7 +1859,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendSticker', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -1843,7 +1881,7 @@ export class TelegramBot extends EventEmitter {
     custom_emoji_ids: string[];
   }): Promise<Sticker[]> {
     return await this.callApi('getCustomEmojiStickers', {
-      custom_emoji_ids: JSON.stringify(options.custom_emoji_ids),
+      custom_emoji_ids: new JSONSerialized(options.custom_emoji_ids),
     });
   }
 
@@ -1875,7 +1913,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('createNewStickerSet', {
       ...options,
-      stickers: JSON.stringify(options.stickers),
+      stickers: new JSONSerialized(options.stickers),
     });
   }
 
@@ -1891,7 +1929,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('addStickerToSet', {
       ...options,
-      sticker: JSON.stringify(options.sticker),
+      sticker: new JSONSerialized(options.sticker),
     });
   }
 
@@ -1929,7 +1967,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('replaceStickerInSet', {
       ...options,
-      new_sticker: JSON.stringify(options.sticker),
+      new_sticker: new JSONSerialized(options.sticker),
     });
   }
 
@@ -1944,7 +1982,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('setStickerEmojiList', {
       ...options,
-      emojis: JSON.stringify(options.emoji_list),
+      emojis: new JSONSerialized(options.emoji_list),
     });
   }
 
@@ -1959,7 +1997,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('setStickerKeywords', {
       ...options,
-      keywords: JSON.stringify(options.keywords),
+      keywords: new JSONSerialized(options.keywords),
     });
   }
 
@@ -1974,7 +2012,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('setStickerMaskPosition', {
       ...options,
-      mask_position: JSON.stringify(options.mask_position),
+      mask_position: new JSONSerialized(options.mask_position),
     });
   }
 
@@ -2041,8 +2079,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('answerInlineQuery', {
       ...options,
-      results: JSON.stringify(options.results),
-      button: JSON.stringify(options.button),
+      results: new JSONSerialized(options.results),
+      button: new JSONSerialized(options.button),
     });
   }
 
@@ -2057,7 +2095,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<SentWebAppMessage> {
     return await this.callApi('answerWebAppQuery', {
       ...options,
-      result: JSON.stringify(options.result),
+      result: new JSONSerialized(options.result),
     });
   }
 
@@ -2098,9 +2136,9 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendInvoice', {
       ...options,
-      prices: JSON.stringify(options.prices),
-      suggested_tip_amounts: JSON.stringify(options.suggested_tip_amounts),
-      reply_markup: JSON.stringify(options.reply_markup),
+      prices: new JSONSerialized(options.prices),
+      suggested_tip_amounts: new JSONSerialized(options.suggested_tip_amounts),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
@@ -2133,8 +2171,8 @@ export class TelegramBot extends EventEmitter {
   }): Promise<string> {
     return await this.callApi('createInvoiceLink', {
       ...options,
-      prices: JSON.stringify(options.prices),
-      suggested_tip_amounts: JSON.stringify(options.suggested_tip_amounts),
+      prices: new JSONSerialized(options.prices),
+      suggested_tip_amounts: new JSONSerialized(options.suggested_tip_amounts),
     });
   }
 
@@ -2160,7 +2198,7 @@ export class TelegramBot extends EventEmitter {
       ...options,
       shipping_options:
         'shipping_options' in options
-          ? JSON.stringify(options.shipping_options)
+          ? new JSONSerialized(options.shipping_options)
           : undefined,
     });
   }
@@ -2217,7 +2255,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<true> {
     return await this.callApi('setPassportDataErrors', {
       ...options,
-      errors: JSON.stringify(options.errors),
+      errors: new JSONSerialized(options.errors),
     });
   }
 
@@ -2239,7 +2277,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendGame', {
       ...options,
-      reply_markup: JSON.stringify(options.reply_markup),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 

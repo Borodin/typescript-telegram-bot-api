@@ -219,6 +219,7 @@ export * from './WebhookInfo';
 export * from './WriteAccessAllowed';
 
 import { ResponseParameters } from './ResponseParameters';
+import { InputFile } from './InputFile';
 
 /**
  * @see https://core.telegram.org/bots/api#making-requests
@@ -242,6 +243,8 @@ export type Response = SuccessResponse | ErrorResponse;
  * @see https://core.telegram.org/bots/api#formatting-options
  */
 export type ParseMode = 'Markdown' | 'MarkdownV2' | 'HTML';
+
+export type Attachment = InputFile;
 
 /**
  * ## Supported Currencies

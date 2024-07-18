@@ -4,7 +4,6 @@ import { readFile } from 'fs/promises';
 import { TelegramBot } from '../src';
 import { TelegramError } from '../src/errors';
 import { ForumTopic, File, User } from '../src/types';
-import * as TelegramTypes from '../src/types';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
@@ -499,7 +498,7 @@ describe('.sendPaidMedia()', () => {
 });
 
 describe('.sendMediaGroup()', () => {
-  it('should send media group', async () => {
+  it('should send media group with urls', async () => {
     await expect(
       bot.sendMediaGroup({
         chat_id: USERID,
@@ -512,6 +511,19 @@ describe('.sendMediaGroup()', () => {
         ],
       }),
     ).resolves.toHaveLength(5);
+  });
+
+  it('should send media group with files', async () => {
+    await expect(
+      bot.sendMediaGroup({
+        chat_id: USERID,
+        media: [
+          { type: 'photo', media: createReadStream('tests/data/photo.jpg') },
+          { type: 'photo', media: createReadStream('tests/data/photo.jpg') },
+          { type: 'photo', media: createReadStream('tests/data/photo.jpg') },
+        ],
+      }),
+    ).resolves.toHaveLength(3);
   });
 });
 
@@ -1879,21 +1891,15 @@ describe('.uploadStickerFile()', () => {
 });
 
 describe('.createNewStickerSet()', () => {
-  let stickerFile = null as null | TelegramTypes.File;
   let me = null as null | User;
 
   beforeAll(async () => {
-    stickerFile = await bot.uploadStickerFile({
-      user_id: USERID,
-      sticker: createReadStream('tests/data/sticker.webp'),
-      sticker_format: 'static',
-    });
     me = await bot.getMe();
   });
 
   it('should create new sticker set', async () => {
-    expect(stickerFile).not.toBeNull();
-    if (stickerFile && me) {
+    expect(me).not.toBeNull();
+    if (me) {
       await expect(
         bot.createNewStickerSet({
           user_id: USERID,
@@ -1902,7 +1908,7 @@ describe('.createNewStickerSet()', () => {
           stickers: [
             {
               emoji_list: ['🐶'],
-              sticker: stickerFile.file_id,
+              sticker: createReadStream('tests/data/sticker.webp'),
               format: 'static',
             },
           ],

@@ -1,8 +1,8 @@
-import { InputFile, MessageEntity, ParseMode } from './';
+import { Attachment, InputFile, MessageEntity, ParseMode } from './';
 
 export type InputMediaVideo = {
   type: 'video';
-  media: string;
+  media: string | Attachment;
   thumbnail?: InputFile | string;
   caption?: string;
   parse_mode?: ParseMode;

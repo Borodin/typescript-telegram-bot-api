@@ -1,8 +1,8 @@
-import { InputFile, MessageEntity, ParseMode } from './';
+import { Attachment, InputFile, MessageEntity, ParseMode } from './';
 
 export type InputMediaDocument = {
   type: 'document';
-  media: string;
+  media: string | Attachment;
   thumbnail?: InputFile | string;
   caption?: string;
   parse_mode?: ParseMode;

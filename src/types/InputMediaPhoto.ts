@@ -1,8 +1,8 @@
-import { MessageEntity, ParseMode } from './';
+import { Attachment, MessageEntity, ParseMode } from './';
 
 export type InputMediaPhoto = {
   type: 'photo';
-  media: string;
+  media: string | Attachment;
   caption?: string;
   parse_mode?: ParseMode;
   caption_entities?: MessageEntity[];
