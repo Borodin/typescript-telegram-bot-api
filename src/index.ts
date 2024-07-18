@@ -148,7 +148,11 @@ export class TelegramBot extends EventEmitter {
       value instanceof Readable
     ) {
       const name = Math.random().toString(36).substring(7);
-      formData.append(name, value, 'file');
+      formData.append(
+        name,
+        value,
+        value instanceof Buffer ? 'file' : undefined,
+      );
       return `attach://${name}`;
     } else if (Array.isArray(value)) {
       return value.map((item) => this.serializeJSON(item, formData));
@@ -171,15 +175,15 @@ export class TelegramBot extends EventEmitter {
     )) {
       if (value === undefined) {
         // Skip undefined values
+      } else if (typeof value === 'boolean') {
+        formData.append(key, String(value));
       } else if (value instanceof JSONSerialized) {
         const json = JSON.stringify(this.serializeJSON(value.value, formData));
-        formData.append(key, json);
-      } else if (
-        value instanceof File ||
-        value instanceof Buffer ||
-        value instanceof Readable
-      ) {
+        if (json !== undefined) formData.append(key, json);
+      } else if (value instanceof Buffer) {
         formData.append(key, value, 'file');
+      } else if (value instanceof File || value instanceof Readable) {
+        formData.append(key, value);
       } else if (
         typeof value === 'object' &&
         value !== null &&
