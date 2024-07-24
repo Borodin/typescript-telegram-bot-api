@@ -46,9 +46,11 @@ If the API error includes a `retry_after` field, the library will retry the requ
 If the error is not related to the API, the Promise will be rejected with a different error.
 
 For sending files, you can use not only ```'file_id'``` or ```'url'```, but also ```stream.Readable``` or ```Buffer```.
+To send files with additional parameters, such as a filename or specific contentType, use the ```FileOptions``` wrapper class.
 ```typescript
-import {createReadStream} from 'fs';
-import {readFile} from 'fs/promises';
+import { TelegramBot, FileOptions } from 'typescript-telegram-bot-api';
+import { createReadStream } from 'fs';
+import { readFile } from 'fs/promises';
 
 
 await bot.sendPhoto({
@@ -81,11 +83,24 @@ await bot.sendPhoto({
   caption: 'buffer',
 });
 
+// or 
+
+await bot.sendPhoto({
+  chat_id: chat_id,
+  photo: new FileOptions(
+    await readFile('photo.jpg'), {
+      filename: 'custom_file_name.jpg',
+      contentType: 'image/jpeg',
+    }
+  ),
+  caption: 'FileOptions',
+});
+
 // or in browser
 
 await bot.sendPhoto({
   chat_id: chat_id,
-  photo: input.files[0],
+  photo: input.files[0], // or new File(…)
   caption: 'file',
 });
 ```

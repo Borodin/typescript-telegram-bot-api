@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
-import { TelegramBot } from '../src';
+import { FileOptions, TelegramBot } from '../src';
 import { TelegramError } from '../src/errors';
 import { ForumTopic, File, User } from '../src/types';
 
@@ -385,6 +385,18 @@ describe('.sendDocument()', () => {
         caption: 'Document from url',
       }),
     ).resolves.toHaveProperty('document.mime_type', 'application/pdf');
+  });
+
+  it('should send document from FileOptions', async () => {
+    await expect(
+      bot.sendDocument({
+        chat_id: USERID,
+        document: new FileOptions(await readFile('tests/data/photo.jpg'), {
+          filename: 'custom_file_name.jpg',
+          contentType: 'image/jpeg',
+        }),
+      }),
+    ).resolves.toHaveProperty('document.file_name', 'custom_file_name.jpg');
   });
 });
 

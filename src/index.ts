@@ -3,6 +3,9 @@ import axios from 'axios';
 import FormData from 'form-data';
 import { promisify } from 'util';
 import { Readable } from 'stream';
+import { TelegramError } from './errors';
+import { Polling } from './pooling';
+import { ReadStream } from 'fs';
 
 import {
   Update,
@@ -63,8 +66,6 @@ import {
   Currencies,
 } from './types/';
 import * as TelegramTypes from './types/';
-import { TelegramError } from './errors';
-import { Polling } from './pooling';
 
 const wait: (ms: number) => Promise<void> = promisify(setTimeout);
 
@@ -72,6 +73,13 @@ type allEmittedTypes = EventTypes & MessageTypes;
 
 class JSONSerialized {
   constructor(public value: object | undefined) {}
+}
+
+export class FileOptions {
+  constructor(
+    public file: ReadStream | Buffer | File,
+    public options?: FormData.AppendOptions | string,
+  ) {}
 }
 
 export class TelegramBot extends EventEmitter {
@@ -145,13 +153,18 @@ export class TelegramBot extends EventEmitter {
     if (
       value instanceof File ||
       value instanceof Buffer ||
-      value instanceof Readable
+      value instanceof Readable ||
+      value instanceof FileOptions
     ) {
       const name = Math.random().toString(36).substring(7);
       formData.append(
         name,
-        value,
-        value instanceof Buffer ? 'file' : undefined,
+        value instanceof FileOptions ? value.file : value,
+        value instanceof Buffer
+          ? 'file'
+          : value instanceof FileOptions
+            ? value.options
+            : undefined,
       );
       return `attach://${name}`;
     } else if (Array.isArray(value)) {
@@ -180,6 +193,8 @@ export class TelegramBot extends EventEmitter {
       } else if (value instanceof JSONSerialized) {
         const json = JSON.stringify(this.serializeJSON(value.value, formData));
         if (json !== undefined) formData.append(key, json);
+      } else if (value instanceof FileOptions) {
+        formData.append(key, value.file, value.options);
       } else if (value instanceof Buffer) {
         formData.append(key, value, 'file');
       } else if (value instanceof File || value instanceof Readable) {
