@@ -136,6 +136,18 @@ describe('.getMe()', () => {
   });
 });
 
+describe('.logOut()', () => {
+  it('should have a logOut method', () => {
+    expect(bot.logOut).toBeDefined();
+  });
+});
+
+describe('.close()', () => {
+  it('should have a close method', () => {
+    expect(bot.close).toBeDefined();
+  });
+});
+
 describe('.sendMessage()', () => {
   it('should send message', async () => {
     await expect(
