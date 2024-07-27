@@ -1923,6 +1923,22 @@ describe('.createNewStickerSet()', () => {
               sticker: createReadStream('tests/data/sticker.webp'),
               format: 'static',
             },
+            {
+              emoji_list: ['🐶'],
+              sticker: await readFile('tests/data/sticker.webp'),
+              format: 'static',
+            },
+            {
+              emoji_list: ['🐶'],
+              sticker: new FileOptions(
+                await readFile('tests/data/sticker.webp'),
+                {
+                  filename: 'dog.webp',
+                  contentType: 'image/webp',
+                },
+              ),
+              format: 'static',
+            },
           ],
         }),
       ).resolves.toBe(true);
