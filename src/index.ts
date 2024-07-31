@@ -1235,6 +1235,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#pinchatmessage
    */
   async pinChatMessage(options: {
+    business_connection_id?: string;
     chat_id: number | string;
     message_id: number;
     disable_notification?: boolean;
@@ -1248,6 +1249,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#unpinchatmessage
    */
   async unpinChatMessage(options: {
+    business_connection_id?: string;
     chat_id: number | string;
     message_id?: number;
   }): Promise<true> {
