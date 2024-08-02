@@ -187,6 +187,5 @@ export const messageTypes = [
  * All message types such as `message:text`, `message:audio`, `message:new_chat_members` etc.
  */
 export type MessageTypes = {
-  [P in (typeof messageTypes)[number] as `message:${P}`]: Message &
-    Required<Pick<Message, P>>;
+  [P in (typeof messageTypes)[number] as `message:${P}`]: Message & Required<Pick<Message, P>>;
 };

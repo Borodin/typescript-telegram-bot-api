@@ -1,13 +1,9 @@
-import {
-  CallbackGame,
-  WebAppData,
-  LoginUrl,
-  SwitchInlineQueryChosenChat,
-} from './';
+import { CallbackGame, WebAppData, LoginUrl, SwitchInlineQueryChosenChat } from './';
 
 /**
  * ## InlineKeyboardButton
- * This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.
+ * This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify
+ * type of the button.
  * @see https://core.telegram.org/bots/api#inlinekeyboardbutton
  */
 export type InlineKeyboardButton = {

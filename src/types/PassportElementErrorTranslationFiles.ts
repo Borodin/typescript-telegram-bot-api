@@ -1,6 +1,7 @@
 /**
  * ## PassportElementErrorTranslationFiles
- * Represents an issue with the translated version of a document. The error is considered resolved when a file with the document translation change.
+ * Represents an issue with the translated version of a document. The error is considered resolved when a file with the
+ * document translation change.
  * @see https://core.telegram.org/bots/api#passportelementerrortranslationfiles
  */
 export type PassportElementErrorTranslationFiles = {

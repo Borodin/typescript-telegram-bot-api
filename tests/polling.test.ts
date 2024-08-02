@@ -28,9 +28,7 @@ describe('Polling ', () => {
       },
     ];
 
-    mock
-      .onPost(`${bot.baseURL}/bot${botToken}/getUpdates`)
-      .reply(200, JSON.stringify({ ok: true, result }));
+    mock.onPost(`${bot.baseURL}/bot${botToken}/getUpdates`).reply(200, JSON.stringify({ ok: true, result }));
     await bot.startPolling();
 
     await expect(

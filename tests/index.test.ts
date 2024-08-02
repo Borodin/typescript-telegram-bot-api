@@ -9,9 +9,7 @@ const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
 const TEST_GROUP_ID = parseInt(process.env.TEST_GROUP_ID as string);
 const TEST_CHANNEL_ID = parseInt(process.env.TEST_CHANNEL_ID as string);
-const TEST_GROUP_MEMBER_ID = parseInt(
-  process.env.TEST_GROUP_MEMBER_ID as string,
-);
+const TEST_GROUP_MEMBER_ID = parseInt(process.env.TEST_GROUP_MEMBER_ID as string);
 
 const bot = new TelegramBot({
   botToken: TOKEN,
@@ -98,10 +96,7 @@ describe('.getWebhookInfo()', () => {
     await bot.setWebhook({
       url: 'https://example.com',
     });
-    await expect(bot.getWebhookInfo()).resolves.toHaveProperty(
-      'url',
-      'https://example.com',
-    );
+    await expect(bot.getWebhookInfo()).resolves.toHaveProperty('url', 'https://example.com');
   });
 
   it('should return empty url when webhook is not set', async () => {
@@ -117,8 +112,7 @@ describe('.isTelegramError()', () => {
   it('should return true for Telegram-related errors', () => {
     const telegramError = new TelegramError({
       ok: false,
-      description:
-        'Conflict: terminated by other getUpdates request; make sure that only one bot instance is running',
+      description: 'Conflict: terminated by other getUpdates request; make sure that only one bot instance is running',
       error_code: 409,
     });
     expect(TelegramBot.isTelegramError(telegramError)).toBe(true);
@@ -156,9 +150,7 @@ describe('.sendMessage()', () => {
         text: 'sendMessage',
         disable_notification: true,
         reply_markup: {
-          inline_keyboard: [
-            [{ text: 'button', callback_data: 'callback_data' }],
-          ],
+          inline_keyboard: [[{ text: 'button', callback_data: 'callback_data' }]],
         },
       }),
     ).resolves.toHaveProperty('text', 'sendMessage');
@@ -334,8 +326,7 @@ describe('.sendPhoto()', () => {
     await expect(
       bot.sendPhoto({
         chat_id: USERID,
-        photo:
-          'AgACAgIAAxkDAAM1ZnG8LabTxno661-KX9W17Je_uekAArXgMRtNXZFLifTnv9tqCs8BAAMCAANzAAM1BA',
+        photo: 'AgACAgIAAxkDAAM1ZnG8LabTxno661-KX9W17Je_uekAArXgMRtNXZFLifTnv9tqCs8BAAMCAANzAAM1BA',
         caption: 'Photo from file_id',
       }),
     ).resolves.toHaveProperty('photo');
@@ -379,8 +370,7 @@ describe('.sendAudio()', () => {
     await expect(
       bot.sendAudio({
         chat_id: USERID,
-        audio:
-          'CQACAgIAAxkDAAOBZnG8knE9iWcIt2j3iRMZfmw1OLMAAilRAAJNXZFLlcKgtkw7etQ1BA',
+        audio: 'CQACAgIAAxkDAAOBZnG8knE9iWcIt2j3iRMZfmw1OLMAAilRAAJNXZFLlcKgtkw7etQ1BA',
         caption: 'Audio from file_id',
       }),
     ).resolves.toHaveProperty('audio');
@@ -392,8 +382,7 @@ describe('.sendDocument()', () => {
     await expect(
       bot.sendDocument({
         chat_id: USERID,
-        document:
-          'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+        document: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
         caption: 'Document from url',
       }),
     ).resolves.toHaveProperty('document.mime_type', 'application/pdf');
@@ -417,8 +406,7 @@ describe('.sendVideo()', () => {
     await expect(
       bot.sendVideo({
         chat_id: USERID,
-        video:
-          'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
+        video: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
         caption: 'Video from url',
         has_spoiler: true,
       }),
@@ -493,8 +481,7 @@ describe('.sendPaidMedia()', () => {
         media: [
           {
             type: 'video',
-            media:
-              'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
+            media: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
           },
         ],
         caption: 'Paid media: video',
@@ -511,8 +498,7 @@ describe('.sendPaidMedia()', () => {
           { type: 'photo', media: 'https://unsplash.it/640/480' },
           {
             type: 'video',
-            media:
-              'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
+            media: 'https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4',
           },
         ],
         caption: 'Paid media: photo and video',
@@ -664,8 +650,7 @@ describe('.getFile()', () => {
   it('should get file', async () => {
     await expect(
       bot.getFile({
-        file_id:
-          'AgACAgIAAxkDAAM1ZnG8LabTxno661-KX9W17Je_uekAArXgMRtNXZFLifTnv9tqCs8BAAMCAANzAAM1BA',
+        file_id: 'AgACAgIAAxkDAAM1ZnG8LabTxno661-KX9W17Je_uekAArXgMRtNXZFLifTnv9tqCs8BAAMCAANzAAM1BA',
       }),
     ).resolves.toHaveProperty('file_unique_id');
   });
@@ -704,9 +689,7 @@ describe('.getStarTransactions()', () => {
   });
 
   it('should get star transactions without options', async () => {
-    await expect(bot.getStarTransactions()).resolves.toHaveProperty(
-      'transactions',
-    );
+    await expect(bot.getStarTransactions()).resolves.toHaveProperty('transactions');
   });
 });
 
@@ -719,10 +702,7 @@ describe('.setMyName()', () => {
       });
       expect(result).toBe(true);
     } catch (error) {
-      if (
-        TelegramBot.isTelegramError(error) &&
-        error.response.error_code === 429
-      ) {
+      if (TelegramBot.isTelegramError(error) && error.response.error_code === 429) {
         expect(error.message).toMatch(/Too Many Requests/);
       } else {
         throw error;
@@ -746,8 +726,7 @@ describe('.setMyDescription()', () => {
     await expect(
       bot.setMyDescription({
         //long description
-        description:
-          'This is a Telegram Bot for testing npm package typescript-telegram-bot-api',
+        description: 'This is a Telegram Bot for testing npm package typescript-telegram-bot-api',
         language_code: 'en',
       }),
     ).resolves.toBe(true);
@@ -947,10 +926,7 @@ describe('.createChatInviteLink()', () => {
       bot.createChatInviteLink({
         chat_id: TEST_GROUP_ID,
       }),
-    ).resolves.toHaveProperty(
-      'invite_link',
-      expect.stringMatching('https://t.me/+'),
-    );
+    ).resolves.toHaveProperty('invite_link', expect.stringMatching('https://t.me/+'));
   });
 });
 
@@ -967,10 +943,7 @@ describe('.editChatInviteLink()', () => {
         invite_link,
         expire_date: Math.floor(Date.now() / 1000) + 60,
       }),
-    ).resolves.toHaveProperty(
-      'invite_link',
-      expect.stringMatching('https://t.me/+'),
-    );
+    ).resolves.toHaveProperty('invite_link', expect.stringMatching('https://t.me/+'));
   });
 });
 
@@ -985,10 +958,7 @@ describe('.revokeChatInviteLink()', () => {
         chat_id: TEST_GROUP_ID,
         invite_link,
       }),
-    ).resolves.toHaveProperty(
-      'invite_link',
-      expect.stringMatching('https://t.me/+'),
-    );
+    ).resolves.toHaveProperty('invite_link', expect.stringMatching('https://t.me/+'));
   });
 });
 
@@ -1172,9 +1142,7 @@ describe('.deleteChatStickerSet()', () => {
 
 describe('.getForumTopicIconStickers()', () => {
   it('should get forum topic icon stickers', async () => {
-    await expect(bot.getForumTopicIconStickers()).resolves.toBeInstanceOf(
-      Array,
-    );
+    await expect(bot.getForumTopicIconStickers()).resolves.toBeInstanceOf(Array);
   });
 });
 
@@ -1459,9 +1427,7 @@ describe('.answerCallbackQuery()', () => {
         callback_query_id: 'QUERY_ID_INVALID',
         text: 'Callback query answered',
       }),
-    ).rejects.toThrow(
-      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
-    );
+    ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 });
 
@@ -1533,9 +1499,7 @@ describe('.setMyDefaultAdministratorRights()', () => {
 
 describe('.getMyDefaultAdministratorRights()', () => {
   it('should get my default administrator rights', async () => {
-    await expect(
-      bot.getMyDefaultAdministratorRights({}),
-    ).resolves.toHaveProperty('is_anonymous');
+    await expect(bot.getMyDefaultAdministratorRights({})).resolves.toHaveProperty('is_anonymous');
   });
 });
 
@@ -1680,9 +1644,7 @@ describe('.editMessageReplyMarkup()', () => {
         chat_id: USERID,
         message_id: message.message_id,
         reply_markup: {
-          inline_keyboard: [
-            [{ text: 'Edited button', callback_data: 'edited_button' }],
-          ],
+          inline_keyboard: [[{ text: 'Edited button', callback_data: 'edited_button' }]],
         },
       }),
     ).resolves.toHaveProperty('reply_markup');
@@ -1779,9 +1741,7 @@ describe('.answerWebAppQuery()', () => {
           },
         },
       }),
-    ).rejects.toThrow(
-      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
-    );
+    ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 });
 
@@ -1824,9 +1784,7 @@ describe('.answerShippingQuery()', () => {
         ok: false,
         error_message: 'Error message',
       }),
-    ).rejects.toThrow(
-      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
-    );
+    ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 
   it('should throw an error for outdated or invalid query ID on success response', async () => {
@@ -1842,9 +1800,7 @@ describe('.answerShippingQuery()', () => {
           },
         ],
       }),
-    ).rejects.toThrow(
-      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
-    );
+    ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 });
 
@@ -1856,9 +1812,7 @@ describe('.answerPreCheckoutQuery()', () => {
         ok: false,
         error_message: 'Error message',
       }),
-    ).rejects.toThrow(
-      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
-    );
+    ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 
   it('should throw an error for outdated or invalid query ID on success response', async () => {
@@ -1867,9 +1821,7 @@ describe('.answerPreCheckoutQuery()', () => {
         pre_checkout_query_id: 'QUERY_ID',
         ok: true,
       }),
-    ).rejects.toThrow(
-      '400 Bad Request: query is too old and response timeout expired or query ID is invalid',
-    );
+    ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 });
 
@@ -1886,9 +1838,7 @@ describe('.refundStarPayment()', () => {
 
 describe('.getStickerSet()', () => {
   it('should get custom emoji stickers', async () => {
-    await expect(
-      bot.getStickerSet({ name: 'Animals' }),
-    ).resolves.toHaveProperty('name', 'Animals');
+    await expect(bot.getStickerSet({ name: 'Animals' })).resolves.toHaveProperty('name', 'Animals');
   });
 });
 
@@ -1942,13 +1892,10 @@ describe('.createNewStickerSet()', () => {
             },
             {
               emoji_list: ['🐶'],
-              sticker: new FileOptions(
-                await readFile('tests/data/sticker.webp'),
-                {
-                  filename: 'dog.webp',
-                  contentType: 'image/webp',
-                },
-              ),
+              sticker: new FileOptions(await readFile('tests/data/sticker.webp'), {
+                filename: 'dog.webp',
+                contentType: 'image/webp',
+              }),
               format: 'static',
             },
           ],

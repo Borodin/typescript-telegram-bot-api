@@ -7,7 +7,9 @@ import { TransactionPartner } from './TransactionPartner';
  */
 export type StarTransaction = {
   /**
-   * 	Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.
+   * 	Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund
+   * 	transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from
+   * 	users.
    */
   id: string;
   /**
@@ -19,11 +21,13 @@ export type StarTransaction = {
    */
   date: number;
   /**
-   * Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions
+   * Optional. Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed
+   * withdrawal). Only for incoming transactions
    */
   source?: TransactionPartner;
   /**
-   * Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions
+   * Optional. Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only
+   * for outgoing transactions
    */
   receiver?: TransactionPartner;
 };

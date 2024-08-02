@@ -1,9 +1,4 @@
-import {
-  BackgroundTypeFill,
-  BackgroundTypeWallpaper,
-  BackgroundTypePattern,
-  BackgroundTypeChatTheme,
-} from './';
+import { BackgroundTypeFill, BackgroundTypeWallpaper, BackgroundTypePattern, BackgroundTypeChatTheme } from './';
 
 /**
  * ## BackgroundType

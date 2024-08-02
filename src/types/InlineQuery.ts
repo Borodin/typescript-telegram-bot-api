@@ -2,7 +2,8 @@ import { Location, User } from './';
 
 /**
  * ## InlineQuery
- * This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
+ * This object represents an incoming inline query. When the user sends an empty query, your bot could return some
+ * default or trending results.
  * @see https://core.telegram.org/bots/api#inlinequery
  */
 export type InlineQuery = {

@@ -1,10 +1,4 @@
-import {
-  InputMediaAnimation,
-  InputMediaDocument,
-  InputMediaAudio,
-  InputMediaPhoto,
-  InputMediaVideo,
-} from './';
+import { InputMediaAnimation, InputMediaDocument, InputMediaAudio, InputMediaPhoto, InputMediaVideo } from './';
 
 /**
  * ## InputMedia
@@ -16,9 +10,4 @@ import {
  * - InputMediaVideo
  * @see https://core.telegram.org/bots/api#inputmedia
  */
-export type InputMedia =
-  | InputMediaAnimation
-  | InputMediaDocument
-  | InputMediaAudio
-  | InputMediaPhoto
-  | InputMediaVideo;
+export type InputMedia = InputMediaAnimation | InputMediaDocument | InputMediaAudio | InputMediaPhoto | InputMediaVideo;

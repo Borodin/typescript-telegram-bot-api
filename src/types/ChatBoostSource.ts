@@ -1,8 +1,4 @@
-import {
-  ChatBoostSourcePremium,
-  ChatBoostSourceGiftCode,
-  ChatBoostSourceGiveaway,
-} from './';
+import { ChatBoostSourcePremium, ChatBoostSourceGiftCode, ChatBoostSourceGiveaway } from './';
 
 /**
  * ## ChatBoostSource
@@ -12,7 +8,4 @@ import {
  * - ChatBoostSourceGiveaway
  * @see https://core.telegram.org/bots/api#chatboostsource
  */
-export type ChatBoostSource =
-  | ChatBoostSourcePremium
-  | ChatBoostSourceGiftCode
-  | ChatBoostSourceGiveaway;
+export type ChatBoostSource = ChatBoostSourcePremium | ChatBoostSourceGiftCode | ChatBoostSourceGiveaway;

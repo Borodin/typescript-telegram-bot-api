@@ -161,30 +161,19 @@ export class TelegramBot extends EventEmitter {
   }
 
   private serializeJSON(value: unknown, formData: FormData): unknown {
-    if (
-      value instanceof File ||
-      value instanceof Buffer ||
-      value instanceof Readable ||
-      value instanceof FileOptions
-    ) {
+    if (value instanceof File || value instanceof Buffer || value instanceof Readable || value instanceof FileOptions) {
       const name = Math.random().toString(36).substring(7);
       formData.append(
         name,
         value instanceof FileOptions ? value.file : value,
-        value instanceof Buffer
-          ? 'file'
-          : value instanceof FileOptions
-            ? value.options
-            : undefined,
+        value instanceof Buffer ? 'file' : value instanceof FileOptions ? value.options : undefined,
       );
       return `attach://${name}`;
     } else if (Array.isArray(value)) {
       return value.map((item) => this.serializeJSON(item, formData));
     } else if (typeof value === 'object' && value !== null) {
       const result: Record<string, unknown> = {};
-      for (const [key, val] of Object.entries(
-        value as Record<string, unknown>,
-      )) {
+      for (const [key, val] of Object.entries(value as Record<string, unknown>)) {
         result[key] = this.serializeJSON(val, formData);
       }
       return result;
@@ -194,9 +183,7 @@ export class TelegramBot extends EventEmitter {
   }
 
   private handleObject(object: unknown, formData: FormData) {
-    for (const [key, value] of Object.entries(
-      object as Record<string, unknown>,
-    )) {
+    for (const [key, value] of Object.entries(object as Record<string, unknown>)) {
       if (value === undefined) {
         // Skip undefined values
       } else if (typeof value === 'boolean') {
@@ -210,11 +197,7 @@ export class TelegramBot extends EventEmitter {
         formData.append(key, value, 'file');
       } else if (value instanceof File || value instanceof Readable) {
         formData.append(key, value);
-      } else if (
-        typeof value === 'object' &&
-        value !== null &&
-        !(value instanceof Date)
-      ) {
+      } else if (typeof value === 'object' && value !== null && !(value instanceof Date)) {
         this.handleObject(value, formData);
       } else {
         formData.append(key, value);
@@ -243,11 +226,7 @@ export class TelegramBot extends EventEmitter {
       return response.result as T;
     } else {
       const error = response as ErrorResponse;
-      if (
-        this.autoRetry &&
-        error.parameters?.retry_after &&
-        error.parameters?.retry_after < this.autoRetryLimit
-      ) {
+      if (this.autoRetry && error.parameters?.retry_after && error.parameters?.retry_after < this.autoRetryLimit) {
         await wait(error.parameters.retry_after * 1000);
         return await this.callApi(method, options);
       } else {
@@ -315,9 +294,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to remove webhook integration if you decide to switch back to getUpdates. Returns True on success.
    * @see https://core.telegram.org/bots/api#deletewebhook
    */
-  async deleteWebhook(options?: {
-    drop_pending_updates?: boolean;
-  }): Promise<true> {
+  async deleteWebhook(options?: { drop_pending_updates?: boolean }): Promise<true> {
     return await this.callApi('deleteWebhook', options);
   }
 
@@ -383,11 +360,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendMessage', {
       ...options,
@@ -397,7 +370,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## forwardMessage
-   * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
+   * Use this method to forward multiple messages of any kind. If some of the specified messages can't be found or
+   * forwarded, they are skipped. Service messages and messages with protected content can't be forwarded. Album
+   * grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.
    * @see https://core.telegram.org/bots/api#forwardmessage
    */
   async forwardMessage(options: {
@@ -413,7 +388,12 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## forwardMessages
-   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
+   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are
+   * skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages
+   * can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot.
+   * The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original
+   * message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is
+   * returned.
    * @see https://core.telegram.org/bots/api#forwardmessages
    */
   async forwardMessages(options: {
@@ -432,7 +412,10 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## copyMessage
-   * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn't have a link to the original message. Returns the MessageId of the sent message on success.
+   * Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway
+   * winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field
+   * correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message
+   * doesn't have a link to the original message. Returns the MessageId of the sent message on success.
    * @see https://core.telegram.org/bots/api#copymessage
    */
   async copyMessage(options: {
@@ -447,11 +430,7 @@ export class TelegramBot extends EventEmitter {
     disable_notification?: boolean;
     protect_content?: boolean;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<MessageId> {
     return await this.callApi('copyMessage', {
       ...options,
@@ -462,7 +441,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## copyMessages
-   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
+   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are
+   * skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A
+   * quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is
+   * analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album
+   * grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
    * @see https://core.telegram.org/bots/api#copymessages
    */
   async copyMessages(options: {
@@ -482,7 +465,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendPhoto
-   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
+   * Use this method to copy messages of any kind. If some of the specified messages can't be found or copied, they are
+   * skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can't be copied. A
+   * quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is
+   * analogous to the method forwardMessages, but the copied messages don't have a link to the original message. Album
+   * grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.
    * @see https://core.telegram.org/bots/api#sendphoto
    */
   async sendPhoto(options: {
@@ -499,11 +486,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<MessageId> {
     return await this.callApi('sendPhoto', {
       ...options,
@@ -514,7 +497,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendAudio
-   * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+   * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio
+   * must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files
+   * of up to 50 MB in size, this limit may be changed in the future.
    *
    * For sending voice messages, use the sendVoice method instead.
    * @see https://core.telegram.org/bots/api#sendaudio
@@ -535,11 +520,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendAudio', {
       ...options,
@@ -549,7 +530,8 @@ export class TelegramBot extends EventEmitter {
   }
 
   /** ## sendDocument
-   * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+   * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of
+   * any type of up to 50 MB in size, this limit may be changed in the future.
    * @see https://core.telegram.org/bots/api#senddocument
    */
   async sendDocument(options: {
@@ -566,11 +548,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendDocument', {
       ...options,
@@ -581,7 +559,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendVideo
-   * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+   * Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document).
+   * On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit
+   * may be changed in the future.
    * @see https://core.telegram.org/bots/api#sendvideo
    */
   async sendVideo(options: {
@@ -603,11 +583,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendVideo', {
       ...options,
@@ -618,7 +594,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendAnimation
-   * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.
+   * Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message
+   * is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the
+   * future.
    * @see https://core.telegram.org/bots/api#sendanimation
    */
   async sendAnimation(options: {
@@ -639,11 +617,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendAnimation', {
       ...options,
@@ -654,7 +628,10 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendVoice
-   * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+   * Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message.
+   * For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other
+   * formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice
+   * messages of up to 50 MB in size, this limit may be changed in the future.
    * @see https://core.telegram.org/bots/api#sendvoice
    */
   async sendVoice(options: {
@@ -670,11 +647,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendVoice', {
       ...options,
@@ -685,7 +658,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendVideoNote
-   * As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.
+   * As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send
+   * video messages. On success, the sent Message is returned.
    * @see https://core.telegram.org/bots/api#sendvideonote
    */
   async sendVideoNote(options: {
@@ -700,11 +674,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendVideoNote', {
       ...options,
@@ -728,11 +698,7 @@ export class TelegramBot extends EventEmitter {
     disable_notification?: boolean;
     protect_content?: boolean;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendPaidMedia', {
       ...options,
@@ -744,19 +710,16 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendMediaGroup
-   * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.
+   * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can
+   * be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is
+   * returned.
    * @see https://core.telegram.org/bots/api#sendmediagroup
    */
   async sendMediaGroup(options: {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
-    media: (
-      | InputMediaAudio
-      | InputMediaDocument
-      | InputMediaPhoto
-      | InputMediaVideo
-    )[];
+    media: (InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo)[];
     disable_notification?: boolean;
     protect_content?: boolean;
     message_effect_id?: string;
@@ -787,11 +750,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendLocation', {
       ...options,
@@ -820,11 +779,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendVenue', {
       ...options,
@@ -849,11 +804,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendContact', {
       ...options,
@@ -888,11 +839,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendPoll', {
       ...options,
@@ -904,7 +851,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendDice
-   * Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.
+   * Use this method to send an animated emoji that will display a random value. On success, the sent Message is
+   * returned.
    * @see https://core.telegram.org/bots/api#senddice
    */
   async sendDice(options: {
@@ -916,11 +864,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendDice', {
       ...options,
@@ -930,7 +874,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendChatAction
-   * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.
+   * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for
+   * 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#sendchataction
    */
   async sendChatAction(options: {
@@ -955,7 +901,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setMessageReaction
-   * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.
+   * Use this method to change the chosen reactions on a message. Service messages can't be reacted to. Automatically
+   * forwarded messages from a channel to its discussion group have the same available reactions as messages in the
+   * channel. Returns True on success.
    * @see https://core.telegram.org/bots/api#setmessagereaction
    */
   async setMessageReaction(options: {
@@ -985,7 +933,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## getFile
-   * Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link ```https://api.telegram.org/file/bot<token>/<file_path>```, where ```<file_path>``` is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
+   * Use this method to get basic information about a file and prepare it for downloading. For the moment, bots can
+   * download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via
+   * the link ```https://api.telegram.org/file/bot<token>/<file_path>```, where ```<file_path>``` is taken from the
+   * response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be
+   * requested by calling getFile again.
    * @see https://core.telegram.org/bots/api#getfile
    */
   async getFile(options: { file_id: string }): Promise<TelegramTypes.File> {
@@ -994,7 +946,10 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## banChatMember
-   * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
+   * Use this method to ban a user in a group, a supergroup or a channel. In the case of supergroups and channels, the
+   * user will not be able to return to the chat on their own using invite links, etc., unless unbanned first. The bot
+   * must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns
+   * True on success.
    * @see https://core.telegram.org/bots/api#banchatmember
    */
   async banChatMember(options: {
@@ -1008,7 +963,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## unbanChatMember
-   * Use this method to unban a previously banned user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't want this, use the parameter only_if_banned. Returns True on success.
+   * Use this method to unban a previously banned user in a supergroup or channel. The user will not return to the group
+   * or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to
+   * work. By default, this method guarantees that after the call the user is not a member of the chat, but will be able
+   * to join it. So if the user is a member of the chat they will also be removed from the chat. If you don't want this,
+   * use the parameter only_if_banned. Returns True on success.
    * @see https://core.telegram.org/bots/api#unbanchatmember
    */
   async unbanChatMember(options: {
@@ -1021,7 +980,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## restrictChatMember
-   * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a user. Returns True on success.
+   * Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to
+   * work and must have the appropriate administrator rights. Pass True for all permissions to lift restrictions from a
+   * user. Returns True on success.
    * @see https://core.telegram.org/bots/api#restrictchatmember
    */
   async restrictChatMember(options: {
@@ -1039,7 +1000,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## promoteChatMember
-   * Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to demote a user. Returns True on success.
+   * Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the
+   * chat for this to work and must have the appropriate administrator rights. Pass False for all boolean parameters to
+   * demote a user. Returns True on success.
    * @see https://core.telegram.org/bots/api#promotechatmember
    */
   async promoteChatMember(options: {
@@ -1066,7 +1029,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setChatAdministratorCustomTitle
-   * Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on success.
+   * Use this method to set a custom title for an administrator in a supergroup promoted by the bot. Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#setchatadministratorcustomtitle
    */
   async setChatAdministratorCustomTitle(options: {
@@ -1079,31 +1043,30 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## banChatSenderChat
-   * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on success.
+   * Use this method to ban a channel chat in a supergroup or a channel. Until the chat is unbanned, the owner of the
+   * banned chat won't be able to send messages on behalf of any of their channels. The bot must be an administrator
+   * in the supergroup or channel for this to work and must have the appropriate administrator rights. Returns True on
+   * \success.
    * @see https://core.telegram.org/bots/api#banchatsenderchat
    */
-  async banChatSenderChat(options: {
-    chat_id: number | string;
-    sender_chat_id: number;
-  }): Promise<true> {
+  async banChatSenderChat(options: { chat_id: number | string; sender_chat_id: number }): Promise<true> {
     return await this.callApi('banChatSenderChat', options);
   }
 
   /**
    * ## unbanChatSenderChat
-   * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns True on success.
+   * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an
+   * administrator for this to work and must have the appropriate administrator rights. Returns True on success.
    * @see https://core.telegram.org/bots/api#unbanchatsenderchat
    */
-  async unbanChatSenderChat(options: {
-    chat_id: number | string;
-    sender_chat_id: number;
-  }): Promise<true> {
+  async unbanChatSenderChat(options: { chat_id: number | string; sender_chat_id: number }): Promise<true> {
     return await this.callApi('unbanChatSenderChat', options);
   }
 
   /**
    * ## setChatPermissions
-   * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an administrator for this to work and must have the appropriate administrator rights. Returns True on success.
+   * Use this method to unban a previously banned channel chat in a supergroup or channel. The bot must be an
+   * administrator for this to work and must have the appropriate administrator rights. Returns True on success.
    * @see https://core.telegram.org/bots/api#setchatpermissions
    */
   async setChatPermissions(options: {
@@ -1119,18 +1082,20 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## exportChatInviteLink
-   * Use this method to generate a new primary invite link for a chat; any previously generated primary link is revoked. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the new invite link as String on success.
+   * Use this method to generate a new primary invite link for a chat; any previously generated primary link is revoked.
+   * The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights.
+   * Returns the new invite link as String on success.
    * @see https://core.telegram.org/bots/api#exportchatinvitelink
    */
-  async exportChatInviteLink(options: {
-    chat_id: number | string;
-  }): Promise<string> {
+  async exportChatInviteLink(options: { chat_id: number | string }): Promise<string> {
     return await this.callApi('exportChatInviteLink', options);
   }
 
   /**
    * ## createChatInviteLink
-   * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. The link can be revoked using the method revokeChatInviteLink. Returns the new invite link as ChatInviteLink object.
+   * Use this method to create an additional invite link for a chat. The bot must be an administrator in the chat for
+   * this to work and must have the appropriate administrator rights. The link can be revoked using the method
+   * revokeChatInviteLink. Returns the new invite link as ChatInviteLink object.
    * @see https://core.telegram.org/bots/api#createchatinvitelink
    */
   async createChatInviteLink(options: {
@@ -1145,7 +1110,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editChatInviteLink
-   * Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the edited invite link as a ChatInviteLink object.
+   * Use this method to edit a non-primary invite link created by the bot. The bot must be an administrator in the chat
+   * for this to work and must have the appropriate administrator rights. Returns the edited invite link as a
+   * ChatInviteLink object.
    * @see https://core.telegram.org/bots/api#editchatinvitelink
    */
   async editChatInviteLink(options: {
@@ -1161,55 +1128,50 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## revokeChatInviteLink
-   * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.
+   * Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is
+   * automatically generated. The bot must be an administrator in the chat for this to work and must have the
+   * appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.
    * @see https://core.telegram.org/bots/api#revokechatinvitelink
    */
-  async revokeChatInviteLink(options: {
-    chat_id: number | string;
-    invite_link: string;
-  }): Promise<ChatInviteLink> {
+  async revokeChatInviteLink(options: { chat_id: number | string; invite_link: string }): Promise<ChatInviteLink> {
     return await this.callApi('revokeChatInviteLink', options);
   }
 
   /**
    * ## approveChatJoinRequest
-   * Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
+   * Use this method to approve a chat join request. The bot must be an administrator in the chat for this to work and
+   * must have the can_invite_users administrator right. Returns True on success.
    * @see https://core.telegram.org/bots/api#approvechatjoinrequest
    */
-  async approveChatJoinRequest(options: {
-    chat_id: number | string;
-    user_id: number;
-  }): Promise<true> {
+  async approveChatJoinRequest(options: { chat_id: number | string; user_id: number }): Promise<true> {
     return await this.callApi('approveChatJoinRequest', options);
   }
 
   /**
    * ## declineChatJoinRequest
-   * Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and must have the can_invite_users administrator right. Returns True on success.
+   * Use this method to decline a chat join request. The bot must be an administrator in the chat for this to work and
+   * must have the can_invite_users administrator right. Returns True on success.
    * @see https://core.telegram.org/bots/api#declinechatjoinrequest
    */
-  async declineChatJoinRequest(options: {
-    chat_id: number | string;
-    user_id: number;
-  }): Promise<true> {
+  async declineChatJoinRequest(options: { chat_id: number | string; user_id: number }): Promise<true> {
     return await this.callApi('declineChatJoinRequest', options);
   }
 
   /**
    * ## setChatPhoto
-   * Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
+   * Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be
+   * an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#setchatphoto
    */
-  async setChatPhoto(options: {
-    chat_id: number | string;
-    photo: InputFile;
-  }): Promise<true> {
+  async setChatPhoto(options: { chat_id: number | string; photo: InputFile }): Promise<true> {
     return await this.callApi('setChatPhoto', options);
   }
 
   /**
    * ## deleteChatPhoto
-   * Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
+   * Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator
+   * in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
    * @see https://core.telegram.org/bots/api#deletechatphoto
    */
   async deleteChatPhoto(options: { chat_id: number | string }): Promise<true> {
@@ -1218,31 +1180,30 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setChatTitle
-   * Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
+   * Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an
+   * administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#setchattitle
    */
-  async setChatTitle(options: {
-    chat_id: number | string;
-    title: string;
-  }): Promise<true> {
+  async setChatTitle(options: { chat_id: number | string; title: string }): Promise<true> {
     return await this.callApi('setChatTitle', options);
   }
 
   /**
    * ## setChatDescription
-   * Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
+   * Use this method to change the description of a group, a supergroup or a channel. The bot must be an administrator
+   * in the chat for this to work and must have the appropriate administrator rights. Returns True on success.
    * @see https://core.telegram.org/bots/api#setchatdescription
    */
-  async setChatDescription(options: {
-    chat_id: number | string;
-    description?: string;
-  }): Promise<true> {
+  async setChatDescription(options: { chat_id: number | string; description?: string }): Promise<true> {
     return await this.callApi('setChatDescription', options);
   }
 
   /**
    * ## pinChatMessage
-   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the ```'can_pin_messages'``` administrator right in a supergroup or ```'can_edit_messages'``` administrator right in a channel. Returns True on success.
+   * Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the
+   * bot must be an administrator in the chat for this to work and must have the ```'can_pin_messages'``` administrator
+   * right in a supergroup or ```'can_edit_messages'``` administrator right in a channel. Returns True on success.
    * @see https://core.telegram.org/bots/api#pinchatmessage
    */
   async pinChatMessage(options: {
@@ -1256,7 +1217,10 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## unpinChatMessage
-   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the ```'can_pin_messages'``` administrator right in a supergroup or ```'can_edit_messages'``` administrator right in a channel. Returns True on success.
+   * Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat,
+   * the bot must be an administrator in the chat for this to work and must have the ```'can_pin_messages'```
+   * administrator right in a supergroup or ```'can_edit_messages'``` administrator right in a channel. Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#unpinchatmessage
    */
   async unpinChatMessage(options: {
@@ -1269,12 +1233,12 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## unpinAllChatMessages
-   * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the ```'can_pin_messages'``` administrator right in a supergroup or ```'can_edit_messages'``` administrator right in a channel. Returns True on success.
+   * Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be
+   * an administrator in the chat for this to work and must have the ```'can_pin_messages'``` administrator right in a
+   * supergroup or ```'can_edit_messages'``` administrator right in a channel. Returns True on success.
    * @see https://core.telegram.org/bots/api#unpinallchatmessages
    */
-  async unpinAllChatMessages(options: {
-    chat_id: number | string;
-  }): Promise<true> {
+  async unpinAllChatMessages(options: { chat_id: number | string }): Promise<true> {
     return await this.callApi('unpinAllChatMessages', options);
   }
 
@@ -1298,12 +1262,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## getChatAdministrators
-   * Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember objects.
+   * Use this method to get a list of administrators in a chat, which aren't bots. Returns an Array of ChatMember
+   * objects.
    * @see https://core.telegram.org/bots/api#getchatadministrators
    */
-  async getChatAdministrators(options: {
-    chat_id: number | string;
-  }): Promise<ChatMember[]> {
+  async getChatAdministrators(options: { chat_id: number | string }): Promise<ChatMember[]> {
     return await this.callApi('getChatAdministrators', options);
   }
 
@@ -1312,50 +1275,46 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get the number of members in a chat. Returns Int on success.
    * @see https://core.telegram.org/bots/api#getchatmembercount
    */
-  async getChatMemberCount(options: {
-    chat_id: number | string;
-  }): Promise<number> {
+  async getChatMemberCount(options: { chat_id: number | string }): Promise<number> {
     return await this.callApi('getChatMemberCount', options);
   }
 
   /**
    * ## getChatMember
-   * Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a ChatMember object on success.
+   * Use this method to get information about a member of a chat. The method is only guaranteed to work for other users
+   * if the bot is an administrator in the chat. Returns a ChatMember object on success.
    * @see https://core.telegram.org/bots/api#getchatmember
    */
-  async getChatMember(options: {
-    chat_id: number | string;
-    user_id: number;
-  }): Promise<ChatMember> {
+  async getChatMember(options: { chat_id: number | string; user_id: number }): Promise<ChatMember> {
     return await this.callApi('getChatMember', options);
   }
 
   /**
    * ## setChatStickerSet
-   * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set optionally returned in getChat requests to check if the bot can use this method. Returns True on success.
+   * Use this method to set a new group sticker set for a supergroup. The bot must be an administrator in the chat for
+   * this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set optionally
+   * returned in getChat requests to check if the bot can use this method. Returns True on success.
    * @see https://core.telegram.org/bots/api#setchatstickerset
    */
-  async setChatStickerSet(options: {
-    chat_id: number | string;
-    sticker_set_name: string;
-  }): Promise<true> {
+  async setChatStickerSet(options: { chat_id: number | string; sticker_set_name: string }): Promise<true> {
     return await this.callApi('setChatStickerSet', options);
   }
 
   /**
    * ## deleteChatStickerSet
-   * Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set optionally returned in getChat requests to check if the bot can use this method. Returns True on success.
+   * Use this method to delete a group sticker set from a supergroup. The bot must be an administrator in the chat for
+   * this to work and must have the appropriate administrator rights. Use the field can_set_sticker_set optionally
+   * returned in getChat requests to check if the bot can use this method. Returns True on success.
    * @see https://core.telegram.org/bots/api#deletechatstickerset
    */
-  async deleteChatStickerSet(options: {
-    chat_id: number | string;
-  }): Promise<true> {
+  async deleteChatStickerSet(options: { chat_id: number | string }): Promise<true> {
     return await this.callApi('deleteChatStickerSet', options);
   }
 
   /**
    * ## getForumTopicIconStickers
-   * Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects.
+   * Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no
+   * parameters. Returns an Array of Sticker objects.
    * @see https://core.telegram.org/bots/api#getforumtopiciconstickers
    */
   async getForumTopicIconStickers(): Promise<Sticker[]> {
@@ -1364,7 +1323,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## createForumTopic
-   * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a ForumTopic object.
+   * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this
+   * to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a
+   * ForumTopic object.
    * @see https://core.telegram.org/bots/api#createforumtopic
    */
   async createForumTopic(options: {
@@ -1378,7 +1339,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editForumTopic
-   * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+   * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in
+   * the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the
+   * topic. Returns True on success.
    * @see https://core.telegram.org/bots/api#editforumtopic
    */
   async editForumTopic(options: {
@@ -1392,122 +1355,115 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## closeForumTopic
-   * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+   * Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for
+   * this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
+   * Returns True on success.
    * @see https://core.telegram.org/bots/api#closeforumtopic
    */
-  async closeForumTopic(options: {
-    chat_id: number | string;
-    message_thread_id: number;
-  }): Promise<true> {
+  async closeForumTopic(options: { chat_id: number | string; message_thread_id: number }): Promise<true> {
     return await this.callApi('closeForumTopic', options);
   }
 
   /**
    * ## reopenForumTopic
-   * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
+   * Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat
+   * for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic.
+   * Returns True on success.
    * @see https://core.telegram.org/bots/api#reopenforumtopic
    */
-  async reopenForumTopic(options: {
-    chat_id: number | string;
-    message_thread_id: number;
-  }): Promise<true> {
+  async reopenForumTopic(options: { chat_id: number | string; message_thread_id: number }): Promise<true> {
     return await this.callApi('reopenForumTopic', options);
   }
 
   /**
    * ## deleteForumTopic
-   * Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.
+   * Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an
+   * administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True
+   * on success.
    * @see https://core.telegram.org/bots/api#deleteforumtopic
    */
-  async deleteForumTopic(options: {
-    chat_id: number | string;
-    message_thread_id: number;
-  }): Promise<true> {
+  async deleteForumTopic(options: { chat_id: number | string; message_thread_id: number }): Promise<true> {
     return await this.callApi('deleteForumTopic', options);
   }
 
   /**
    * ## unpinAllForumTopicMessages
-   * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
+   * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat
+   * for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
    * @see https://core.telegram.org/bots/api#unpinallforumtopicmessages
    */
-  async unpinAllForumTopicMessages(options: {
-    chat_id: number | string;
-    message_thread_id: number;
-  }): Promise<true> {
+  async unpinAllForumTopicMessages(options: { chat_id: number | string; message_thread_id: number }): Promise<true> {
     return await this.callApi('unpinAllForumTopicMessages', options);
   }
 
   /**
    * ## editGeneralForumTopic
-   * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success.
+   * Use this method to edit the name of the 'General' topic in a forum supergroup chat. The bot must be an
+   * administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#editgeneralforumtopic
    */
-  async editGeneralForumTopic(options: {
-    chat_id: number | string;
-    name: string;
-  }): Promise<true> {
+  async editGeneralForumTopic(options: { chat_id: number | string; name: string }): Promise<true> {
     return await this.callApi('editGeneralForumTopic', options);
   }
 
   /**
    * ## closeGeneralForumTopic
-   * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the ```can_manage_topics``` administrator rights. Returns True on success.
+   * Use this method to close an open 'General' topic in a forum supergroup chat. The bot must be an administrator in
+   * the chat for this to work and must have the ```can_manage_topics``` administrator rights. Returns True on success.
    * @see https://core.telegram.org/bots/api#closegeneralforumtopic
    */
-  async closeGeneralForumTopic(options: {
-    chat_id: number | string;
-  }): Promise<true> {
+  async closeGeneralForumTopic(options: { chat_id: number | string }): Promise<true> {
     return await this.callApi('closeGeneralForumTopic', options);
   }
 
   /**
    * ## reopenGeneralForumTopic
-   * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.
+   * Use this method to reopen a closed 'General' topic in a forum supergroup chat. The bot must be an administrator in
+   * the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically
+   * unhidden if it was hidden. Returns True on success.
    * @see https://core.telegram.org/bots/api#reopengeneralforumtopic
    */
-  async reopenGeneralForumTopic(options: {
-    chat_id: number | string;
-  }): Promise<true> {
+  async reopenGeneralForumTopic(options: { chat_id: number | string }): Promise<true> {
     return await this.callApi('reopenGeneralForumTopic', options);
   }
 
   /**
    * ## hideGeneralForumTopic
-   * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success.
+   * Use this method to hide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the
+   * chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically
+   * closed if it was open. Returns True on success.
    * @see https://core.telegram.org/bots/api#hidegeneralforumtopic
    */
-  async hideGeneralForumTopic(options: {
-    chat_id: number | string;
-  }): Promise<true> {
+  async hideGeneralForumTopic(options: { chat_id: number | string }): Promise<true> {
     return await this.callApi('hideGeneralForumTopic', options);
   }
 
   /**
    * ## unhideGeneralForumTopic
-   * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
+   * Use this method to unhide the 'General' topic in a forum supergroup chat. The bot must be an administrator in the
+   * chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.
    * @see https://core.telegram.org/bots/api#unhidegeneralforumtopic
    */
-  async unhideGeneralForumTopic(options: {
-    chat_id: number | string;
-  }): Promise<true> {
+  async unhideGeneralForumTopic(options: { chat_id: number | string }): Promise<true> {
     return await this.callApi('unhideGeneralForumTopic', options);
   }
 
   /**
    * ## unpinAllGeneralForumTopicMessages
-   * se this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
+   * se this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in
+   * the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#unpinallgeneralforumtopicmessages
    */
-  async unpinAllGeneralForumTopicMessages(options: {
-    chat_id: number | string;
-  }): Promise<true> {
+  async unpinAllGeneralForumTopicMessages(options: { chat_id: number | string }): Promise<true> {
     return await this.callApi('unpinAllGeneralForumTopicMessages', options);
   }
 
   /**
    * ## answerCallbackQuery
-   * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
+   * Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the
+   * user as a notification at the top of the chat screen or as an alert. On success, True is returned.
    * @see https://core.telegram.org/bots/api#answercallbackquery
    */
   async answerCallbackQuery(options: {
@@ -1522,30 +1478,28 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## getUserChatBoosts
-   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.
+   * Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat.
+   * Returns a UserChatBoosts object.
    * @see https://core.telegram.org/bots/api#getuserchatboosts
    */
-  async getUserChatBoosts(options: {
-    chat_id: number | string;
-    user_id: number;
-  }): Promise<ChatBoost[]> {
+  async getUserChatBoosts(options: { chat_id: number | string; user_id: number }): Promise<ChatBoost[]> {
     return await this.callApi('getUserChatBoosts', options);
   }
 
   /**
    * ## getBusinessConnection
-   * Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success.
+   * Use this method to get information about the connection of the bot with a business account. Returns a
+   * BusinessConnection object on success.
    * @see https://core.telegram.org/bots/api#getbusinessconnection
    */
-  async getBusinessConnection(options: {
-    business_connection_id: string;
-  }): Promise<BusinessConnection> {
+  async getBusinessConnection(options: { business_connection_id: string }): Promise<BusinessConnection> {
     return await this.callApi('getBusinessConnection', options);
   }
 
   /**
    * ## setMyCommands
-   * Use this method to change the list of the bot's commands. See this manual for more details about bot commands. Returns True on success.
+   * Use this method to change the list of the bot's commands. See this manual for more details about bot commands.
+   * Returns True on success.
    * @see https://core.telegram.org/bots/api#setmycommands
    */
   async setMyCommands(options: {
@@ -1561,13 +1515,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## deleteMyCommands
-   * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion, higher level commands will be shown to affected users. Returns True on success.
+   * Use this method to delete the list of the bot's commands for the given scope and user language. After deletion,
+   * higher level commands will be shown to affected users. Returns True on success.
    * @see https://core.telegram.org/bots/api#deletemycommands
    */
-  async deleteMyCommands(options?: {
-    scope?: BotCommandScope;
-    language_code?: string;
-  }): Promise<true> {
+  async deleteMyCommands(options?: { scope?: BotCommandScope; language_code?: string }): Promise<true> {
     return await this.callApi('deleteMyCommands', {
       scope: new JSONSerialized(options?.scope),
     });
@@ -1575,13 +1527,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## getMyCommands
-   * Use this method to get the current list of the bot's commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren't set, an empty list is returned.
+   * Use this method to get the current list of the bot's commands for the given scope and user language. Returns an
+   * Array of BotCommand objects. If commands aren't set, an empty list is returned.
    * @see https://core.telegram.org/bots/api#getmycommands
    */
-  async getMyCommands(options?: {
-    scope?: BotCommandScope;
-    language_code?: string;
-  }): Promise<BotCommand[]> {
+  async getMyCommands(options?: { scope?: BotCommandScope; language_code?: string }): Promise<BotCommand[]> {
     return await this.callApi('getMyCommands', {
       scope: new JSONSerialized(options?.scope),
     });
@@ -1592,10 +1542,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to change the bot's name. Returns True on success.
    * @see https://core.telegram.org/bots/api#setmyname
    */
-  async setMyName(options?: {
-    name?: string;
-    language_code?: string;
-  }): Promise<true> {
+  async setMyName(options?: { name?: string; language_code?: string }): Promise<true> {
     return await this.callApi('setMyName', options);
   }
 
@@ -1610,13 +1557,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setMyDescription
-   * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty. Returns True on success.
+   * Use this method to change the bot's description, which is shown in the chat with the bot if the chat is empty.
+   * Returns True on success.
    * @see https://core.telegram.org/bots/api#setmydescription
    */
-  async setMyDescription(options?: {
-    description?: string;
-    language_code?: string;
-  }): Promise<true> {
+  async setMyDescription(options?: { description?: string; language_code?: string }): Promise<true> {
     return await this.callApi('setMyDescription', options);
   }
 
@@ -1625,44 +1570,37 @@ export class TelegramBot extends EventEmitter {
    * Use this method to get the current bot description for the given user language. Returns BotDescription on success.
    * @see https://core.telegram.org/bots/api#getmydescription
    */
-  async getMyDescription(options?: {
-    language_code?: string;
-  }): Promise<BotDescription> {
+  async getMyDescription(options?: { language_code?: string }): Promise<BotDescription> {
     return await this.callApi('getMyDescription', options);
   }
 
   /**
    * ## setMyShortDescription
-   * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent together with the link when users share the bot. Returns True on success.
+   * Use this method to change the bot's short description, which is shown on the bot's profile page and is sent
+   * together with the link when users share the bot. Returns True on success.
    * @see https://core.telegram.org/bots/api#setmyshortdescription
    */
-  async setMyShortDescription(options?: {
-    short_description?: string;
-    language_code?: string;
-  }): Promise<true> {
+  async setMyShortDescription(options?: { short_description?: string; language_code?: string }): Promise<true> {
     return await this.callApi('setMyShortDescription', options);
   }
 
   /**
    * ## getMyShortDescription
-   * Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success.
+   * Use this method to get the current bot short description for the given user language. Returns BotShortDescription
+   * on success.
    * @see https://core.telegram.org/bots/api#getmyshortdescription
    */
-  async getMyShortDescription(options?: {
-    language_code?: string;
-  }): Promise<BotShortDescription> {
+  async getMyShortDescription(options?: { language_code?: string }): Promise<BotShortDescription> {
     return await this.callApi('getMyShortDescription', options);
   }
 
   /**
    * ## setChatMenuButton
-   * Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on success.
+   * Use this method to change the bot's menu button in a private chat, or the default menu button. Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#setchatmenubutton
    */
-  async setChatMenuButton(options: {
-    chat_id: number | string;
-    menu_button?: MenuButton;
-  }): Promise<true> {
+  async setChatMenuButton(options: { chat_id: number | string; menu_button?: MenuButton }): Promise<true> {
     return await this.callApi('setChatMenuButton', {
       ...options,
       menu_button: new JSONSerialized(options.menu_button),
@@ -1671,18 +1609,19 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## getChatMenuButton
-   * Use this method to get the current value of the bot's menu button in a private chat, or the default menu button. Returns MenuButton on success.
+   * Use this method to get the current value of the bot's menu button in a private chat, or the default menu button.
+   * Returns MenuButton on success.
    * @see https://core.telegram.org/bots/api#getchatmenubutton
    */
-  async getChatMenuButton(options: {
-    chat_id: number | string;
-  }): Promise<MenuButton> {
+  async getChatMenuButton(options: { chat_id: number | string }): Promise<MenuButton> {
     return await this.callApi('getChatMenuButton', options);
   }
 
   /**
    * ## setMyDefaultAdministratorRights
-   * Use this method to change the default administrator rights requested by the bot when it's added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns True on success.
+   * Use this method to change the default administrator rights requested by the bot when it's added as an administrator
+   * to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding
+   * the bot. Returns True on success.
    * @see https://core.telegram.org/bots/api#setmydefaultadministratorrights
    */
   async setMyDefaultAdministratorRights(options: {
@@ -1696,25 +1635,22 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## getMyDefaultAdministratorRights
-   * Use this method to get the current default administrator rights of the bot. Returns ChatAdministratorRights on success.
+   * Use this method to get the current default administrator rights of the bot. Returns ChatAdministratorRights on
+   * success.
    * @see https://core.telegram.org/bots/api#getmydefaultadministratorrights
    */
-  async getMyDefaultAdministratorRights(options?: {
-    for_channels?: boolean;
-  }): Promise<ChatAdministratorRights> {
+  async getMyDefaultAdministratorRights(options?: { for_channels?: boolean }): Promise<ChatAdministratorRights> {
     return await this.callApi('getMyDefaultAdministratorRights', options);
   }
 
   /**
    * ## editMessageText
-   * Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * Use this method to edit text and game messages. On success, if the edited message is not an inline message, the
+   * edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagetext
    */
   async editMessageText(
-    options: (
-      | { chat_id: number | string; message_id: number }
-      | { inline_message_id: string }
-    ) & {
+    options: ({ chat_id: number | string; message_id: number } | { inline_message_id: string }) & {
       business_connection_id?: string;
       text: string;
       parse_mode?: ParseMode;
@@ -1732,14 +1668,12 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editMessageCaption
-   * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * Use this method to edit captions of messages. On success, if the edited message is not an inline message, the
+   * edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagecaption
    */
   async editMessageCaption(
-    options: (
-      | { chat_id: number | string; message_id: number }
-      | { inline_message_id: string }
-    ) & {
+    options: ({ chat_id: number | string; message_id: number } | { inline_message_id: string }) & {
       business_connection_id?: string;
       caption?: string;
       parse_mode?: ParseMode;
@@ -1757,14 +1691,15 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editMessageMedia
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message
+   * album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a
+   * photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously
+   * uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the
+   * edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
   async editMessageMedia(
-    options: (
-      | { chat_id: number; message_id: number }
-      | { inline_message_id: string }
-    ) & {
+    options: ({ chat_id: number; message_id: number } | { inline_message_id: string }) & {
       business_connection_id?: string;
       media: InputMedia;
       reply_markup?: InlineKeyboardMarkup;
@@ -1779,14 +1714,13 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editMessageLiveLocation
-   * Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * Use this method to edit live location messages. A location can be edited until its live_period expires or editing
+   * is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline
+   * message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagelivelocation
    */
   async editMessageLiveLocation(
-    options: (
-      | { chat_id: number | string; message_id: number }
-      | { inline_message_id: string }
-    ) & {
+    options: ({ chat_id: number | string; message_id: number } | { inline_message_id: string }) & {
       business_connection_id?: string;
       latitude: number;
       longitude: number;
@@ -1805,14 +1739,12 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## stopMessageLiveLocation
-   * se this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * se this method to stop updating a live location message before live_period expires. On success, if the message is
+   * not an inline message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#stopmessagelivelocation
    */
   async stopMessageLiveLocation(
-    options: (
-      | { chat_id: number | string; message_id: number }
-      | { inline_message_id: string }
-    ) & {
+    options: ({ chat_id: number | string; message_id: number } | { inline_message_id: string }) & {
       business_connection_id?: string;
       reply_markup?: InlineKeyboardMarkup;
     },
@@ -1825,14 +1757,12 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editMessageReplyMarkup
-   * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
+   * Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline
+   * message, the edited Message is returned, otherwise True is returned.
    * @see https://core.telegram.org/bots/api#editmessagereplymarkup
    */
   async editMessageReplyMarkup(
-    options: (
-      | { chat_id: number | string; message_id: number }
-      | { inline_message_id: string }
-    ) & {
+    options: ({ chat_id: number | string; message_id: number } | { inline_message_id: string }) & {
       business_connection_id?: string;
       reply_markup?: InlineKeyboardMarkup;
     },
@@ -1873,22 +1803,17 @@ export class TelegramBot extends EventEmitter {
    * Returns True on success.
    * @see https://core.telegram.org/bots/api#deletemessage
    */
-  async deleteMessage(options: {
-    chat_id: number | string;
-    message_id: number;
-  }): Promise<true> {
+  async deleteMessage(options: { chat_id: number | string; message_id: number }): Promise<true> {
     return await this.callApi('deleteMessage', options);
   }
 
   /**
    * ## deleteMessages
-   * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they are skipped. Returns True on success.
+   * Use this method to delete multiple messages simultaneously. If some of the specified messages can't be found, they
+   * are skipped. Returns True on success.
    * @see https://core.telegram.org/bots/api#deletemessages
    */
-  async deleteMessages(options: {
-    chat_id: number | string;
-    message_ids: [number, ...number[]];
-  }): Promise<true> {
+  async deleteMessages(options: { chat_id: number | string; message_ids: [number, ...number[]] }): Promise<true> {
     return await this.callApi('deleteMessages', {
       ...options,
       message_ids: new JSONSerialized(options.message_ids),
@@ -1897,7 +1822,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendSticker
-   * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.
+   * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is
+   * returned.
    * @see https://core.telegram.org/bots/api#sendsticker
    */
   async sendSticker(options: {
@@ -1910,11 +1836,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup?:
-      | InlineKeyboardMarkup
-      | ReplyKeyboardMarkup
-      | ReplyKeyboardRemove
-      | ForceReply;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendSticker', {
       ...options,
@@ -1933,12 +1855,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## getCustomEmojiStickers
-   * Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects.
+   * Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker
+   * objects.
    * @see https://core.telegram.org/bots/api#getcustomemojistickers
    */
-  async getCustomEmojiStickers(options: {
-    custom_emoji_ids: string[];
-  }): Promise<Sticker[]> {
+  async getCustomEmojiStickers(options: { custom_emoji_ids: string[] }): Promise<Sticker[]> {
     return await this.callApi('getCustomEmojiStickers', {
       custom_emoji_ids: new JSONSerialized(options.custom_emoji_ids),
     });
@@ -1946,7 +1867,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## uploadStickerFile
-   * Use this method to upload a file with a sticker for later use in the createNewStickerSet, addStickerToSet, or replaceStickerInSet methods (the file can be used multiple times). Returns the uploaded File on success.
+   * Use this method to upload a file with a sticker for later use in the createNewStickerSet, addStickerToSet, or
+   * replaceStickerInSet methods (the file can be used multiple times). Returns the uploaded File on success.
    * @see https://core.telegram.org/bots/api#uploadstickerfile
    */
   async uploadStickerFile(options: {
@@ -1959,7 +1881,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## createNewStickerSet
-   * Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns True on success.
+   * Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus
+   * created. Returns True on success.
    * @see https://core.telegram.org/bots/api#createnewstickerset
    */
   async createNewStickerSet(options: {
@@ -1978,14 +1901,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## addStickerToSet
-   * Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns True on success.
+   * Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers.
+   * Other sticker sets can have up to 120 stickers. Returns True on success.
    * @see https://core.telegram.org/bots/api#addstickertoset
    */
-  async addStickerToSet(options: {
-    user_id: number;
-    name: string;
-    sticker: InputSticker;
-  }): Promise<true> {
+  async addStickerToSet(options: { user_id: number; name: string; sticker: InputSticker }): Promise<true> {
     return await this.callApi('addStickerToSet', {
       ...options,
       sticker: new JSONSerialized(options.sticker),
@@ -1997,10 +1917,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to move a sticker in a set created by the bot to a specific position. Returns True on success.
    * @see https://core.telegram.org/bots/api#setstickerpositioninset
    */
-  async setStickerPositionInSet(options: {
-    sticker: string;
-    position: number;
-  }): Promise<true> {
+  async setStickerPositionInSet(options: { sticker: string; position: number }): Promise<true> {
     return await this.callApi('setStickerPositionInSet', options);
   }
 
@@ -2015,7 +1932,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## replaceStickerInSet
-   * Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success.
+   * Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling
+   * deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success.
    * @see https://core.telegram.org/bots/api#replacestickerinset
    */
   async replaceStickerInSet(options: {
@@ -2032,13 +1950,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setStickerEmojiList
-   * Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
+   * Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong
+   * to a sticker set created by the bot. Returns True on success.
    * @see https://core.telegram.org/bots/api#setstickeremojilist
    */
-  async setStickerEmojiList(options: {
-    sticker: string;
-    emoji_list: [string, ...string[]];
-  }): Promise<true> {
+  async setStickerEmojiList(options: { sticker: string; emoji_list: [string, ...string[]] }): Promise<true> {
     return await this.callApi('setStickerEmojiList', {
       ...options,
       emojis: new JSONSerialized(options.emoji_list),
@@ -2047,13 +1963,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setStickerKeywords
-   * Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.
+   * Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to
+   * a sticker set created by the bot. Returns True on success.
    * @see https://core.telegram.org/bots/api#setstickerkeywords
    */
-  async setStickerKeywords(options: {
-    sticker: string;
-    keywords: string[];
-  }): Promise<true> {
+  async setStickerKeywords(options: { sticker: string; keywords: string[] }): Promise<true> {
     return await this.callApi('setStickerKeywords', {
       ...options,
       keywords: new JSONSerialized(options.keywords),
@@ -2062,13 +1976,11 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setStickerMaskPosition
-   * Use this method to change the mask position of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns True on success.
+   * Use this method to change the mask position of a mask sticker. The sticker must belong to a sticker set that was
+   * created by the bot. Returns True on success.
    * @see https://core.telegram.org/bots/api#setstickermaskposition
    */
-  async setStickerMaskPosition(options: {
-    sticker: string;
-    mask_position: MaskPosition;
-  }): Promise<true> {
+  async setStickerMaskPosition(options: { sticker: string; mask_position: MaskPosition }): Promise<true> {
     return await this.callApi('setStickerMaskPosition', {
       ...options,
       mask_position: new JSONSerialized(options.mask_position),
@@ -2080,16 +1992,14 @@ export class TelegramBot extends EventEmitter {
    * Use this method to set the title of a created sticker set. Returns True on success.
    * @see https://core.telegram.org/bots/api#setstickersettitle
    */
-  async setStickerSetTitle(options: {
-    name: string;
-    title: string;
-  }): Promise<true> {
+  async setStickerSetTitle(options: { name: string; title: string }): Promise<true> {
     return await this.callApi('setStickerSetTitle', options);
   }
 
   /**
    * ## setStickerSetThumbnail
-   * Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match the format of the stickers in the set. Returns True on success.
+   * Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match
+   * the format of the stickers in the set. Returns True on success.
    * @see https://core.telegram.org/bots/api#setstickersettitle
    */
   async setStickerSetThumbnail(options: {
@@ -2106,10 +2016,7 @@ export class TelegramBot extends EventEmitter {
    * Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success.
    * @see https://core.telegram.org/bots/api#setcustomemojistickersetthumbnail
    */
-  async setCustomEmojiStickerSetThumbnail(options: {
-    name: string;
-    custom_emoji_id?: string;
-  }): Promise<true> {
+  async setCustomEmojiStickerSetThumbnail(options: { name: string; custom_emoji_id?: string }): Promise<true> {
     return await this.callApi('setCustomEmojiStickerSetThumbnail', options);
   }
 
@@ -2145,7 +2052,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## answerWebAppQuery
-   * Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned.
+   * Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of
+   * the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned.
    * @see https://core.telegram.org/bots/api#answerwebappquery
    */
   async answerWebAppQuery(options: {
@@ -2237,7 +2145,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## answerShippingQuery
-   * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success, True is returned.
+   * If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will
+   * send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries. On success,
+   * True is returned.
    * @see https://core.telegram.org/bots/api#answershippingquery
    */
   async answerShippingQuery(
@@ -2255,25 +2165,22 @@ export class TelegramBot extends EventEmitter {
   ): Promise<true> {
     return await this.callApi('answerShippingQuery', {
       ...options,
-      shipping_options:
-        'shipping_options' in options
-          ? new JSONSerialized(options.shipping_options)
-          : undefined,
+      shipping_options: 'shipping_options' in options ? new JSONSerialized(options.shipping_options) : undefined,
     });
   }
 
   /**
    * ## answerPreCheckoutQuery
-   * Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
+   * Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the
+   * form of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On
+   * success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query
+   * was sent.
    * @see https://core.telegram.org/bots/api#answerprecheckoutquery
    */
   async answerPreCheckoutQuery(
     options: {
       pre_checkout_query_id: string;
-    } & (
-      | { ok: true; error_message?: never }
-      | { ok: false; error_message: string }
-    ),
+    } & ({ ok: true; error_message?: never } | { ok: false; error_message: string }),
   ): Promise<true> {
     return await this.callApi('answerPreCheckoutQuery', options);
   }
@@ -2283,10 +2190,7 @@ export class TelegramBot extends EventEmitter {
    * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
    * @see https://core.telegram.org/bots/api#getstartransactions
    */
-  async getStarTransactions(options?: {
-    offset?: number;
-    limit?: number;
-  }): Promise<StarTransactions> {
+  async getStarTransactions(options?: { offset?: number; limit?: number }): Promise<StarTransactions> {
     return await this.callApi('getStarTransactions', options);
   }
 
@@ -2295,23 +2199,21 @@ export class TelegramBot extends EventEmitter {
    * Refunds a successful payment in Telegram Stars. Returns True on success.
    * @see https://core.telegram.org/bots/api#refundstarpayment
    */
-  async refundStarPayment(options: {
-    user_id: number;
-    telegram_payment_charge_id: string;
-  }): Promise<true> {
+  async refundStarPayment(options: { user_id: number; telegram_payment_charge_id: string }): Promise<true> {
     return await this.callApi('refundStarPayment', options);
   }
 
   /**
    * ## setPassportDataErrors
-   * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.
-   * Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc. Supply some details in the error message to make sure the user knows how to correct the issues.
+   * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able
+   * to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the
+   * error must change). Returns True on success.
+   * Use this if the data submitted by the user doesn't satisfy the standards your service requires for any reason. For
+   * example, if a birthday date seems invalid, a submitted document is blurry, a scan shows evidence of tampering, etc.
+   * Supply some details in the error message to make sure the user knows how to correct the issues.
    * @see https://core.telegram.org/bots/api#setpassportdataerrors
    */
-  async setPassportDataErrors(options: {
-    user_id: number;
-    errors: PassportElementError[];
-  }): Promise<true> {
+  async setPassportDataErrors(options: { user_id: number; errors: PassportElementError[] }): Promise<true> {
     return await this.callApi('setPassportDataErrors', {
       ...options,
       errors: new JSONSerialized(options.errors),
@@ -2342,14 +2244,13 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## setGameScore
-   * Use this method to set the score of the specified user in a game message. On success, if the message is not an inline message, the [Message](https://core.telegram.org/bots/api#message) is returned, otherwise True is returned. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+   * Use this method to set the score of the specified user in a game message. On success, if the message is not an
+   * inline message, the [Message](https://core.telegram.org/bots/api#message) is returned, otherwise True is returned.
+   * Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
    * @see https://core.telegram.org/bots/api#setgamescore
    */
   async setGameScore(
-    options: (
-      | { chat_id: number; message_id: number }
-      | { inline_message_id: string }
-    ) & {
+    options: ({ chat_id: number; message_id: number } | { inline_message_id: string }) & {
       user_id: number;
       score: number;
       force?: boolean;
@@ -2361,32 +2262,26 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## getGameHighScores
-   * Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. Returns an Array of GameHighScore objects.
-   * > This method will currently return scores for the target user, plus two of their closest neighbors on each side. Will also return the top three users if the user and their neighbors are not among them. Please note that this behavior is subject to change.
+   * Use this method to get data for high score tables. Will return the score of the specified user and several of their
+   * neighbors in a game. Returns an Array of GameHighScore objects.
+   * > This method will currently return scores for the target user, plus two of their closest neighbors on each side.
+   * Will also return the top three users if the user and their neighbors are not among them. Please note that this
+   * behavior is subject to change.
    * @see https://core.telegram.org/bots/api#getgamehighscores
    */
   async getGameHighScores(
-    options: (
-      | { chat_id: number; message_id: number }
-      | { inline_message_id: string }
-    ) & {
+    options: ({ chat_id: number; message_id: number } | { inline_message_id: string }) & {
       user_id: number;
     },
   ): Promise<GameHighScore[]> {
     return await this.callApi('getGameHighScores', options);
   }
 
-  on<U extends keyof allEmittedTypes>(
-    event: U,
-    listener: (eventData: NonNullable<allEmittedTypes[U]>) => void,
-  ): this {
+  on<U extends keyof allEmittedTypes>(event: U, listener: (eventData: NonNullable<allEmittedTypes[U]>) => void): this {
     return super.on(event, listener) as this;
   }
 
-  emit<U extends keyof allEmittedTypes>(
-    event: U,
-    eventData: NonNullable<allEmittedTypes[U]>,
-  ): boolean {
+  emit<U extends keyof allEmittedTypes>(event: U, eventData: NonNullable<allEmittedTypes[U]>): boolean {
     return super.emit(event, eventData);
   }
 }

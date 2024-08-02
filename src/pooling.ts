@@ -1,11 +1,5 @@
 import { TelegramBot } from './index';
-import {
-  EventTypes,
-  Message,
-  messageTypes,
-  MessageTypes,
-  Update,
-} from './types/';
+import { EventTypes, Message, messageTypes, MessageTypes, Update } from './types/';
 import { TelegramError } from './errors';
 
 export class Polling {

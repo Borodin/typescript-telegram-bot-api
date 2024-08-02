@@ -19,7 +19,8 @@ export default tseslint.config(
                 contexts: [
                     "TSTypeAliasDeclaration",
                 ],
-            }]
+            }],
+            "max-len": ["error", { "code": 120, "tabWidth": 4, "ignoreUrls": true }],
         }
     },
 );

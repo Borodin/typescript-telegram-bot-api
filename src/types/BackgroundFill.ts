@@ -1,8 +1,4 @@
-import {
-  BackgroundFillSolid,
-  BackgroundFillGradient,
-  BackgroundFillFreeformGradient,
-} from './';
+import { BackgroundFillSolid, BackgroundFillGradient, BackgroundFillFreeformGradient } from './';
 
 /**
  * ## BackgroundFill
@@ -12,7 +8,4 @@ import {
  * - `BackgroundFillFreeformGradient`
  * @see https://core.telegram.org/bots/api#backgroundfill
  */
-export type BackgroundFill =
-  | BackgroundFillSolid
-  | BackgroundFillGradient
-  | BackgroundFillFreeformGradient;
+export type BackgroundFill = BackgroundFillSolid | BackgroundFillGradient | BackgroundFillFreeformGradient;

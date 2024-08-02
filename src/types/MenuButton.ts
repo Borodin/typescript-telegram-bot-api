@@ -8,7 +8,4 @@ import { MenuButtonCommands, MenuButtonWebApp, MenuButtonDefault } from './';
  * - MenuButtonDefault
  * @see https://core.telegram.org/bots/api#menubutton
  */
-export type MenuButton =
-  | MenuButtonCommands
-  | MenuButtonWebApp
-  | MenuButtonDefault;
+export type MenuButton = MenuButtonCommands | MenuButtonWebApp | MenuButtonDefault;

@@ -1,6 +1,7 @@
 /**
  * ## getWebhookInfo
- * Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty.
+ * Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If
+ * the bot is using getUpdates, will return an object with the url field empty.
  * @see https://core.telegram.org/bots/api#getwebhookinfo
  */
 export type WebhookInfo = {
@@ -30,12 +31,14 @@ export type WebhookInfo = {
   last_error_date?: number;
 
   /**
-   * Optional. Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook
+   * Optional. Error message in human-readable format for the most recent error that happened when trying to deliver an
+   * update via webhook
    */
   last_error_message?: string;
 
   /**
-   * Optional. Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters
+   * Optional. Unix time of the most recent error that happened when trying to synchronize available updates with
+   * Telegram datacenters
    */
   last_synchronization_error_date?: number;
 

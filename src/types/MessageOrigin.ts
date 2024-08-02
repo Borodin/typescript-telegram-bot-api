@@ -1,9 +1,4 @@
-import {
-  MessageOriginUser,
-  MessageOriginHiddenUser,
-  MessageOriginChat,
-  MessageOriginChannel,
-} from './';
+import { MessageOriginUser, MessageOriginHiddenUser, MessageOriginChat, MessageOriginChannel } from './';
 
 /**
  * ## MessageOrigin
@@ -14,8 +9,4 @@ import {
  * - MessageOriginChannel
  * @see https://core.telegram.org/bots/api#messageorigin
  */
-export type MessageOrigin =
-  | MessageOriginUser
-  | MessageOriginHiddenUser
-  | MessageOriginChat
-  | MessageOriginChannel;
+export type MessageOrigin = MessageOriginUser | MessageOriginHiddenUser | MessageOriginChat | MessageOriginChannel;
