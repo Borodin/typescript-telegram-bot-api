@@ -1,5 +1,10 @@
 import { PhotoSize } from './';
 
+/**
+ * ## Video
+ * This object represents a video file.
+ * @see https://core.telegram.org/bots/api#video
+ */
 export type Video = {
   file_id: string;
   file_unique_id: string;

@@ -1,5 +1,10 @@
 import { Currencies, OrderInfo } from './';
 
+/**
+ * ## SuccessfulPayment
+ * This object contains basic information about a successful payment.
+ * @see https://core.telegram.org/bots/api#successfulpayment
+ */
 export type SuccessfulPayment = {
   currency: Currencies | 'XTR';
   total_amount: number;

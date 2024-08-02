@@ -1,5 +1,10 @@
 import { Attachment, InputFile, MessageEntity, ParseMode } from './';
 
+/**
+ * ## InputMediaAnimation
+ * Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
+ * @see https://core.telegram.org/bots/api#inputmediaanimation
+ */
 export type InputMediaAnimation = {
   type: 'animation';
   media: string | Attachment;

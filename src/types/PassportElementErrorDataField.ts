@@ -1,3 +1,8 @@
+/**
+ * ## PassportElementErrorDataField
+ * Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.
+ * @see https://core.telegram.org/bots/api#passportelementerrordatafield
+ */
 export type PassportElementErrorDataField = {
   source: 'data';
   type:

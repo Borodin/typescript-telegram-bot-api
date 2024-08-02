@@ -1,3 +1,8 @@
+/**
+ * ## LinkPreviewOptions
+ * Describes the options used for link preview generation.
+ * @see https://core.telegram.org/bots/api#linkpreviewoptions
+ */
 export type LinkPreviewOptions = {
   is_disabled?: boolean;
   url?: string;

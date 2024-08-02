@@ -1,5 +1,10 @@
 import { File, PhotoSize, MaskPosition } from './';
 
+/**
+ * ## Sticker
+ * This object represents a sticker.
+ * @see https://core.telegram.org/bots/api#sticker
+ */
 export type Sticker = {
   file_id: string;
   file_unique_id: string;

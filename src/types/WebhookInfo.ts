@@ -3,7 +3,6 @@
  * Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty.
  * @see https://core.telegram.org/bots/api#getwebhookinfo
  */
-
 export type WebhookInfo = {
   /**
    * Webhook URL, may be empty if webhook is not set up

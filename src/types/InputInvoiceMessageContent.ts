@@ -1,5 +1,10 @@
 import { Currencies, LabeledPrice } from './';
 
+/**
+ * ## InputInvoiceMessageContent
+ * Represents the content of an invoice message to be sent as the result of an inline query.
+ * @see https://core.telegram.org/bots/api#inputinvoicemessagecontent
+ */
 export type InputInvoiceMessageContent = {
   title: string;
   description: string;

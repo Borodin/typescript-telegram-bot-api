@@ -8,5 +8,4 @@ import { InputPaidMediaVideo } from './InputPaidMediaVideo';
  * - InputPaidMediaVideo
  * @see https://core.telegram.org/bots/api#inputpaidmedia
  */
-
 export type InputPaidMedia = InputPaidMediaPhoto | InputPaidMediaVideo;

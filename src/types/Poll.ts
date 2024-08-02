@@ -1,5 +1,10 @@
 import { MessageEntity, PollOption } from './';
 
+/**
+ * ## Poll
+ * This object contains information about a poll.
+ * @see https://core.telegram.org/bots/api#poll
+ */
 export type Poll = {
   id: string;
   question: string;

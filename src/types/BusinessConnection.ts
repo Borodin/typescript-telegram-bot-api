@@ -1,5 +1,10 @@
 import { User } from './';
 
+/**
+ * ## BusinessConnection
+ * Describes the connection of the bot with a business account.
+ * @see https://core.telegram.org/bots/api#businessconnection
+ */
 export type BusinessConnection = {
   id: string;
   user: User;

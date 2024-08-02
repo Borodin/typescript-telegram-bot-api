@@ -1,3 +1,8 @@
+/**
+ * ## ForumTopic
+ * This object represents a forum topic.
+ * @see https://core.telegram.org/bots/api#forumtopic
+ */
 export type ForumTopic = {
   message_thread_id: number;
   name: string;

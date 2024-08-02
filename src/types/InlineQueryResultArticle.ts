@@ -1,5 +1,10 @@
 import { InlineKeyboardMarkup, InputMessageContent } from './';
 
+/**
+ * ## InlineQueryResultArticle
+ * Represents a link to an article or web page.
+ * @see https://core.telegram.org/bots/api#inlinequeryresultarticle
+ */
 export type InlineQueryResultArticle = {
   type: 'article';
   id: string;

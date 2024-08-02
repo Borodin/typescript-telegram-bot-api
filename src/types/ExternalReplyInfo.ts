@@ -23,6 +23,11 @@ import {
   PaidMediaInfo,
 } from './';
 
+/**
+ * ## ExternalReplyInfo
+ * This object contains information about a message that is being replied to, which may come from another chat or forum topic.
+ * @see https://core.telegram.org/bots/api#externalreplyinfo
+ */
 export type ExternalReplyInfo = {
   origin: MessageOrigin;
   chat?: Chat;

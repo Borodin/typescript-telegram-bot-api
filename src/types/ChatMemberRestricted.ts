@@ -1,5 +1,10 @@
 import { User } from './';
 
+/**
+ * ## ChatMemberRestricted
+ * Represents a chat member that is under certain restrictions in the chat. Supergroups only.
+ * @see https://core.telegram.org/bots/api#chatmemberrestricted
+ */
 export type ChatMemberRestricted = {
   status: 'restricted';
   user: User;

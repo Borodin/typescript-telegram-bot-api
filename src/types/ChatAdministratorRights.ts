@@ -1,3 +1,8 @@
+/**
+ * ## ChatAdministratorRights
+ * Represents the rights of an administrator in a chat.
+ * @see https://core.telegram.org/bots/api#chatadministratorrights
+ */
 export type ChatAdministratorRights = {
   is_anonymous: boolean;
   can_manage_chat: boolean;

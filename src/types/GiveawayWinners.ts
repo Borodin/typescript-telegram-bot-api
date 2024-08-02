@@ -1,5 +1,10 @@
 import { Chat, User } from './';
 
+/**
+ * ## GiveawayWinners
+ * This object represents a message about the completion of a giveaway with public winners.
+ * @see https://core.telegram.org/bots/api#giveawaywinners
+ */
 export type GiveawayWinners = {
   chat: Chat;
   giveaway_message_id: number;

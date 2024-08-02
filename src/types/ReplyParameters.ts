@@ -1,5 +1,10 @@
 import { ParseMode } from './index';
 
+/**
+ * ## ReplyParameters
+ * Describes reply parameters for the message that is being sent.
+ * @see https://core.telegram.org/bots/api#replyparameters
+ */
 export type ReplyParameters = {
   message_id: number;
   chat_id?: number | string;

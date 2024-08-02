@@ -74,6 +74,11 @@ const emojis = [
   '😡',
 ] as const;
 
+/**
+ * ## ReactionTypeEmoji
+ * The reaction is based on an emoji.
+ * @see https://core.telegram.org/bots/api#reactiontypeemoji
+ */
 export type ReactionTypeEmoji = {
   type: 'emoji';
   emoji: (typeof emojis)[number] | string;

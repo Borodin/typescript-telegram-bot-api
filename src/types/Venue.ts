@@ -1,5 +1,10 @@
 import { Location } from './';
 
+/**
+ * ## Venue
+ * This object represents a venue.
+ * @see https://core.telegram.org/bots/api#venue
+ */
 export type Venue = {
   location: Location;
   title: string;

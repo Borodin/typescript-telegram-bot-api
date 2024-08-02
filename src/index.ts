@@ -69,12 +69,23 @@ import * as TelegramTypes from './types/';
 
 const wait: (ms: number) => Promise<void> = promisify(setTimeout);
 
+/**
+ * All events such as `message`, `callback_query`, `message:location` etc.
+ */
 type allEmittedTypes = EventTypes & MessageTypes;
 
+/**
+ * A class for serializing objects into JSON format.
+ * Used to mark objects that need to be serialized in a special way, preserving nested files in a specific manner.
+ */
 class JSONSerialized {
   constructor(public value: object | undefined) {}
 }
 
+/**
+ * A class for wrapping files or buffers, intended for use when sending files in requests.
+ * Allows you to specify additional file parameters.
+ */
 export class FileOptions {
   constructor(
     public file: ReadStream | Buffer | File,
@@ -409,7 +420,7 @@ export class TelegramBot extends EventEmitter {
     chat_id: number | string;
     message_thread_id?: number;
     from_chat_id: number | string;
-    message_ids: number[];
+    message_ids: [number, ...number[]];
     disable_notification?: boolean;
     protect_content?: boolean;
   }): Promise<MessageId[]> {
@@ -458,7 +469,7 @@ export class TelegramBot extends EventEmitter {
     chat_id: number | string;
     message_thread_id?: number;
     from_chat_id: number | string;
-    message_ids: number[];
+    message_ids: [number, ...number[]];
     disable_notification?: boolean;
     protect_content?: boolean;
     remove_caption?: boolean;
@@ -1876,7 +1887,7 @@ export class TelegramBot extends EventEmitter {
    */
   async deleteMessages(options: {
     chat_id: number | string;
-    message_ids: number[];
+    message_ids: [number, ...number[]];
   }): Promise<true> {
     return await this.callApi('deleteMessages', {
       ...options,
@@ -1955,7 +1966,7 @@ export class TelegramBot extends EventEmitter {
     user_id: number;
     name: string;
     title: string;
-    stickers: InputSticker[];
+    stickers: [InputSticker, ...InputSticker[]];
     sticker_type?: Sticker['type'];
     needs_repainting?: boolean;
   }): Promise<true> {
@@ -2026,7 +2037,7 @@ export class TelegramBot extends EventEmitter {
    */
   async setStickerEmojiList(options: {
     sticker: string;
-    emoji_list: string[];
+    emoji_list: [string, ...string[]];
   }): Promise<true> {
     return await this.callApi('setStickerEmojiList', {
       ...options,

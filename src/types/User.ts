@@ -1,3 +1,8 @@
+/**
+ * ## User
+ * This object represents a Telegram user or bot.
+ * @see https://core.telegram.org/bots/api#user
+ */
 export type User = {
   id: number;
   is_bot: boolean;

@@ -221,21 +221,21 @@ export * from './WriteAccessAllowed';
 import { ResponseParameters } from './ResponseParameters';
 import { InputFile } from './InputFile';
 
-/**
- * @see https://core.telegram.org/bots/api#making-requests
- */
-
-export type SuccessResponse = {
+export interface SuccessResponse {
   ok: true;
   result: unknown;
   description?: string;
-};
-export type ErrorResponse = {
+}
+export interface ErrorResponse {
   ok: false;
   description: string;
   error_code: number;
   parameters?: ResponseParameters;
-};
+}
+
+/**
+ * @see https://core.telegram.org/bots/api#making-requests
+ */
 export type Response = SuccessResponse | ErrorResponse;
 
 /**
@@ -244,6 +244,10 @@ export type Response = SuccessResponse | ErrorResponse;
  */
 export type ParseMode = 'Markdown' | 'MarkdownV2' | 'HTML';
 
+/**
+ * ## Attachment
+ * alias for InputFile
+ */
 export type Attachment = InputFile;
 
 /**

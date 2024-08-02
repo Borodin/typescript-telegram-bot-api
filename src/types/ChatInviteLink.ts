@@ -1,5 +1,10 @@
 import { User } from './';
 
+/**
+ * ## ChatInviteLink
+ * Represents an invite link for a chat.
+ * @see https://core.telegram.org/bots/api#chatinvitelink
+ */
 export type ChatInviteLink = {
   invite_link: string;
   creator: User;

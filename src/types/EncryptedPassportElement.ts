@@ -1,18 +1,3 @@
-type EncryptedPassportElementType =
-  | 'personal_details'
-  | 'passport'
-  | 'driver_license'
-  | 'identity_card'
-  | 'internal_passport'
-  | 'address'
-  | 'utility_bill'
-  | 'bank_statement'
-  | 'rental_agreement'
-  | 'passport_registration'
-  | 'temporary_registration'
-  | 'phone_number'
-  | 'email';
-
 interface PassportFile {
   file_id: string;
   file_size: number;
@@ -20,7 +5,20 @@ interface PassportFile {
 }
 
 interface BaseEncryptedPassportElement {
-  type: EncryptedPassportElementType;
+  type:
+    | 'personal_details'
+    | 'passport'
+    | 'driver_license'
+    | 'identity_card'
+    | 'internal_passport'
+    | 'address'
+    | 'utility_bill'
+    | 'bank_statement'
+    | 'rental_agreement'
+    | 'passport_registration'
+    | 'temporary_registration'
+    | 'phone_number'
+    | 'email';
   hash: string;
 }
 

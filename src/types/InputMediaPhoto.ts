@@ -1,5 +1,10 @@
 import { Attachment, MessageEntity, ParseMode } from './';
 
+/**
+ * ## InputMediaPhoto
+ * Represents a photo to be sent.
+ * @see https://core.telegram.org/bots/api#inputmediaphoto
+ */
 export type InputMediaPhoto = {
   type: 'photo';
   media: string | Attachment;

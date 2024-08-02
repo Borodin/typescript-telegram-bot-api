@@ -1,35 +1,31 @@
 import { User } from './';
 
-type MessageEntityType =
-  | 'mention'
-  | 'hashtag'
-  | 'cashtag'
-  | 'bot_command'
-  | 'url'
-  | 'email'
-  | 'phone_number'
-  | 'bold'
-  | 'italic'
-  | 'underline'
-  | 'strikethrough'
-  | 'spoiler'
-  | 'blockquote'
-  | 'expandable_blockquote'
-  | 'code'
-  | 'pre'
-  | 'text_link'
-  | 'text_mention'
-  | 'custom_emoji';
-
+/**
+ * ## MessageEntity
+ * This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
+ * @see https://core.telegram.org/bots/api#messageentity
+ */
 export type MessageEntity = {
   offset: number;
   length: number;
 } & (
   | {
-      type: Exclude<
-        MessageEntityType,
-        'url' | 'text_mention' | 'pre' | 'custom_emoji'
-      >;
+      type:
+        | 'mention'
+        | 'hashtag'
+        | 'cashtag'
+        | 'bot_command'
+        | 'email'
+        | 'phone_number'
+        | 'bold'
+        | 'italic'
+        | 'underline'
+        | 'strikethrough'
+        | 'spoiler'
+        | 'blockquote'
+        | 'expandable_blockquote'
+        | 'code'
+        | 'text_link';
     }
   | {
       type: 'url';

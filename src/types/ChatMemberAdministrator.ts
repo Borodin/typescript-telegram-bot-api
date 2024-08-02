@@ -1,5 +1,10 @@
 import { User } from './';
 
+/**
+ * ## ChatMemberAdministrator
+ * Represents a chat member that has some additional privileges.
+ * @see https://core.telegram.org/bots/api#chatmemberadministrator
+ */
 export type ChatMemberAdministrator = {
   status: 'administrator';
   user: User;

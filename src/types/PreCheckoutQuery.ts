@@ -1,5 +1,10 @@
 import { User, OrderInfo, Currencies } from './';
 
+/**
+ * ## PreCheckoutQuery
+ * This object contains information about an incoming pre-checkout query.
+ * @see https://core.telegram.org/bots/api#precheckoutquery
+ */
 export type PreCheckoutQuery = {
   id: string;
   from: User;

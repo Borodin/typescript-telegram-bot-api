@@ -1,5 +1,10 @@
 import { Attachment, InputFile, MessageEntity, ParseMode } from './';
 
+/**
+ * ## InputMediaDocument
+ * Represents a general file to be sent.
+ * @see https://core.telegram.org/bots/api#inputmediadocument
+ */
 export type InputMediaDocument = {
   type: 'document';
   media: string | Attachment;

@@ -1,3 +1,8 @@
+/**
+ * ## ChatPermissions
+ * Describes actions that a non-administrator user is allowed to take in a chat.
+ * @see https://core.telegram.org/bots/api#chatpermissions
+ */
 export type ChatPermissions = {
   can_send_messages?: boolean;
   can_send_audios?: boolean;

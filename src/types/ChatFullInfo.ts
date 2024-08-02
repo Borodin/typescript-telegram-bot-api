@@ -11,6 +11,11 @@ import {
   BusinessOpeningHours,
 } from './';
 
+/**
+ * ## ChatFullInfo
+ * This object contains full information about a chat.
+ * @see https://core.telegram.org/bots/api#chatfullinfo
+ */
 export type ChatFullInfo = {
   id: number;
   type: 'private' | 'group' | 'supergroup' | 'channel';
