@@ -4,7 +4,7 @@ import FormData from 'form-data';
 import { promisify } from 'util';
 import { Readable } from 'stream';
 import { TelegramError } from './errors';
-import { Polling } from './pooling';
+import { Polling } from './polling';
 import { ReadStream } from 'fs';
 
 import {
