@@ -1508,6 +1508,7 @@ export class TelegramBot extends EventEmitter {
     language_code?: string;
   }): Promise<true> {
     return await this.callApi('setMyCommands', {
+      ...options,
       commands: new JSONSerialized(options.commands),
       scope: new JSONSerialized(options.scope),
     });
@@ -1521,6 +1522,7 @@ export class TelegramBot extends EventEmitter {
    */
   async deleteMyCommands(options?: { scope?: BotCommandScope; language_code?: string }): Promise<true> {
     return await this.callApi('deleteMyCommands', {
+      ...options,
       scope: new JSONSerialized(options?.scope),
     });
   }
@@ -1533,6 +1535,7 @@ export class TelegramBot extends EventEmitter {
    */
   async getMyCommands(options?: { scope?: BotCommandScope; language_code?: string }): Promise<BotCommand[]> {
     return await this.callApi('getMyCommands', {
+      ...options,
       scope: new JSONSerialized(options?.scope),
     });
   }
