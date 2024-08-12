@@ -1603,10 +1603,10 @@ export class TelegramBot extends EventEmitter {
    * success.
    * @see https://core.telegram.org/bots/api#setchatmenubutton
    */
-  async setChatMenuButton(options: { chat_id: number | string; menu_button?: MenuButton }): Promise<true> {
+  async setChatMenuButton(options?: { chat_id?: number | string; menu_button?: MenuButton }): Promise<true> {
     return await this.callApi('setChatMenuButton', {
       ...options,
-      menu_button: new JSONSerialized(options.menu_button),
+      menu_button: new JSONSerialized(options?.menu_button),
     });
   }
 
@@ -1616,7 +1616,7 @@ export class TelegramBot extends EventEmitter {
    * Returns MenuButton on success.
    * @see https://core.telegram.org/bots/api#getchatmenubutton
    */
-  async getChatMenuButton(options: { chat_id: number | string }): Promise<MenuButton> {
+  async getChatMenuButton(options?: { chat_id?: number | string }): Promise<MenuButton> {
     return await this.callApi('getChatMenuButton', options);
   }
 
