@@ -8,4 +8,5 @@ import { User } from './';
 export type ChatMemberMember = {
   status: 'member';
   user: User;
+  until_date?: number;
 };

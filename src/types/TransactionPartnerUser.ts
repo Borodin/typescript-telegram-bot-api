@@ -1,4 +1,5 @@
 import { User } from './User';
+import { PaidMedia } from './PaidMedia';
 
 /**
  * ## TransactionPartnerUser
@@ -20,4 +21,9 @@ export type TransactionPartnerUser = {
    * Optional. Bot-specified invoice payload
    */
   invoice_payload: string;
+
+  /**
+   * Optional. Information about the paid media bought by the user
+   */
+  paid_media: PaidMedia[];
 };

@@ -947,6 +947,37 @@ describe('.editChatInviteLink()', () => {
   });
 });
 
+describe('.createChatSubscriptionInviteLink()', () => {
+  it('should create chat subscription invite link', async () => {
+    await expect(
+      bot.createChatSubscriptionInviteLink({
+        chat_id: TEST_CHANNEL_ID,
+        subscription_period: 2592000,
+        subscription_price: 1,
+      }),
+    ).resolves.toHaveProperty('invite_link', expect.stringMatching('https://t.me/+'));
+  });
+});
+
+describe('.editChatSubscriptionInviteLink()', () => {
+  it('should edit chat subscription invite link', async () => {
+    const { invite_link } = await bot.createChatSubscriptionInviteLink({
+      chat_id: TEST_CHANNEL_ID,
+      name: 'name',
+      subscription_period: 2592000,
+      subscription_price: 1,
+    });
+
+    await expect(
+      bot.editChatSubscriptionInviteLink({
+        chat_id: TEST_CHANNEL_ID,
+        invite_link,
+        name: 'New name',
+      }),
+    ).resolves.toHaveProperty('name', expect.stringMatching('New name'));
+  });
+});
+
 describe('.revokeChatInviteLink()', () => {
   it('should revoke chat invite link', async () => {
     const { invite_link } = await bot.createChatInviteLink({

@@ -688,6 +688,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#sendpaidmedia
    */
   async sendPaidMedia(options: {
+    business_connection_id?: string;
     chat_id: number | string;
     star_count: number;
     media: InputPaidMedia[];
@@ -1089,6 +1090,34 @@ export class TelegramBot extends EventEmitter {
    */
   async exportChatInviteLink(options: { chat_id: number | string }): Promise<string> {
     return await this.callApi('exportChatInviteLink', options);
+  }
+
+  /**
+   * ## createChatSubscriptionInviteLink
+   * Use this method to create a subscription invite link for a channel chat. The bot must have the `can_invite_users`
+   * administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the
+   * method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.
+   */
+  async createChatSubscriptionInviteLink(options: {
+    chat_id: number | string;
+    name?: string;
+    subscription_period: number;
+    subscription_price: number;
+  }): Promise<ChatInviteLink> {
+    return await this.callApi('createChatSubscriptionInviteLink', options);
+  }
+
+  /**
+   * ## editChatSubscriptionInviteLink
+   * Use this method to edit a subscription invite link created by the bot. The bot must have the `can_invite_users`
+   * administrator rights. Returns the edited invite link as a ChatInviteLink object.
+   */
+  async editChatSubscriptionInviteLink(options: {
+    chat_id: number | string;
+    invite_link: string;
+    name?: string;
+  }): Promise<ChatInviteLink> {
+    return await this.callApi('editChatSubscriptionInviteLink', options);
   }
 
   /**

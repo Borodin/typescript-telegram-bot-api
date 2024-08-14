@@ -177,6 +177,7 @@ export * from './ReactionCount';
 export * from './ReactionType';
 export * from './ReactionTypeCustomEmoji';
 export * from './ReactionTypeEmoji';
+export * from './ReactionTypePaid';
 export * from './ReplyKeyboardMarkup';
 export * from './ReplyKeyboardRemove';
 export * from './ReplyParameters';

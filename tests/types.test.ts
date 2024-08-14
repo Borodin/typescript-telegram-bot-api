@@ -12,7 +12,7 @@ describe('Types', () => {
 
     bot.on('message:audio', (message) => {
       message.audio.file_id.toUpperCase();
-      // message.video.file_id.toUpperCase(); Error 'message.video' is possibly 'undefined'.
+      // message.video.file_id.toUpperCase(); // Error 'message.video' is possibly 'undefined'.
     });
 
     bot.on('message:refunded_payment', (message) => {
