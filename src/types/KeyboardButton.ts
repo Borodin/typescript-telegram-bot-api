@@ -1,4 +1,5 @@
 import { WebAppInfo, KeyboardButtonRequestChat, KeyboardButtonPollType, KeyboardButtonRequestUsers } from './';
+import { AtMostOne } from './Update';
 
 /**
  * ## KeyboardButton
@@ -8,10 +9,11 @@ import { WebAppInfo, KeyboardButtonRequestChat, KeyboardButtonPollType, Keyboard
  */
 export type KeyboardButton = {
   text: string;
+} & AtMostOne<{
   request_users?: KeyboardButtonRequestUsers;
   request_chat?: KeyboardButtonRequestChat;
   request_contact?: boolean;
   request_location?: boolean;
   request_poll?: KeyboardButtonPollType;
   web_app?: WebAppInfo;
-};
+}>;

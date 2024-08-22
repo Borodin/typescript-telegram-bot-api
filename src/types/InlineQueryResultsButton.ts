@@ -1,4 +1,5 @@
 import { WebAppInfo } from './';
+import { AtMostOne } from './Update';
 
 /**
  * ## InlineQueryResultsButton
@@ -8,6 +9,7 @@ import { WebAppInfo } from './';
  */
 export type InlineQueryResultsButton = {
   text: string;
+} & AtMostOne<{
   web_app: WebAppInfo;
   start_parameter: string;
-};
+}>;

@@ -54,7 +54,7 @@ export type UpdateType = keyof EventTypes;
 /**
  * A TypeScript utility type that enforces only one or none specified properties of a given type to be present.
  */
-type AtMostOne<T, Keys extends keyof T = keyof T> = {
+export type AtMostOne<T, Keys extends keyof T = keyof T> = {
   [K in Keys]: { [P in K]: T[K] } & Partial<Record<Exclude<Keys, K>, never>>;
 }[Keys];
 
