@@ -1787,6 +1787,9 @@ describe('.sendInvoice()', () => {
         currency: 'XTR',
         prices: [{ label: 'Price', amount: 100 }],
         start_parameter: 'start_parameter',
+        reply_markup: {
+          inline_keyboard: [[{ text: '️Pay ⭐️100', pay: true }],[{ text: 'Cancel', callback_data: 'cancel',pay: true }]],
+        }
       }),
     ).resolves.toHaveProperty('invoice');
   });
