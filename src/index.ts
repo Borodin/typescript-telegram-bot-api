@@ -400,7 +400,7 @@ export class TelegramBot extends EventEmitter {
     chat_id: number | string;
     message_thread_id?: number;
     from_chat_id: number | string;
-    message_ids: [number, ...number[]];
+    message_ids: number[];
     disable_notification?: boolean;
     protect_content?: boolean;
   }): Promise<MessageId[]> {
@@ -452,7 +452,7 @@ export class TelegramBot extends EventEmitter {
     chat_id: number | string;
     message_thread_id?: number;
     from_chat_id: number | string;
-    message_ids: [number, ...number[]];
+    message_ids: number[];
     disable_notification?: boolean;
     protect_content?: boolean;
     remove_caption?: boolean;
@@ -1845,7 +1845,7 @@ export class TelegramBot extends EventEmitter {
    * are skipped. Returns True on success.
    * @see https://core.telegram.org/bots/api#deletemessages
    */
-  async deleteMessages(options: { chat_id: number | string; message_ids: [number, ...number[]] }): Promise<true> {
+  async deleteMessages(options: { chat_id: number | string; message_ids: number[] }): Promise<true> {
     return await this.callApi('deleteMessages', {
       ...options,
       message_ids: new JSONSerialized(options.message_ids),
@@ -1921,7 +1921,7 @@ export class TelegramBot extends EventEmitter {
     user_id: number;
     name: string;
     title: string;
-    stickers: [InputSticker, ...InputSticker[]];
+    stickers: InputSticker[];
     sticker_type?: Sticker['type'];
     needs_repainting?: boolean;
   }): Promise<true> {
@@ -1986,7 +1986,7 @@ export class TelegramBot extends EventEmitter {
    * to a sticker set created by the bot. Returns True on success.
    * @see https://core.telegram.org/bots/api#setstickeremojilist
    */
-  async setStickerEmojiList(options: { sticker: string; emoji_list: [string, ...string[]] }): Promise<true> {
+  async setStickerEmojiList(options: { sticker: string; emoji_list: string[] }): Promise<true> {
     return await this.callApi('setStickerEmojiList', {
       ...options,
       emojis: new JSONSerialized(options.emoji_list),
