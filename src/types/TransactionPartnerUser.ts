@@ -26,4 +26,9 @@ export type TransactionPartnerUser = {
    * Optional. Information about the paid media bought by the user
    */
   paid_media: PaidMedia[];
+
+  /**
+   * Optional. Bot-specified paid media payload
+   */
+  paid_media_payload: string;
 };

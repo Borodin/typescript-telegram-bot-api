@@ -15,6 +15,7 @@ import {
   ChatJoinRequest,
   ChatBoostUpdated,
   ChatBoostRemoved,
+  PaidMediaPurchased,
 } from './';
 
 /**
@@ -103,6 +104,11 @@ export type EventTypes = {
    * New incoming pre-checkout query. Contains full information about checkout
    */
   pre_checkout_query: PreCheckoutQuery;
+
+  /**
+   * A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat
+   */
+  purchased_paid_media: PaidMediaPurchased;
 
   /**
    * New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot

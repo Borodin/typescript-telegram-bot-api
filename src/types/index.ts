@@ -200,6 +200,7 @@ export * from './PaidMedia';
 export * from './PaidMediaInfo';
 export * from './PaidMediaPhoto';
 export * from './PaidMediaPreview';
+export * from './PaidMediaPurchased';
 export * from './PaidMediaVideo';
 export * from './TransactionPartnerUser';
 export * from './Update';

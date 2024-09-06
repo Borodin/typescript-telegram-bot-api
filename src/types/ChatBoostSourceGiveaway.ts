@@ -24,6 +24,11 @@ export type ChatBoostSourceGiveaway = {
   user?: User;
 
   /**
+   * Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+   */
+  prize_star_count?: number;
+
+  /**
    * Optional. True, if the giveaway was completed, but there was no user to win the prize
    */
   is_unclaimed?: boolean;

@@ -37,6 +37,11 @@ export type GiveawayWinners = {
   additional_chat_count?: number;
 
   /**
+   * Optional. The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only
+   */
+  prize_star_count?: number;
+
+  /**
    * Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for
    */
   premium_subscription_month_count?: number;

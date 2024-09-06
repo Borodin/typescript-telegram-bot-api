@@ -44,6 +44,11 @@ export type Giveaway = {
   country_codes?: string[];
 
   /**
+   * Optional. The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+   */
+  prize_star_count?: number;
+
+  /**
    * Optional. The number of months the Telegram Premium subscription won from the giveaway will be active for
    */
   premium_subscription_month_count?: number;

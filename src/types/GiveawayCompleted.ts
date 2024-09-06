@@ -20,4 +20,10 @@ export type GiveawayCompleted = {
    * Optional. Message with the giveaway that was completed, if it wasn't deleted
    */
   giveaway_message: Message;
+
+  /**
+   * Optional. True, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram
+   * Premium giveaway.
+   */
+  is_star_giveaway: boolean;
 };
