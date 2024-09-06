@@ -692,7 +692,7 @@ export class TelegramBot extends EventEmitter {
     chat_id: number | string;
     star_count: number;
     media: InputPaidMedia[];
-    payload: string;
+    payload?: string;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
