@@ -7,7 +7,6 @@ import { InlineKeyboardMarkup, InputMessageContent } from './';
  * @see https://core.telegram.org/bots/api#inlinequeryresultvenue
  */
 export type InlineQueryResultVenue = {
-
   /**
    * Type of the result, must be venue
    */

@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#transactionpartnertelegramads
  */
 export type TransactionPartnerTelegramAds = {
-
   /**
    * Type of the transaction partner, always “telegram_ads”
    */

@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#keyboardbuttonrequestusers
  */
 export type KeyboardButtonRequestUsers = {
-
   /**
    * Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within
    * the message

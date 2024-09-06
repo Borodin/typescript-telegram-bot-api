@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#passportelementerrordatafield
  */
 export type PassportElementErrorDataField = {
-
   /**
    * Error source, must be data
    */

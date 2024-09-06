@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#linkpreviewoptions
  */
 export type LinkPreviewOptions = {
-
   /**
    * Optional. True, if the link preview is disabled
    */

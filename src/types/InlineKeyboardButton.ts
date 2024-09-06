@@ -7,7 +7,6 @@ import { CallbackGame, WebAppData, LoginUrl, SwitchInlineQueryChosenChat } from 
  * @see https://core.telegram.org/bots/api#inlinekeyboardbutton
  */
 export type InlineKeyboardButton = {
-
   /**
    * Label text on the button
    */

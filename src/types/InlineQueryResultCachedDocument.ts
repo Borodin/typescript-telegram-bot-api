@@ -8,7 +8,6 @@ import { MessageEntity, InlineKeyboardMarkup, InputMessageContent, ParseMode } f
  * @see https://core.telegram.org/bots/api#inlinequeryresultcacheddocument
  */
 export type InlineQueryResultCachedDocument = {
-
   /**
    * Type of the result, must be document
    */

@@ -6,7 +6,6 @@ import { Attachment, InputFile, MessageEntity, ParseMode } from './';
  * @see https://core.telegram.org/bots/api#inputmediaanimation
  */
 export type InputMediaAnimation = {
-
   /**
    * Type of the result, must be animation
    */

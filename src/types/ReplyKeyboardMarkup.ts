@@ -7,7 +7,6 @@ import { KeyboardButton } from './KeyboardButton';
  * @see https://core.telegram.org/bots/api#replykeyboardmarkup
  */
 export type ReplyKeyboardMarkup = {
-
   /**
    * Array of button rows, each represented by an Array of KeyboardButton objects
    */

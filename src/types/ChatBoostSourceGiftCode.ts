@@ -7,7 +7,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#chatboostsourcegiftcode
  */
 export type ChatBoostSourceGiftCode = {
-
   /**
    * Source of the boost, always “gift_code”
    */

@@ -8,7 +8,6 @@ import { MessageEntity, InlineKeyboardMarkup, InputMessageContent, ParseMode } f
  * @see https://core.telegram.org/bots/api#inlinequeryresultcachedphoto
  */
 export type InlineQueryResultCachedPhoto = {
-
   /**
    * Type of the result, must be photo
    */

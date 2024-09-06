@@ -7,7 +7,6 @@ import { InlineKeyboardMarkup, InputMessageContent } from './';
  * @see https://core.telegram.org/bots/api#inlinequeryresultcachedsticker
  */
 export type InlineQueryResultCachedSticker = {
-
   /**
    * Type of the result, must be sticker
    */

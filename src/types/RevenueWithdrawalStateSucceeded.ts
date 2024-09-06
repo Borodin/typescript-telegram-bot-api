@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#revenuewithdrawalstatesucceeded
  */
 export type RevenueWithdrawalStateSucceeded = {
-
   /**
    * Type of the state, always “succeeded”
    */

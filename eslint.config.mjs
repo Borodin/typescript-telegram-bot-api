@@ -24,15 +24,8 @@ export default tseslint.config(
                     "TSTypeLiteral>TSPropertySignature"
                 ]
             }],
+            "jsdoc/empty-tags": "error",
             "max-len": ["error", { "code": 120, "tabWidth": 4, "ignoreUrls": true }],
-            "lines-around-comment": [
-                "warn",
-                {
-                    "beforeLineComment": true,
-                    "allowBlockStart": true,
-                    "ignorePattern": "pragma|ignore",
-                }
-            ],
         }
     },
     {

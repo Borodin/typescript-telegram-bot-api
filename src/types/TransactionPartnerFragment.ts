@@ -6,7 +6,6 @@ import { RevenueWithdrawalState } from './RevenueWithdrawalState';
  * @see https://core.telegram.org/bots/api#transactionpartnerfragment
  */
 export type TransactionPartnerFragment = {
-
   /**
    * Type of the transaction partner, always “fragment”
    */

@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#dice
  */
 export type Dice = {
-
   /**
    * Emoji on which the dice throw animation is based
    */

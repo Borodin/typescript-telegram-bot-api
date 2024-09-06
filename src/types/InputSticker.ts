@@ -6,7 +6,6 @@ import { InputFile, MaskPosition } from './';
  * @see https://core.telegram.org/bots/api#inputsticker
  */
 export type InputSticker = {
-
   /**
    * The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an
    * HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or

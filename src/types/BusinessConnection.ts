@@ -6,7 +6,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#businessconnection
  */
 export type BusinessConnection = {
-
   /**
    * Unique identifier of the business connection
    */

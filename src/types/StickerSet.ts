@@ -6,7 +6,6 @@ import { Sticker, PhotoSize } from './';
  * @see https://core.telegram.org/bots/api#stickerset
  */
 export type StickerSet = {
-
   /**
    * Sticker set name
    */

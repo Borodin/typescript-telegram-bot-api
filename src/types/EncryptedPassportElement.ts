@@ -2,7 +2,6 @@
  *
  */
 type PassportFile = {
-
   /**
    *
    */
@@ -23,7 +22,6 @@ type PassportFile = {
  *
  */
 type BaseEncryptedPassportElement = {
-
   /**
    *
    */
@@ -52,7 +50,6 @@ type BaseEncryptedPassportElement = {
  *
  */
 type PersonalDetailsElement = {
-
   /**
    *
    */
@@ -68,7 +65,6 @@ type PersonalDetailsElement = {
  *
  */
 type PassportElement = {
-
   /**
    *
    */
@@ -99,7 +95,6 @@ type PassportElement = {
  *
  */
 type DriverLicenseElement = {
-
   /**
    *
    */
@@ -135,7 +130,6 @@ type DriverLicenseElement = {
  *
  */
 type IdentityCardElement = {
-
   /**
    *
    */
@@ -171,7 +165,6 @@ type IdentityCardElement = {
  *
  */
 type InternalPassportElement = {
-
   /**
    *
    */
@@ -202,7 +195,6 @@ type InternalPassportElement = {
  *
  */
 type AddressElement = {
-
   /**
    *
    */
@@ -218,7 +210,6 @@ type AddressElement = {
  *
  */
 type UtilityBillElement = {
-
   /**
    *
    */
@@ -239,7 +230,6 @@ type UtilityBillElement = {
  *
  */
 type BankStatementElement = {
-
   /**
    *
    */
@@ -260,7 +250,6 @@ type BankStatementElement = {
  *
  */
 type RentalAgreementElement = {
-
   /**
    *
    */
@@ -281,7 +270,6 @@ type RentalAgreementElement = {
  *
  */
 type PassportRegistrationElement = {
-
   /**
    *
    */
@@ -302,7 +290,6 @@ type PassportRegistrationElement = {
  *
  */
 type TemporaryRegistrationElement = {
-
   /**
    *
    */
@@ -323,7 +310,6 @@ type TemporaryRegistrationElement = {
  *
  */
 type PhoneNumberElement = {
-
   /**
    *
    */
@@ -339,7 +325,6 @@ type PhoneNumberElement = {
  *
  */
 type EmailElement = {
-
   /**
    *
    */

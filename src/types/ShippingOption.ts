@@ -6,7 +6,6 @@ import { LabeledPrice } from './LabeledPrice';
  * @see https://core.telegram.org/bots/api#shippingoption
  */
 export type ShippingOption = {
-
   /**
    * Shipping option identifier
    */

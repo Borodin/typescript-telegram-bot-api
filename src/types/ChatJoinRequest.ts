@@ -6,7 +6,6 @@ import { Chat, ChatInviteLink, User } from './';
  * @see https://core.telegram.org/bots/api#chatjoinrequest
  */
 export type ChatJoinRequest = {
-
   /**
    * Chat to which the request was sent
    */

@@ -6,7 +6,6 @@ import { PhotoSize } from './';
  * @see https://core.telegram.org/bots/api#animation
  */
 export type Animation = {
-
   /**
    * Identifier for this file, which can be used to download or reuse the file
    */

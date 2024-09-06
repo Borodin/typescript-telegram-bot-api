@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#shippingaddress
  */
 export type ShippingAddress = {
-
   /**
    * Two-letter ISO 3166-1 alpha-2 country code
    */

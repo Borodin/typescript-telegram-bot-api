@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#webappdata
  */
 export type WebAppData = {
-
   /**
    * The data. Be aware that a bad client can send arbitrary data in this field.
    */

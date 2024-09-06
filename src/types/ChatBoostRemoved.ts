@@ -6,7 +6,6 @@ import { ChatBoostSource, Chat } from './';
  * @see https://core.telegram.org/bots/api#chatboostremoved
  */
 export type ChatBoostRemoved = {
-
   /**
    * Chat which was boosted
    */

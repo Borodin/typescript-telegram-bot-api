@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#forumtopic
  */
 export type ForumTopic = {
-
   /**
    * Unique identifier of the forum topic
    */

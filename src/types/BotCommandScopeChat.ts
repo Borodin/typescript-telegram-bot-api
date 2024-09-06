@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#botcommandscopechat
  */
 export type BotCommandScopeChat = {
-
   /**
    * Scope type, must be chat
    */

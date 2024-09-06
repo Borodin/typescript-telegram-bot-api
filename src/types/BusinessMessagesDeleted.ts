@@ -6,7 +6,6 @@ import { Chat } from './';
  * @see https://core.telegram.org/bots/api#businessmessagesdeleted
  */
 export type BusinessMessagesDeleted = {
-
   /**
    * Unique identifier of the business connection
    */

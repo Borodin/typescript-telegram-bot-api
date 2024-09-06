@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#forumtopicedited
  */
 export type ForumTopicEdited = {
-
   /**
    * Optional. New name of the topic, if it was edited
    */

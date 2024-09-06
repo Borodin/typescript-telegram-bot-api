@@ -6,7 +6,6 @@ import { MessageEntity } from './MessageEntity';
  * @see https://core.telegram.org/bots/api#polloption
  */
 export type PollOption = {
-
   /**
    * Option text, 1-100 characters
    */

@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#botcommandscopeallchatadministrators
  */
 export type BotCommandScopeAllChatAdministrators = {
-
   /**
    * Scope type, must be all_chat_administrators
    */

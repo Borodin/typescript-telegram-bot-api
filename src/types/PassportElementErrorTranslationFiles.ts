@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#passportelementerrortranslationfiles
  */
 export type PassportElementErrorTranslationFiles = {
-
   /**
    * Error source, must be translation_files
    */

@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#menubuttoncommands
  */
 export type MenuButtonCommands = {
-
   /**
    * Type of the button, must be commands
    */

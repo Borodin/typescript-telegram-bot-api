@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#messageoriginhiddenuser
  */
 export type MessageOriginHiddenUser = {
-
   /**
    * Type of the message origin, always “hidden_user”
    */

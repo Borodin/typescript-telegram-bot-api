@@ -6,7 +6,6 @@ import { Attachment, MessageEntity, ParseMode } from './';
  * @see https://core.telegram.org/bots/api#inputmediaphoto
  */
 export type InputMediaPhoto = {
-
   /**
    * Type of the result, must be photo
    */

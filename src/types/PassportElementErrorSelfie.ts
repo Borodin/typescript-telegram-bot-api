@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#passportelementerrorselfie
  */
 export type PassportElementErrorSelfie = {
-
   /**
    * Error source, must be selfie
    */

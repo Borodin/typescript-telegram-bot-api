@@ -6,7 +6,6 @@ import { ChatBoostSource } from './';
  * @see https://core.telegram.org/bots/api#chatboost
  */
 export type ChatBoost = {
-
   /**
    * Unique identifier of the boost
    */

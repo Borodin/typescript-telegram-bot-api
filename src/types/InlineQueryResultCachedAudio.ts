@@ -8,7 +8,6 @@ import { MessageEntity, InlineKeyboardMarkup, InputMessageContent, ParseMode } f
  * @see https://core.telegram.org/bots/api#inlinequeryresultcachedaudio
  */
 export type InlineQueryResultCachedAudio = {
-
   /**
    * Type of the result, must be audio
    */

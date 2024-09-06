@@ -6,7 +6,6 @@ import { Currencies, OrderInfo } from './';
  * @see https://core.telegram.org/bots/api#successfulpayment
  */
 export type SuccessfulPayment = {
-
   /**
    * Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars
    */

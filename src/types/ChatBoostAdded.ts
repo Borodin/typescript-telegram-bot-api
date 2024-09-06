@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#chatboostadded
  */
 export type ChatBoostAdded = {
-
   /**
    * Number of boosts added by the user
    */

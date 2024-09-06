@@ -6,7 +6,6 @@ import { PhotoSize } from './';
  * @see https://core.telegram.org/bots/api#userprofilephotos
  */
 export type UserProfilePhotos = {
-
   /**
    * Total number of profile pictures the target user has
    */

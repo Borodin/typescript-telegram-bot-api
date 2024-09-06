@@ -6,7 +6,6 @@ import { PhotoSize } from './PhotoSize';
  * @see https://core.telegram.org/bots/api#paidmediaphoto
  */
 export type PaidMediaPhoto = {
-
   /**
    * Type of the paid media, always “photo”
    */

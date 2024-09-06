@@ -6,7 +6,6 @@ import { MessageEntity, PollOption } from './';
  * @see https://core.telegram.org/bots/api#poll
  */
 export type Poll = {
-
   /**
    * Unique poll identifier
    */

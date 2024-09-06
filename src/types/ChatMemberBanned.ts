@@ -6,7 +6,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#chatmemberbanned
  */
 export type ChatMemberBanned = {
-
   /**
    * The member's status in the chat, always “kicked”
    */

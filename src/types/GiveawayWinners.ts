@@ -6,7 +6,6 @@ import { Chat, User } from './';
  * @see https://core.telegram.org/bots/api#giveawaywinners
  */
 export type GiveawayWinners = {
-
   /**
    * The chat that created the giveaway
    */

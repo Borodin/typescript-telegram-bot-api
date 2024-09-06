@@ -6,7 +6,6 @@
  * @see https://core.telegram.org/bots/api#keyboardbuttonrequestchat
  */
 export type KeyboardButtonRequestChat = {
-
   /**
    * Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique
    * within the message

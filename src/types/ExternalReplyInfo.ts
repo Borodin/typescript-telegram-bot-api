@@ -30,7 +30,6 @@ import {
  * @see https://core.telegram.org/bots/api#externalreplyinfo
  */
 export type ExternalReplyInfo = {
-
   /**
    * Origin of the message replied to by the given message
    */

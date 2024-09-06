@@ -6,7 +6,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#messageentity
  */
 export type MessageEntity = {
-
   /**
    * Offset in UTF-16 code units to the start of the entity
    */
@@ -18,7 +17,6 @@ export type MessageEntity = {
   length: number;
 } & (
   | {
-
       /**
        * Type of the entity. Currently, can be
        * “mention” (@username),
@@ -59,7 +57,6 @@ export type MessageEntity = {
         | 'text_link';
     }
   | {
-
       /**
        * Type of the entity.
        * “url” (https://telegram.org),
@@ -72,7 +69,6 @@ export type MessageEntity = {
       url: string;
     }
   | {
-
       /**
        * Type of the entity.
        * “text_mention” (for users without usernames),
@@ -85,7 +81,6 @@ export type MessageEntity = {
       user: User;
     }
   | {
-
       /**
        * Type of the entity.
        * “pre” (monowidth block),
@@ -98,7 +93,6 @@ export type MessageEntity = {
       language: string;
     }
   | {
-
       /**
        * Type of the entity.
        * “custom_emoji” (for inline custom emoji stickers)

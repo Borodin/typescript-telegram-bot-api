@@ -6,7 +6,6 @@ import { ReactionType } from './ReactionType';
  * @see https://core.telegram.org/bots/api#reactioncount
  */
 export type ReactionCount = {
-
   /**
    * Type of the reaction
    */

@@ -6,7 +6,6 @@ import { User, ShippingAddress } from './';
  * @see https://core.telegram.org/bots/api#shippingquery
  */
 export type ShippingQuery = {
-
   /**
    * Unique query identifier
    */

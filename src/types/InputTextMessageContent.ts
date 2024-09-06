@@ -6,7 +6,6 @@ import { MessageEntity, LinkPreviewOptions, ParseMode } from './';
  * @see https://core.telegram.org/bots/api#inputtextmessagecontent
  */
 export type InputTextMessageContent = {
-
   /**
    * Text of the message to be sent, 1-4096 characters
    */

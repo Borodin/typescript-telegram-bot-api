@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#chatadministratorrights
  */
 export type ChatAdministratorRights = {
-
   /**
    * True, if the user's presence in the chat is hidden
    */

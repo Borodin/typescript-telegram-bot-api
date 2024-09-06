@@ -6,7 +6,6 @@ import { MessageEntity } from './';
  * @see https://core.telegram.org/bots/api#textquote
  */
 export type TextQuote = {
-
   /**
    * Text of the quoted part of a message that is replied to by the given message
    */

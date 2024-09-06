@@ -7,7 +7,6 @@ import { MessageEntity, PhotoSize } from './';
  * @see https://core.telegram.org/bots/api#game
  */
 export type Game = {
-
   /**
    * Title of the game
    */

@@ -725,7 +725,6 @@ describe('.setMyDescription()', () => {
   it('should set my description', async () => {
     await expect(
       bot.setMyDescription({
-
         //long description
         description: 'This is a Telegram Bot for testing npm package typescript-telegram-bot-api',
         language_code: 'en',

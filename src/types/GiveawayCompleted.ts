@@ -6,7 +6,6 @@ import { Message } from './';
  * @see https://core.telegram.org/bots/api#giveawaycompleted
  */
 export type GiveawayCompleted = {
-
   /**
    * Number of winners in the giveaway
    */

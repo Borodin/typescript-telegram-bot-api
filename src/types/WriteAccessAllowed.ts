@@ -6,7 +6,6 @@
  * @see https://core.telegram.org/bots/api#writeaccessallowed
  */
 export type WriteAccessAllowed = {
-
   /**
    * True, if the user can write custom messages
    */

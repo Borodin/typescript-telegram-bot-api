@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#passportfile
  */
 export type PassportFile = {
-
   /**
    * Identifier for this file, which can be used to download or reuse the file
    */

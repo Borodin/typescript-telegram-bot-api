@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#chatlocation
  */
 export type ChatLocation = {
-
   /**
    * The location to which the supergroup is connected. Can't be a live location.
    */

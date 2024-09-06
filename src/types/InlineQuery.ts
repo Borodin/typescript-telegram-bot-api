@@ -7,7 +7,6 @@ import { Location, User } from './';
  * @see https://core.telegram.org/bots/api#inlinequery
  */
 export type InlineQuery = {
-
   /**
    * Unique identifier for this query
    */

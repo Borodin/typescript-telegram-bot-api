@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#voice
  */
 export type Voice = {
-
   /**
    * Identifier for this file, which can be used to download or reuse the file
    */

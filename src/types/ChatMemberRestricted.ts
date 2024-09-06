@@ -6,7 +6,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#chatmemberrestricted
  */
 export type ChatMemberRestricted = {
-
   /**
    * The member's status in the chat, always “restricted”
    */

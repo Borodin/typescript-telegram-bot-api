@@ -6,7 +6,6 @@ import { ParseMode } from './index';
  * @see https://core.telegram.org/bots/api#replyparameters
  */
 export type ReplyParameters = {
-
   /**
    * Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified
    */

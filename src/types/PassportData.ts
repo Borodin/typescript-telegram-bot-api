@@ -6,7 +6,6 @@ import { EncryptedPassportElement, EncryptedCredentials } from './';
  * @see https://core.telegram.org/bots/api#passportdata
  */
 export type PassportData = {
-
   /**
    * Array with information about documents and other Telegram Passport elements that was shared with the bot
    */

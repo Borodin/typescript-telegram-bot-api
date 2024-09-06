@@ -8,7 +8,6 @@
  * @see https://core.telegram.org/bots/api#file
  */
 export type File = {
-
   /**
    * Identifier for this file, which can be used to download or reuse the file
    */

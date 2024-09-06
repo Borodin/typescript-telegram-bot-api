@@ -8,7 +8,6 @@ import { MessageEntity, InlineKeyboardMarkup, InputMessageContent, ParseMode } f
  * @see https://core.telegram.org/bots/api#inlinequeryresultcachedmpeg4gif
  */
 export type InlineQueryResultCachedMpeg4Gif = {
-
   /**
    * Type of the result, must be mpeg4_gif
    */

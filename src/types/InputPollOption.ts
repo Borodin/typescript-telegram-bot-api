@@ -6,7 +6,6 @@ import { ParseMode } from './';
  * @see https://core.telegram.org/bots/api#inputpolloption
  */
 export type InputPollOption = {
-
   /**
    * Option text, 1-100 characters
    */

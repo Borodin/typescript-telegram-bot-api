@@ -6,7 +6,6 @@ import { BackgroundFill } from './';
  * @see https://core.telegram.org/bots/api#backgroundtypefill
  */
 export type BackgroundTypeFill = {
-
   /**
    * Type of the background, always “fill”
    */

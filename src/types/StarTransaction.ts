@@ -6,7 +6,6 @@ import { TransactionPartner } from './TransactionPartner';
  * @see https://core.telegram.org/bots/api#startransaction
  */
 export type StarTransaction = {
-
   /**
    * Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund
    * transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from

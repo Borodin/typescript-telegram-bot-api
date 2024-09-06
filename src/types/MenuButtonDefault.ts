@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#menubuttondefault
  */
 export type MenuButtonDefault = {
-
   /**
    * Type of the button, must be default
    */

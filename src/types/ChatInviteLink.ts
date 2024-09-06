@@ -6,7 +6,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#chatinvitelink
  */
 export type ChatInviteLink = {
-
   /**
    * The invite link. If the link was created by another chat administrator, then the second part of the link will be
    * replaced with “…”.

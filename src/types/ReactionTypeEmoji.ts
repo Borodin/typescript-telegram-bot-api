@@ -80,7 +80,6 @@ const emojis = [
  * @see https://core.telegram.org/bots/api#reactiontypeemoji
  */
 export type ReactionTypeEmoji = {
-
   /**
    * Type of the reaction, always “emoji”
    */

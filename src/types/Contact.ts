@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#contact
  */
 export type Contact = {
-
   /**
    * Contact's phone number
    */

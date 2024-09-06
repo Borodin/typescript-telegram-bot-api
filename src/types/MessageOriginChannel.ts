@@ -6,7 +6,6 @@ import { Chat } from './';
  * @see https://core.telegram.org/bots/api#messageoriginchannel
  */
 export type MessageOriginChannel = {
-
   /**
    * Type of the message origin, always “channel”
    */

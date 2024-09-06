@@ -6,7 +6,6 @@ import { Chat, ReactionCount } from './';
  * @see https://core.telegram.org/bots/api#messagereactioncountupdated
  */
 export type MessageReactionCountUpdated = {
-
   /**
    * The chat containing the message
    */

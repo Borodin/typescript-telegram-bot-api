@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#backgroundfillsolid
  */
 export type BackgroundFillSolid = {
-
   /**
    * Type of the background fill, always “solid”
    */

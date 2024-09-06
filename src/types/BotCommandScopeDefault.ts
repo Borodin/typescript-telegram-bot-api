@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#botcommandscopedefault
  */
 export type BotCommandScopeDefault = {
-
   /**
    * Scope type, must be default
    */

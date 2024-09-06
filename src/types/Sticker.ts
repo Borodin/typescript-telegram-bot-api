@@ -6,7 +6,6 @@ import { File, PhotoSize, MaskPosition } from './';
  * @see https://core.telegram.org/bots/api#sticker
  */
 export type Sticker = {
-
   /**
    * Identifier for this file, which can be used to download or reuse the file
    */

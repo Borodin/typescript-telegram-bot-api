@@ -6,7 +6,6 @@ import { Document } from './';
  * @see https://core.telegram.org/bots/api#backgroundtypewallpaper
  */
 export type BackgroundTypeWallpaper = {
-
   /**
    * Type of the background, always “wallpaper”
    */

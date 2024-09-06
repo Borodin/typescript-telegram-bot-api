@@ -8,13 +8,11 @@ import { AtMostOne } from './Update';
  * @see https://core.telegram.org/bots/api#inlinequeryresultsbutton
  */
 export type InlineQueryResultsButton = {
-
   /**
    * Label text on the button
    */
   text: string;
 } & AtMostOne<{
-
   /**
    * Optional. Description of the Web App that will be launched when the user presses the button. The Web App will be
    * able to switch back to the inline mode using the method switchInlineQuery inside the Web App.

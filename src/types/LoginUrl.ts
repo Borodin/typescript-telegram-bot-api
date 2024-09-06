@@ -8,7 +8,6 @@
  * @see https://core.telegram.org/bots/api#loginurl
  */
 export type LoginUrl = {
-
   /**
    * An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed.
    * If the user refuses to provide authorization data, the original URL without information about the user will be

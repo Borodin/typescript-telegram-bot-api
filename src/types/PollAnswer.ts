@@ -6,7 +6,6 @@ import { Chat, User } from './';
  * @see https://core.telegram.org/bots/api#pollanswer
  */
 export type PollAnswer = {
-
   /**
    * Unique poll identifier
    */

@@ -7,7 +7,6 @@ import { InlineKeyboardMarkup } from './';
  * @see https://core.telegram.org/bots/api#inlinequeryresultgame
  */
 export type InlineQueryResultGame = {
-
   /**
    * Type of the result, must be game
    */

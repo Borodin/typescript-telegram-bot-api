@@ -6,7 +6,6 @@ import { Chat, User, ReactionType } from './';
  * @see https://core.telegram.org/bots/api#messagereactionupdated
  */
 export type MessageReactionUpdated = {
-
   /**
    * The chat containing the message the user reacted to
    */

@@ -7,7 +7,6 @@ import { SharedUser } from './';
  * @see https://core.telegram.org/bots/api#usersshared
  */
 export type UsersShared = {
-
   /**
    * Identifier of the request
    */

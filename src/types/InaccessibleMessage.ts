@@ -6,7 +6,6 @@ import { Chat } from './';
  * @see https://core.telegram.org/bots/api#inaccessiblemessage
  */
 export type InaccessibleMessage = {
-
   /**
    * Chat the message belonged to
    */

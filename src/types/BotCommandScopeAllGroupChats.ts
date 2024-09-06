@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#botcommandscopeallgroupchats
  */
 export type BotCommandScopeAllGroupChats = {
-
   /**
    * Scope type, must be all_group_chats
    */

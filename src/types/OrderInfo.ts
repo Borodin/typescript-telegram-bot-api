@@ -6,7 +6,6 @@ import { ShippingAddress } from './';
  * @see https://core.telegram.org/bots/api#orderinfo
  */
 export type OrderInfo = {
-
   /**
    * Optional. User name
    */

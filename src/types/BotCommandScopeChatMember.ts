@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#botcommandscopechatmember
  */
 export type BotCommandScopeChatMember = {
-
   /**
    * Scope type, must be chat_member
    */

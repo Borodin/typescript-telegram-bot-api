@@ -6,7 +6,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#choseninlineresult
  */
 export type ChosenInlineResult = {
-
   /**
    * The unique identifier for the result that was chosen
    */

@@ -6,7 +6,6 @@ import { Chat, User, ChatMember, ChatInviteLink } from './';
  * @see https://core.telegram.org/bots/api#chatmemberupdated
  */
 export type ChatMemberUpdated = {
-
   /**
    * Chat the user belongs to
    */

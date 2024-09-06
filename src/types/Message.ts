@@ -58,7 +58,6 @@ import {
  * @see https://core.telegram.org/bots/api#message
  */
 export type Message = {
-
   /**
    * Unique message identifier inside this chat
    */

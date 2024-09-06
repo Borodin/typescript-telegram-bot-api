@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#chatpermissions
  */
 export type ChatPermissions = {
-
   /**
    * Optional. True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices,
    * locations and venues

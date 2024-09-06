@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#encryptedcredentials
  */
 export type EncryptedCredentials = {
-
   /**
    * Base64-encoded encrypted JSON-serialized data with unique user's payload, data hashes and secrets required for
    * EncryptedPassportElement decryption and authentication

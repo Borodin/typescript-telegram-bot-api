@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#labeledprice
  */
 export type LabeledPrice = {
-
   /**
    * Portion label
    */

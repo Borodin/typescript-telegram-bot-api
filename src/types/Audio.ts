@@ -6,7 +6,6 @@ import { PhotoSize } from './';
  * @see https://core.telegram.org/bots/api#audio
  */
 export type Audio = {
-
   /**
    * Identifier for this file, which can be used to download or reuse the file
    */

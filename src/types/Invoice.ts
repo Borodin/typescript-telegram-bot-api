@@ -6,7 +6,6 @@ import { Currencies } from './index';
  * @see https://core.telegram.org/bots/api#invoice
  */
 export type Invoice = {
-
   /**
    * Product name
    */

@@ -6,7 +6,6 @@ import { Location } from './';
  * @see https://core.telegram.org/bots/api#venue
  */
 export type Venue = {
-
   /**
    * Venue location. Can't be a live location
    */

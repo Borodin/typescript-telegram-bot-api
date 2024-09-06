@@ -6,7 +6,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#chatmemberleft
  */
 export type ChatMemberLeft = {
-
   /**
    * The member's status in the chat, always “left”
    */

@@ -6,7 +6,6 @@ import { User, OrderInfo, Currencies } from './';
  * @see https://core.telegram.org/bots/api#precheckoutquery
  */
 export type PreCheckoutQuery = {
-
   /**
    * Unique query identifier
    */

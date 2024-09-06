@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#passportelementerrorreverseside
  */
 export type PassportElementErrorReverseSide = {
-
   /**
    * Error source, must be reverse_side
    */

@@ -6,7 +6,6 @@ import { Currencies } from './index';
  * @see https://core.telegram.org/bots/api#refundedpayment
  */
 export type RefundedPayment = {
-
   /**
    * Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. Currently, always “XTR”
    */

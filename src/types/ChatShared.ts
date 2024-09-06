@@ -6,7 +6,6 @@ import { PhotoSize } from './';
  * @see https://core.telegram.org/bots/api#chatshared
  */
 export type ChatShared = {
-
   /**
    * Identifier of the request
    */

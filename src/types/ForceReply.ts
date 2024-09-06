@@ -7,7 +7,6 @@
  * @see https://core.telegram.org/bots/api#forcereply
  */
 export type ForceReply = {
-
   /**
    * Shows reply interface to the user, as if they manually selected the bot's message and tapped 'Reply'
    */

@@ -6,7 +6,6 @@ import { WebAppInfo } from './';
  * @see https://core.telegram.org/bots/api#menubuttonwebapp
  */
 export type MenuButtonWebApp = {
-
   /**
    * Type of the button, must be web_app
    */

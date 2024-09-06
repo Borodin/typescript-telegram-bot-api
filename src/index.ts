@@ -185,7 +185,6 @@ export class TelegramBot extends EventEmitter {
   private handleObject(object: unknown, formData: FormData) {
     for (const [key, value] of Object.entries(object as Record<string, unknown>)) {
       if (value === undefined) {
-
         // Skip undefined values
       } else if (typeof value === 'boolean') {
         formData.append(key, String(value));

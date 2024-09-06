@@ -6,7 +6,6 @@ import { Currencies, LabeledPrice } from './';
  * @see https://core.telegram.org/bots/api#inputinvoicemessagecontent
  */
 export type InputInvoiceMessageContent = {
-
   /**
    * Product name, 1-32 characters
    */

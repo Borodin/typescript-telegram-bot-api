@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#backgroundfillgradient
  */
 export type BackgroundFillGradient = {
-
   /**
    * Type of the background fill, always “gradient”
    */

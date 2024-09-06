@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#forumtopiccreated
  */
 export type ForumTopicCreated = {
-
   /**
    * Name of the topic
    */

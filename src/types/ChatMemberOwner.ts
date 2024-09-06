@@ -6,7 +6,6 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#chatmemberowner
  */
 export type ChatMemberOwner = {
-
   /**
    * The member's status in the chat, always “creator”
    */

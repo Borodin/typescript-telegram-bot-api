@@ -6,7 +6,6 @@ import { Attachment, InputFile, MessageEntity, ParseMode } from './';
  * @see https://core.telegram.org/bots/api#inputmediadocument
  */
 export type InputMediaDocument = {
-
   /**
    * Type of the result, must be document
    */

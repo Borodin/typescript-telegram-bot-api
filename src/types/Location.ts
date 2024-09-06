@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#location
  */
 export type Location = {
-
   /**
    * Latitude as defined by the sender
    */

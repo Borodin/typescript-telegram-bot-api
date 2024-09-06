@@ -8,7 +8,6 @@ import { MessageEntity, InlineKeyboardMarkup, InputMessageContent, ParseMode } f
  * @see https://core.telegram.org/bots/api#inlinequeryresultvoice
  */
 export type InlineQueryResultVoice = {
-
   /**
    * Type of the result, must be voice
    */

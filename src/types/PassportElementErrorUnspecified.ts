@@ -15,7 +15,6 @@ import {
  * @see https://core.telegram.org/bots/api#passportelementerrorunspecified
  */
 export type PassportElementErrorUnspecified = {
-
   /**
    * Error source, must be unspecified
    */

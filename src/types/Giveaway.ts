@@ -6,7 +6,6 @@ import { Chat } from './';
  * @see https://core.telegram.org/bots/api#giveaway
  */
 export type Giveaway = {
-
   /**
    * The list of chats which the user must join to participate in the giveaway
    */

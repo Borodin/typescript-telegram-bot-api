@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#inputlocationmessagecontent
  */
 export type InputLocationMessageContent = {
-
   /**
    * Latitude of the location in degrees
    */

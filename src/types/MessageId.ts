@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#messageid
  */
 export type MessageId = {
-
   /**
    * Unique message identifier
    */

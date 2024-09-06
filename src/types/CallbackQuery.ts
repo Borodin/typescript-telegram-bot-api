@@ -10,7 +10,6 @@ import { MaybeInaccessibleMessage, User } from './';
  * @see https://core.telegram.org/bots/api#callbackquery
  */
 export type CallbackQuery = {
-
   /**
    * Unique identifier for this query
    */

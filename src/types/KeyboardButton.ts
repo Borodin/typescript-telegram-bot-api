@@ -8,14 +8,12 @@ import { AtMostOne } from './Update';
  * @see https://core.telegram.org/bots/api#keyboardbutton
  */
 export type KeyboardButton = {
-
   /**
    * Text of the button. If none of the optional fields are used, it will be sent as a message when the button is
    * pressed
    */
   text: string;
 } & AtMostOne<{
-
   /**
    * Optional. If specified, pressing the button will open a list of suitable users. Identifiers of selected users will
    * be sent to the bot in a “users_shared” service message. Available in private chats only.

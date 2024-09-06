@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#inputcontactmessagecontent
  */
 export type InputContactMessageContent = {
-
   /**
    * Contact's phone number
    */

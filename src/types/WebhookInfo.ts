@@ -5,7 +5,6 @@
  * @see https://core.telegram.org/bots/api#getwebhookinfo
  */
 export type WebhookInfo = {
-
   /**
    * Webhook URL, may be empty if webhook is not set up
    */

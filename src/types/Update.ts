@@ -21,7 +21,6 @@ import {
  * @see https://core.telegram.org/bots/api#update
  */
 export type EventTypes = {
-
   /**
    * New incoming message of any kind - text, photo, sticker, etc.
    */

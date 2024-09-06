@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#maskposition
  */
 export type MaskPosition = {
-
   /**
    * The part of the face relative to which the mask should be placed. One of “forehead”, “eyes”, “mouth”, or “chin”.
    */

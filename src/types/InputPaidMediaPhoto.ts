@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#inputpaidmediaphoto
  */
 export type InputPaidMediaPhoto = {
-
   /**
    * Type of the media, must be photo
    */

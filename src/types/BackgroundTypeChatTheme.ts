@@ -4,7 +4,6 @@
  * @see https://core.telegram.org/bots/api#backgroundtypechattheme
  */
 export type BackgroundTypeChatTheme = {
-
   /**
    * Type of the background, always “chat_theme”
    */

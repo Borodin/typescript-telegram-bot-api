@@ -6,7 +6,6 @@ import { BackgroundType } from './';
  * @see https://core.telegram.org/bots/api#chatbackground
  */
 export type ChatBackground = {
-
   /**
    * Type of the background
    */
