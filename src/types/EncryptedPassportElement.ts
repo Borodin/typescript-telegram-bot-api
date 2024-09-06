@@ -1,10 +1,32 @@
-interface PassportFile {
-  file_id: string;
-  file_size: number;
-  file_date: number;
-}
+/**
+ *
+ */
+type PassportFile = {
 
-interface BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  file_id: string;
+
+  /**
+   *
+   */
+  file_size: number;
+
+  /**
+   *
+   */
+  file_date: number;
+};
+
+/**
+ *
+ */
+type BaseEncryptedPassportElement = {
+
+  /**
+   *
+   */
   type:
     | 'personal_details'
     | 'passport'
@@ -19,92 +41,315 @@ interface BaseEncryptedPassportElement {
     | 'temporary_registration'
     | 'phone_number'
     | 'email';
+
+  /**
+   *
+   */
   hash: string;
-}
+};
 
-interface PersonalDetailsElement extends BaseEncryptedPassportElement {
+/**
+ *
+ */
+type PersonalDetailsElement = {
+
+  /**
+   *
+   */
   type: 'personal_details';
-  data?: string;
-}
 
-interface PassportElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  data?: string;
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type PassportElement = {
+
+  /**
+   *
+   */
   type: 'passport';
-  data?: string;
-  front_side?: PassportFile;
-  selfie?: PassportFile;
-  translation?: PassportFile[];
-}
 
-interface DriverLicenseElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  data?: string;
+
+  /**
+   *
+   */
+  front_side?: PassportFile;
+
+  /**
+   *
+   */
+  selfie?: PassportFile;
+
+  /**
+   *
+   */
+  translation?: PassportFile[];
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type DriverLicenseElement = {
+
+  /**
+   *
+   */
   type: 'driver_license';
-  data?: string;
-  front_side?: PassportFile;
-  reverse_side?: PassportFile;
-  selfie?: PassportFile;
-  translation?: PassportFile[];
-}
 
-interface IdentityCardElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  data?: string;
+
+  /**
+   *
+   */
+  front_side?: PassportFile;
+
+  /**
+   *
+   */
+  reverse_side?: PassportFile;
+
+  /**
+   *
+   */
+  selfie?: PassportFile;
+
+  /**
+   *
+   */
+  translation?: PassportFile[];
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type IdentityCardElement = {
+
+  /**
+   *
+   */
   type: 'identity_card';
+
+  /**
+   *
+   */
   data?: string;
+
+  /**
+   *
+   */
   front_side?: PassportFile;
+
+  /**
+   *
+   */
   reverse_side?: PassportFile;
-  selfie?: PassportFile;
-  translation?: PassportFile[];
-}
 
-interface InternalPassportElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  selfie?: PassportFile;
+
+  /**
+   *
+   */
+  translation?: PassportFile[];
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type InternalPassportElement = {
+
+  /**
+   *
+   */
   type: 'internal_passport';
+
+  /**
+   *
+   */
   data?: string;
+
+  /**
+   *
+   */
   front_side?: PassportFile;
+
+  /**
+   *
+   */
   selfie?: PassportFile;
-  translation?: PassportFile[];
-}
 
-interface AddressElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  translation?: PassportFile[];
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type AddressElement = {
+
+  /**
+   *
+   */
   type: 'address';
+
+  /**
+   *
+   */
   data?: string;
-}
+} & BaseEncryptedPassportElement;
 
-interface UtilityBillElement extends BaseEncryptedPassportElement {
+/**
+ *
+ */
+type UtilityBillElement = {
+
+  /**
+   *
+   */
   type: 'utility_bill';
-  files?: PassportFile[];
-  translation?: PassportFile[];
-}
 
-interface BankStatementElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  files?: PassportFile[];
+
+  /**
+   *
+   */
+  translation?: PassportFile[];
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type BankStatementElement = {
+
+  /**
+   *
+   */
   type: 'bank_statement';
-  files?: PassportFile[];
-  translation?: PassportFile[];
-}
 
-interface RentalAgreementElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  files?: PassportFile[];
+
+  /**
+   *
+   */
+  translation?: PassportFile[];
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type RentalAgreementElement = {
+
+  /**
+   *
+   */
   type: 'rental_agreement';
-  files?: PassportFile[];
-  translation?: PassportFile[];
-}
 
-interface PassportRegistrationElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  files?: PassportFile[];
+
+  /**
+   *
+   */
+  translation?: PassportFile[];
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type PassportRegistrationElement = {
+
+  /**
+   *
+   */
   type: 'passport_registration';
-  files?: PassportFile[];
-  translation?: PassportFile[];
-}
 
-interface TemporaryRegistrationElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  files?: PassportFile[];
+
+  /**
+   *
+   */
+  translation?: PassportFile[];
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type TemporaryRegistrationElement = {
+
+  /**
+   *
+   */
   type: 'temporary_registration';
+
+  /**
+   *
+   */
   files?: PassportFile[];
+
+  /**
+   *
+   */
   translation?: PassportFile[];
-}
+} & BaseEncryptedPassportElement;
 
-interface PhoneNumberElement extends BaseEncryptedPassportElement {
+/**
+ *
+ */
+type PhoneNumberElement = {
+
+  /**
+   *
+   */
   type: 'phone_number';
-  phone_number?: string;
-}
 
-interface EmailElement extends BaseEncryptedPassportElement {
+  /**
+   *
+   */
+  phone_number?: string;
+} & BaseEncryptedPassportElement;
+
+/**
+ *
+ */
+type EmailElement = {
+
+  /**
+   *
+   */
   type: 'email';
+
+  /**
+   *
+   */
   email?: string;
-}
+} & BaseEncryptedPassportElement;
 
 /**
  * ## EncryptedPassportElement

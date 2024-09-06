@@ -6,6 +6,7 @@ import { StarTransaction } from './StarTransaction';
  * @see https://core.telegram.org/bots/api#startransactions
  */
 export type StarTransactions = {
+
   /**
    * The list of transactions
    */

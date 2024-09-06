@@ -7,6 +7,7 @@ import { PaidMedia } from './PaidMedia';
  * @see https://core.telegram.org/bots/api#transactionpartneruser
  */
 export type TransactionPartnerUser = {
+
   /**
    * Type of the transaction partner, always “user”
    */

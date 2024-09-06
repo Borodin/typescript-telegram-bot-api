@@ -725,6 +725,7 @@ describe('.setMyDescription()', () => {
   it('should set my description', async () => {
     await expect(
       bot.setMyDescription({
+
         //long description
         description: 'This is a Telegram Bot for testing npm package typescript-telegram-bot-api',
         language_code: 'en',
@@ -1788,8 +1789,11 @@ describe('.sendInvoice()', () => {
         prices: [{ label: 'Price', amount: 100 }],
         start_parameter: 'start_parameter',
         reply_markup: {
-          inline_keyboard: [[{ text: '️Pay ⭐️100', pay: true }],[{ text: 'Cancel', callback_data: 'cancel',pay: true }]],
-        }
+          inline_keyboard: [
+            [{ text: '️Pay ⭐️100', pay: true }],
+            [{ text: 'Cancel', callback_data: 'cancel', pay: true }],
+          ],
+        },
       }),
     ).resolves.toHaveProperty('invoice');
   });
@@ -1802,6 +1806,7 @@ describe('.createInvoiceLink()', () => {
         title: 'Invoice',
         description: 'Invoice description',
         payload: 'payload',
+
         // provider_token: 'PROVIDER_TOKEN',
         currency: 'XTR',
         prices: [{ label: 'Price', amount: 100 }],

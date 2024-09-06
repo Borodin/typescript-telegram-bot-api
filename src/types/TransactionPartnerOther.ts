@@ -4,6 +4,7 @@
  * @see https://core.telegram.org/bots/api#transactionpartneruser
  */
 export type TransactionPartnerOther = {
+
   /**
    * Type of the transaction partner, always “other”
    */

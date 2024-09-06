@@ -6,7 +6,19 @@ import { Sticker } from './';
  * @see https://core.telegram.org/bots/api#businessintro
  */
 export type BusinessIntro = {
+
+  /**
+   * Optional. Title text of the business intro
+   */
   title?: string;
+
+  /**
+   * Optional. Message text of the business intro
+   */
   message?: string;
+
+  /**
+   * Optional. Sticker of the business intro
+   */
   sticker?: Sticker;
 };

@@ -4,6 +4,7 @@
  * @see https://core.telegram.org/bots/api#paidmediapreview
  */
 export type PaidMediaPreview = {
+
   /**
    * Type of the paid media, always “preview”
    */

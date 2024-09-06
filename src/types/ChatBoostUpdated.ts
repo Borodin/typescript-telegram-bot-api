@@ -6,6 +6,14 @@ import { Chat, ChatBoost } from './';
  * @see https://core.telegram.org/bots/api#chatboostupdated
  */
 export type ChatBoostUpdated = {
+
+  /**
+   * Chat which was boosted
+   */
   chat: Chat;
+
+  /**
+   * Information about the chat boost
+   */
   boost: ChatBoost;
 };

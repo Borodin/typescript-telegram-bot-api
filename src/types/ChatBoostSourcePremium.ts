@@ -7,6 +7,14 @@ import { User } from './';
  * @see https://core.telegram.org/bots/api#chatboostsourcepremium
  */
 export type ChatBoostSourcePremium = {
+
+  /**
+   * Source of the boost, always “premium”
+   */
   source: 'premium';
+
+  /**
+   * User that boosted the chat
+   */
   user: User;
 };

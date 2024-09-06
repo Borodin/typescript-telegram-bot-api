@@ -6,6 +6,7 @@ import { InputFile } from './InputFile';
  * @see https://core.telegram.org/bots/api#inputpaidmediavideo
  */
 export type InputPaidMediaVideo = {
+
   /**
    * Type of the media, must be video
    */

@@ -6,8 +6,24 @@ import { User, ShippingAddress } from './';
  * @see https://core.telegram.org/bots/api#shippingquery
  */
 export type ShippingQuery = {
+
+  /**
+   * Unique query identifier
+   */
   id: string;
+
+  /**
+   * User who sent the query
+   */
   from: User;
+
+  /**
+   * Bot-specified invoice payload
+   */
   invoice_payload: string;
+
+  /**
+   * User specified shipping address
+   */
   shipping_address: ShippingAddress;
 };

@@ -6,6 +6,14 @@ import { Location } from './';
  * @see https://core.telegram.org/bots/api#businesslocation
  */
 export type BusinessLocation = {
+
+  /**
+   * Address of the business
+   */
   address: string;
+
+  /**
+   * Optional. Location of the business
+   */
   location?: Location;
 };
