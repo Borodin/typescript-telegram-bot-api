@@ -246,9 +246,35 @@ export class TelegramBot extends EventEmitter {
    */
   async getUpdates(
     options?: {
+      /**
+       * Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of
+       * previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An
+       * update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The
+       * negative offset can be specified to retrieve updates starting from -offset update from the end of the updates
+       * queue. All previous updates will be forgotten.
+       */
       offset?: number;
+
+      /**
+       * Limits the number of updates to be retrieved. Values between 1-100 are accepted. Defaults to 100.
+       */
       limit?: number;
+
+      /**
+       * Timeout in seconds for long polling. Defaults to 0, i.e. usual short polling. Should be positive, short polling
+       * should be used for testing purposes only.
+       */
       timeout?: number;
+
+      /**
+       * A JSON-serialized list of the update types you want your bot to receive. For example, specify `["message",
+       * "edited_channel_post", "callback_query"]` to only receive updates of these types. See Update for a complete
+       * list of available update types. Specify an empty list to receive all update types except chat_member,
+       * message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.
+       *
+       * Please note that this parameter doesn't affect updates created before the call to the getUpdates, so unwanted
+       * updates may be received for a short period of time.
+       */
       allowed_updates?: UpdateType[];
     },
     abortController?: AbortController,
@@ -275,12 +301,49 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#setwebhook
    */
   async setWebhook(options: {
+    /**
+     * HTTPS URL to send updates to. Use an empty string to remove webhook integration
+     */
     url: string;
+
+    /**
+     * Upload your public key certificate so that the root certificate in use can be checked. See our self-signed guide
+     * for details.
+     */
     certificate?: InputFile;
+
+    /**
+     * The fixed IP address which will be used to send webhook requests instead of the IP address resolved through DNS
+     */
     ip_address?: string;
+
+    /**
+     * The maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery, 1-100. Defaults
+     * to 40. Use lower values to limit the load on your bot's server, and higher values to increase your bot's
+     * throughput.
+     */
     max_connections?: number;
+
+    /**
+     * A JSON-serialized list of the update types you want your bot to receive. For example, specify `["message",
+     * "edited_channel_post", "callback_query"]` to only receive updates of these types. See Update for a complete list
+     * of available update types. Specify an empty list to receive all update types except chat_member,
+     * message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.
+     * Please note that this parameter doesn't affect updates created before the call to the setWebhook, so unwanted
+     * updates may be received for a short period of time.
+     */
     allowed_updates?: UpdateType[];
+
+    /**
+     * Pass True to drop all pending updates
+     */
     drop_pending_updates?: boolean;
+
+    /**
+     * A secret token to be sent in a header “X-Telegram-Bot-Api-Secret-Token” in every webhook request, 1-256
+     * characters. Only characters `A-Z`, `a-z`, `0-9`, `_` and `-` are allowed. The header is useful to ensure that the
+     * request comes from a webhook set by you.
+     */
     secret_token?: string;
   }): Promise<true> {
     return await this.callApi('setWebhook', {
@@ -349,17 +412,66 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#sendmessage
    */
   async sendMessage(options: {
+    /**
+     * Unique identifier of the business connection on behalf of which the message will be sent
+     */
     business_connection_id?: string;
+
+    /**
+     * Unique identifier for the target chat or username of the target channel (in the format `@channelusername`)
+     */
     chat_id: number | string;
+
+    /**
+     * Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+     */
     message_thread_id?: number;
+
+    /**
+     * Text of the message to be sent, 1-4096 characters after entities parsing
+     */
     text: string;
+
+    /**
+     * Mode for parsing entities in the message text. See formatting options for more details.
+     */
     parse_mode?: ParseMode;
+
+    /**
+     * A JSON-serialized list of special entities that appear in message text, which can be specified instead of
+     * parse_mode
+     */
     entities?: MessageEntity[];
+
+    /**
+     * Link preview generation options for the message
+     */
     link_preview_options?: LinkPreviewOptions;
+
+    /**
+     * Sends the message silently. Users will receive a notification with no sound.
+     */
     disable_notification?: boolean;
+
+    /**
+     * Protects the contents of the sent message from forwarding and saving
+     */
     protect_content?: boolean;
+
+    /**
+     * Unique identifier of the message effect to be added to the message; for private chats only
+     */
     message_effect_id?: string;
+
+    /**
+     * Description of the message to reply to
+     */
     reply_parameters?: ReplyParameters;
+
+    /**
+     * Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard,
+     * instructions to remove a reply keyboard or to force a reply from the user
+     */
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendMessage', {
@@ -2318,3 +2430,27 @@ export class TelegramBot extends EventEmitter {
     return super.emit(event, eventData);
   }
 }
+
+/**
+ * ## MethodParameters
+ * Get the parameters of a method.
+ */
+export type MethodParameters<T extends keyof TelegramBot> = TelegramBot[T] extends (
+  ...args: infer P
+) => Promise<unknown>
+  ? P[0]
+  : TelegramBot[T] extends (...args: infer P) => unknown
+    ? P[0]
+    : never;
+
+/**
+ * ## MethodReturn
+ * Get the return type of a method.
+ */
+export type MethodReturn<T extends keyof TelegramBot> = T extends unknown
+  ? TelegramBot[T] extends (...args: infer A) => Promise<infer U>
+    ? U
+    : TelegramBot[T] extends (...args: infer A) => infer U
+      ? U
+      : never
+  : never;

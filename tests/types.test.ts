@@ -1,4 +1,4 @@
-import { TelegramBot } from '../src';
+import { MethodParameters, MethodReturn, TelegramBot } from '../src';
 
 const bot = new TelegramBot({
   botToken: 'TOKEN',
@@ -27,5 +27,13 @@ describe('Types', () => {
     bot.on('poll', (poll) => {
       poll.id.toUpperCase();
     });
+
+    const title: MethodParameters<'sendInvoice'>['title'] = 'title';
+    title.toUpperCase();
+
+    const messageIds: MethodReturn<'copyMessage'> = {
+      message_id: 1,
+    };
+    messageIds.message_id.toFixed();
   });
 });
