@@ -3,7 +3,7 @@ import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { FileOptions, TelegramBot } from '../src';
 import { TelegramError } from '../src/errors';
-import { ForumTopic, File, User } from '../src/types';
+import { ForumTopic, File, User, StickerSet } from '../src/types';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
@@ -198,6 +198,18 @@ describe('.sendMessage()', () => {
         text: '0'.repeat(4096 + 1),
       }),
     ).rejects.toThrow('400 Bad Request: message is too long');
+  });
+
+  it('should send message with link preview disabled', async () => {
+    await expect(
+      bot.sendMessage({
+        chat_id: USERID,
+        text: 'text https://telegram.org/ text',
+        link_preview_options: {
+          is_disabled: true,
+        },
+      }),
+    ).resolves.toHaveProperty('link_preview_options', expect.objectContaining({ is_disabled: true }));
   });
 });
 
@@ -1942,6 +1954,16 @@ describe('.createNewStickerSet()', () => {
     }
   });
 
+  it('should have 3 stickers in the set', async () => {
+    expect(me).not.toBeNull();
+    if (me) {
+      const stickerSet = await bot.getStickerSet({
+        name: `new_sticker_set_by_${me.username}`,
+      });
+      expect(stickerSet.stickers.length).toBe(3);
+    }
+  });
+
   afterAll(async () => {
     if (me) {
       await bot.deleteStickerSet({
@@ -1994,6 +2016,58 @@ describe('.addStickerToSet()', () => {
           });
         }),
       );
+    }
+  });
+});
+
+describe('.setStickerPositionInSet()', () => {
+  let me = null as null | User;
+  let stickerSet = null as null | StickerSet;
+
+  beforeAll(async () => {
+    me = await bot.getMe();
+    await bot.createNewStickerSet({
+      user_id: USERID,
+      name: `video_emoji_by_${me.username}`,
+      title: 'Sticker Set',
+      sticker_type: 'custom_emoji',
+      needs_repainting: true,
+      stickers: [
+        {
+          emoji_list: ['✨'],
+          sticker: createReadStream('tests/data/video_emoji.webm'),
+          format: 'video',
+        },
+        {
+          emoji_list: ['✨'],
+          sticker: createReadStream('tests/data/video_emoji.webm'),
+          format: 'video',
+        },
+      ],
+    });
+
+    stickerSet = await bot.getStickerSet({
+      name: `video_emoji_by_${me.username}`,
+    });
+  });
+
+  it('should set sticker position in set', async () => {
+    expect(stickerSet).not.toBeNull();
+    if (stickerSet) {
+      await expect(
+        bot.setStickerPositionInSet({
+          sticker: stickerSet.stickers[0].file_id,
+          position: 1,
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  afterAll(async () => {
+    if (me) {
+      await bot.deleteStickerSet({
+        name: `video_emoji_by_${me.username}`,
+      });
     }
   });
 });

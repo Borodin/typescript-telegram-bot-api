@@ -198,7 +198,7 @@ export class TelegramBot extends EventEmitter {
       } else if (value instanceof File || value instanceof Readable) {
         formData.append(key, value);
       } else if (typeof value === 'object' && value !== null && !(value instanceof Date)) {
-        this.handleObject(value, formData);
+        formData.append(key, JSON.stringify(this.serializeJSON(value, formData)));
       } else {
         formData.append(key, value);
       }
