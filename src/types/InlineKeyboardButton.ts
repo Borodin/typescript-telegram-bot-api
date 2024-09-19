@@ -1,4 +1,4 @@
-import { CallbackGame, WebAppData, LoginUrl, SwitchInlineQueryChosenChat } from './';
+import { CallbackGame, WebAppInfo, LoginUrl, SwitchInlineQueryChosenChat } from './';
 
 /**
  * ## InlineKeyboardButton
@@ -28,7 +28,7 @@ export type InlineKeyboardButton = {
    * able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in
    * private chats between a user and the bot. Not supported for messages sent on behalf of a Telegram Business account.
    */
-  web_app?: WebAppData;
+  web_app?: WebAppInfo;
 
   /**
    * Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram
