@@ -599,7 +599,7 @@ export class TelegramBot extends EventEmitter {
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
-  }): Promise<MessageId> {
+  }): Promise<Message> {
     return await this.callApi('sendPhoto', {
       ...options,
       caption_entities: new JSONSerialized(options.caption_entities),
