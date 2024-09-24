@@ -1,3 +1,5 @@
+import { ChatAdministratorRights } from './ChatAdministratorRights';
+
 /**
  * ## KeyboardButtonRequestChat
  * This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared
@@ -38,12 +40,12 @@ export type KeyboardButtonRequestChat = {
    * Optional. A JSON-serialized object listing the required administrator rights of the user in the chat. The rights
    * must be a superset of bot_administrator_rights. If not specified, no additional restrictions are applied.
    */
-  user_administrator_rights?: string; //TODO: JSON
+  user_administrator_rights?: Partial<ChatAdministratorRights>;
   /**
    * Optional. A JSON-serialized object listing the required administrator rights of the bot in the chat. The rights
    * must be a subset of user_administrator_rights. If not specified, no additional restrictions are applied.
    */
-  bot_administrator_rights?: string; //TODO: JSON
+  bot_administrator_rights?: Partial<ChatAdministratorRights>;
   /**
    * Optional. Pass True to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.
    */
@@ -52,15 +54,15 @@ export type KeyboardButtonRequestChat = {
   /**
    * Optional. Pass True to request the chat's title
    */
-  request_title?: string;
+  request_title?: boolean;
 
   /**
    * Optional. Pass True to request the chat's username
    */
-  request_username?: string;
+  request_username?: boolean;
 
   /**
    * Optional. Pass True to request the chat's photo
    */
-  request_photo?: string;
+  request_photo?: boolean;
 };
