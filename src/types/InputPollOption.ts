@@ -1,4 +1,4 @@
-import { ParseMode } from './';
+import { MessageEntity, ParseMode } from './';
 
 /**
  * ## InputPollOption
@@ -21,5 +21,5 @@ export type InputPollOption = {
    * Optional. A JSON-serialized list of special entities that appear in the poll option text. It can be specified
    * instead of text_parse_mode
    */
-  text_entities?: 'string'; // TODO: JSON MessageEntity[];
+  text_entities?: MessageEntity[];
 };
