@@ -17,7 +17,7 @@ export type SharedUser = {
   /**
    * Optional. First name of the user, if the name was requested by the bot
    */
-  first_name: string;
+  first_name?: string;
 
   /**
    * Optional. Last name of the user, if the name was requested by the bot
