@@ -1,3 +1,5 @@
+import { Attachment } from './index';
+
 /**
  * InputPaidMediaPhoto
  * The paid media to send is a photo.
@@ -15,5 +17,5 @@ export type InputPaidMediaPhoto = {
    * multipart/form-data under <file_attach_name> name.
    * @see https://core.telegram.org/bots/api#sending-files
    */
-  media: string;
+  media: string | Attachment;
 };
