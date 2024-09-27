@@ -1,4 +1,5 @@
 import { InputFile } from './InputFile';
+import { Attachment } from './index';
 
 /**
  * InputPaidMediaVideo
@@ -17,7 +18,7 @@ export type InputPaidMediaVideo = {
    * multipart/form-data under <file_attach_name> name.
    * @see https://core.telegram.org/bots/api#sending-files
    */
-  media: string;
+  media: string | Attachment;
 
   /**
    * Optional. Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side.

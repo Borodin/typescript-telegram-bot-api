@@ -517,6 +517,22 @@ describe('.sendPaidMedia()', () => {
       }),
     ).resolves.toHaveProperty('paid_media');
   });
+
+  it('should send paid media from file', async () => {
+    await expect(
+      bot.sendPaidMedia({
+        chat_id: TEST_CHANNEL_ID,
+        star_count: 1,
+        media: [
+          {
+            type: 'video',
+            media: createReadStream('tests/data/video.mp4'),
+          },
+        ],
+        caption: 'Paid media from file',
+      }),
+    ).resolves.toHaveProperty('paid_media');
+  });
 });
 
 describe('.sendMediaGroup()', () => {
