@@ -973,7 +973,7 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
-    emoji?: string;
+    emoji?: '🎲' | '🎯' | '🏀' | '⚽' | '🎳' | '🎰';
     disable_notification?: boolean;
     protect_content?: boolean;
     message_effect_id?: string;
