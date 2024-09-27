@@ -31,15 +31,15 @@ export type KeyboardButtonRequestUsers = {
   /**
    * Optional. Pass True to request the users' first and last names
    */
-  request_name?: string;
+  request_name?: boolean;
 
   /**
    * Optional. Pass True to request the users' usernames
    */
-  request_username?: string;
+  request_username?: boolean;
 
   /**
    * Optional. Pass True to request the users' photos
    */
-  request_photo?: string;
+  request_photo?: boolean;
 };
