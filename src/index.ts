@@ -1974,7 +1974,7 @@ export class TelegramBot extends EventEmitter {
   async sendSticker(options: {
     business_connection_id?: string;
     chat_id: number | string;
-    message_thread_id?: string;
+    message_thread_id?: number;
     sticker: InputFile | string;
     emoji?: string;
     disable_notification?: boolean;
