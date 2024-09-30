@@ -2145,13 +2145,13 @@ export class TelegramBot extends EventEmitter {
    * ## setStickerSetThumbnail
    * Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match
    * the format of the stickers in the set. Returns True on success.
-   * @see https://core.telegram.org/bots/api#setstickersettitle
+   * @see https://core.telegram.org/bots/api#setstickersetthumbnail
    */
   async setStickerSetThumbnail(options: {
     name: string;
     user_id: number;
     thumbnail?: InputFile | string;
-    format?: InputSticker['format'];
+    format: InputSticker['format'];
   }): Promise<true> {
     return await this.callApi('setStickerSetThumbnail', options);
   }
@@ -2379,7 +2379,7 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
-    reply_markup: InlineKeyboardMarkup;
+    reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message> {
     return await this.callApi('sendGame', {
       ...options,

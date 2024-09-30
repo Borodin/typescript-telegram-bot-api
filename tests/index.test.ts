@@ -3,7 +3,7 @@ import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { FileOptions, TelegramBot } from '../src';
 import { TelegramError } from '../src/errors';
-import { ForumTopic, File, User, StickerSet } from '../src/types';
+import { ForumTopic, File, User, StickerSet, Update } from '../src/types';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
@@ -53,11 +53,35 @@ describe('TelegramBot', () => {
   });
 });
 
+describe('.processUpdate()', () => {
+  const update: Update = {
+    update_id: 1,
+    message: {
+      message_id: 1,
+      chat: { id: 1, type: 'private' },
+      text: '/start',
+      date: 0,
+    },
+  };
+
+  it('should emit message event', () => {
+    const spy = jest.spyOn(bot, 'emit');
+    bot.processUpdate(update);
+    expect(spy).toHaveBeenCalledWith('message', update.message);
+  });
+
+  it('should emit message text event', () => {
+    const spy = jest.spyOn(bot, 'emit');
+    bot.processUpdate(update);
+    expect(spy).toHaveBeenCalledWith('message:text', update.message);
+  });
+});
+
 describe('.startPolling()', () => {
   it('should start polling', async () => {
     expect(() => bot.startPolling()).not.toThrow();
     await new Promise((resolve) => setTimeout(resolve, 5000));
-    bot.stopPolling();
+    await bot.stopPolling();
   });
 });
 
@@ -134,11 +158,27 @@ describe('.logOut()', () => {
   it('should have a logOut method', () => {
     expect(bot.logOut).toBeDefined();
   });
+
+  it('should log out the bot', async () => {
+    await expect(
+      new TelegramBot({
+        botToken: '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
+      }).logOut(),
+    ).rejects.toThrow('401 Unauthorized');
+  });
 });
 
 describe('.close()', () => {
   it('should have a close method', () => {
     expect(bot.close).toBeDefined();
+  });
+
+  it('should close the bot', async () => {
+    await expect(
+      new TelegramBot({
+        botToken: '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
+      }).close(),
+    ).rejects.toThrow('401 Unauthorized');
   });
 });
 
@@ -1782,7 +1822,7 @@ describe('.answerInlineQuery()', () => {
           },
         ],
       }),
-    ).rejects.toThrow('400 Bad Request: USER_BOT_INVALID');
+    ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 });
 
@@ -1945,6 +1985,7 @@ describe('.createNewStickerSet()', () => {
           user_id: USERID,
           name: `new_sticker_set_by_${me.username}`,
           title: 'NewStickerSet',
+          sticker_type: 'regular',
           stickers: [
             {
               emoji_list: ['🐶'],
@@ -2036,7 +2077,136 @@ describe('.addStickerToSet()', () => {
   });
 });
 
-describe('.setStickerPositionInSet()', () => {
+describe(`setStickerEmojiList(), setStickerKeywords(), setStickerSetTitle(), 
+setStickerSetThumbnail(), setStickerMaskPosition(), .replaceStickerInSet()`, () => {
+  let stickerSet = null as null | StickerSet;
+  let me = null as null | User;
+
+  beforeAll(async () => {
+    me = await bot.getMe();
+    await bot.addStickerToSet({
+      user_id: USERID,
+      name: `sticker_set_by_${me.username}`,
+      sticker: {
+        emoji_list: ['👻'],
+        sticker: createReadStream('tests/data/sticker.webp'),
+        format: 'static',
+      },
+    });
+    stickerSet = await bot.getStickerSet({
+      name: `sticker_set_by_${me.username}`,
+    });
+  });
+
+  it('should set sticker emoji list', async () => {
+    expect(stickerSet).not.toBeNull();
+    expect(me).not.toBeNull();
+    if (stickerSet && me) {
+      await expect(
+        bot.setStickerEmojiList({
+          sticker: stickerSet.stickers[0].file_id,
+          emoji_list: ['🐶', '🐕'],
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  it('should set sticker keywords', async () => {
+    expect(stickerSet).not.toBeNull();
+    expect(me).not.toBeNull();
+    if (stickerSet && me) {
+      await expect(
+        bot.setStickerKeywords({
+          sticker: stickerSet.stickers[0].file_id,
+          keywords: ['dog', 'puppy'],
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  it('should set sticker title', async () => {
+    expect(stickerSet).not.toBeNull();
+    expect(me).not.toBeNull();
+    if (stickerSet && me) {
+      await expect(
+        bot.setStickerSetTitle({
+          name: `sticker_set_by_${me.username}`,
+          title: 'Dog Sticker',
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  it('should set sticker set thumbnail', async () => {
+    expect(stickerSet).not.toBeNull();
+    expect(me).not.toBeNull();
+    if (stickerSet && me) {
+      await expect(
+        bot.setStickerSetThumbnail({
+          name: `sticker_set_by_${me.username}`,
+          user_id: USERID,
+          thumbnail: createReadStream('tests/data/video_emoji.webm'),
+          format: 'video',
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  it('should set sticker mask position', async () => {
+    expect(stickerSet).not.toBeNull();
+    expect(me).not.toBeNull();
+    if (stickerSet && me) {
+      await expect(
+        bot.setStickerMaskPosition({
+          sticker: stickerSet.stickers[0].file_id,
+          mask_position: {
+            point: 'eyes',
+            x_shift: 0.5,
+            y_shift: 0.5,
+            scale: 1,
+          },
+        }),
+      ).rejects.toThrow('400 Bad Request: STICKER_MASK_COORDS_NOT_SUPPORTED');
+    }
+  });
+
+  it('should replace sticker in set', async () => {
+    expect(stickerSet).not.toBeNull();
+    expect(me).not.toBeNull();
+    if (stickerSet && me) {
+      await expect(
+        bot.replaceStickerInSet({
+          old_sticker: stickerSet.stickers[0].file_id,
+          user_id: USERID,
+          name: `sticker_set_by_${me.username}`,
+          sticker: {
+            emoji_list: ['🐶'],
+            sticker: createReadStream('tests/data/sticker.webp'),
+            format: 'static',
+          },
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
+  afterAll(async () => {
+    if (me) {
+      const stickerSet = await bot.getStickerSet({
+        name: `sticker_set_by_${me.username}`,
+      });
+
+      await Promise.all(
+        stickerSet.stickers.map(async (sticker) => {
+          await bot.deleteStickerFromSet({
+            sticker: sticker.file_id,
+          });
+        }),
+      );
+    }
+  });
+});
+
+describe('.setStickerPositionInSet(), setCustomEmojiStickerSetThumbnail()', () => {
   let me = null as null | User;
   let stickerSet = null as null | StickerSet;
 
@@ -2079,11 +2249,128 @@ describe('.setStickerPositionInSet()', () => {
     }
   });
 
+  it('should set custom emoji sticker set thumbnail', async () => {
+    expect(stickerSet).not.toBeNull();
+    expect(me).not.toBeNull();
+    if (stickerSet && me) {
+      await expect(
+        bot.setCustomEmojiStickerSetThumbnail({
+          name: `video_emoji_by_${me.username}`,
+          custom_emoji_id: '',
+        }),
+      ).resolves.toBe(true);
+    }
+  });
+
   afterAll(async () => {
     if (me) {
       await bot.deleteStickerSet({
         name: `video_emoji_by_${me.username}`,
       });
     }
+  });
+});
+
+describe('.sendGame()', () => {
+  it('should send game', async () => {
+    await expect(
+      bot.sendGame({
+        chat_id: USERID,
+        game_short_name: 'game',
+      }),
+    ).resolves.toHaveProperty('game.title', 'game');
+  });
+});
+
+describe('.setGameScore()', () => {
+  let message_id = null as null | number;
+
+  beforeAll(async () => {
+    const message = await bot.sendGame({
+      chat_id: USERID,
+      game_short_name: 'game',
+    });
+    message_id = message.message_id;
+  });
+
+  it('should set game score', async () => {
+    expect(message_id).not.toBeNull();
+    if (message_id) {
+      await expect(
+        bot.setGameScore({
+          user_id: USERID,
+          score: Math.floor(Math.random() * 10000),
+          chat_id: USERID,
+          message_id: message_id,
+          force: true,
+        }),
+      ).resolves.toHaveProperty('game.title', 'game');
+    }
+  });
+});
+
+describe('.setGameScore()', () => {
+  let message_id = null as null | number;
+  beforeAll(async () => {
+    const message = await bot.sendGame({
+      chat_id: USERID,
+      game_short_name: 'game',
+    });
+    message_id = message.message_id;
+  });
+
+  it('should set game score', async () => {
+    expect(message_id).not.toBeNull();
+    await expect(
+      bot.setGameScore({
+        user_id: USERID,
+        score: Math.floor(Math.random() * 10000),
+        chat_id: USERID,
+        message_id: message_id as number,
+        force: true,
+      }),
+    ).resolves.toHaveProperty('game.title', 'game');
+  });
+});
+
+describe('.getGameHighScores()', () => {
+  let message_id = null as null | number;
+
+  beforeAll(async () => {
+    const message = await bot.sendGame({
+      chat_id: USERID,
+      game_short_name: 'game',
+    });
+    message_id = message.message_id;
+  });
+
+  it('should get game high scores', async () => {
+    expect(message_id).not.toBeNull();
+    await expect(
+      bot.getGameHighScores({
+        user_id: USERID,
+        chat_id: USERID,
+        message_id: message_id as number,
+      }),
+    ).resolves.toBeInstanceOf(Array);
+  });
+});
+
+describe('.setPassportDataErrors()', () => {
+  it('should set passport data errors', async () => {
+    await expect(
+      bot.setPassportDataErrors({
+        user_id: USERID,
+        errors: [
+          {
+            source: 'data',
+            type: 'passport',
+            field_name: 'name',
+            data_hash: '78EJbNOmoK3Axtg7yzA9cA==',
+            message: 'Error message',
+          },
+        ],
+      }),
+    ).rejects.toThrow('400 Bad Request: DATA_HASH_SIZE_INVALID');
   });
 });
