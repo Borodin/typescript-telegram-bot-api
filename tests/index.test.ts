@@ -51,6 +51,15 @@ describe('TelegramBot', () => {
       }).getMe(),
     ).rejects.toThrow(/getaddrinfo (ENOTFOUND|EAI_AGAIN) invalid_url/);
   });
+
+  it('should throw "401 Unauthorized" error with a valid botToken', async () => {
+    await expect(
+      new TelegramBot({
+        botToken: TOKEN,
+        testEnvironment: true,
+      }).getMe(),
+    ).rejects.toThrow('401 Unauthorized');
+  });
 });
 
 describe('.processUpdate()', () => {
