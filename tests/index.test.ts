@@ -199,7 +199,10 @@ describe('.sendMessage()', () => {
         text: 'sendMessage',
         disable_notification: true,
         reply_markup: {
-          inline_keyboard: [[{ text: 'button', callback_data: 'callback_data' }]],
+          inline_keyboard: [
+            [{ text: 'button', callback_data: 'callback_data' }],
+            [{ text: 'copy 123', copy_text: { text: '123' } }],
+          ],
         },
       }),
     ).resolves.toHaveProperty('text', 'sendMessage');

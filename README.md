@@ -3,7 +3,7 @@
 [![npm](https://img.shields.io/npm/v/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
 [![npm](https://img.shields.io/npm/dt/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
 [![codecov](https://codecov.io/github/Borodin/typescript-telegram-bot-api/graph/badge.svg?token=509N5AZDTV)](https://codecov.io/github/Borodin/typescript-telegram-bot-api)
-[![GitHub](https://img.shields.io/badge/Bot_API-v7.10-0088cc)](https://core.telegram.org/bots/api#september-6-2024)
+[![GitHub](https://img.shields.io/badge/Bot_API-v7.11-0088cc)](https://core.telegram.org/bots/api#october-31-2024)
 
 
 This is a TypeScript wrapper for the [Telegram Bot API](https://core.telegram.org/bots/api) Node.js and browsers. It allows you to easily interact with the Telegram Bot API using TypeScript.
@@ -118,6 +118,39 @@ bot.on('message_reaction', (messageReactionUpdated) => {
 bot.on('message:audio', (message) => {
   console.log('Received audio:', message.audio.file_id);
 });
+```
+
+## Error Handling
+Wrap asynchronous calls in `try...catch` blocks or use `.catch()` on promises to handle exceptions properly.
+
+```typescript
+try {
+  await bot.sendPhoto({
+    chat_id: chat_id,
+    photo: createReadStream('photo.jpg'),
+    caption: 'stream',
+  });
+} catch (error: unknown) {
+  if (TelegramBot.isTelegramError(error)) {
+    // Handle Telegram API errors
+    if(error.response.description === 'Bad Request: chat not found'){
+      console.info('Message not sent: chat not found');
+    } else if (error.response.description === 'Request Entity Too Large'){
+      console.info('Message not sent: file too large');
+    } else if (error.response.description === 'Bad Request: IMAGE_PROCESS_FAILED'){
+      console.info('Message not sent: image processing failed');
+    } else if (error.response.description === 'Forbidden: bot was blocked by the user'){
+      console.info('Message not sent: user blocked bot');
+    } else {
+      console.error('Telegram API Error:', error.message);
+    }
+  } else if (error instanceof Error) {
+    // Handle system errors (example: no such file)
+    console.error('System Error:', error.message);
+  } else {
+    console.error('Unknown Error:', error);
+  }
+}
 ```
 
 ## Webhooks

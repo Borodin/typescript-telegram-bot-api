@@ -1,6 +1,7 @@
 import { TransactionPartnerFragment } from './TransactionPartnerFragment';
 import { TransactionPartnerUser } from './TransactionPartnerUser';
 import { TransactionPartnerTelegramAds } from './TransactionPartnerTelegramAds';
+import { TransactionPartnerTelegramApi } from './TransactionPartnerTelegramApi';
 import { TransactionPartnerOther } from './TransactionPartnerOther';
 
 /**
@@ -10,6 +11,7 @@ import { TransactionPartnerOther } from './TransactionPartnerOther';
  * - TransactionPartnerFragment
  * - TransactionPartnerUser
  * - TransactionPartnerTelegramAds
+ * - TransactionPartnerTelegramApi
  * - TransactionPartnerOther
  * @see https://core.telegram.org/bots/api#transactionpartner
  */
@@ -17,4 +19,5 @@ export type TransactionPartner =
   | TransactionPartnerFragment
   | TransactionPartnerUser
   | TransactionPartnerTelegramAds
+  | TransactionPartnerTelegramApi
   | TransactionPartnerOther;

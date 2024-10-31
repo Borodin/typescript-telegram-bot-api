@@ -1,4 +1,4 @@
-import { CallbackGame, WebAppInfo, LoginUrl, SwitchInlineQueryChosenChat } from './';
+import { CallbackGame, WebAppInfo, LoginUrl, SwitchInlineQueryChosenChat, CopyTextButton } from './';
 
 /**
  * ## InlineKeyboardButton
@@ -59,6 +59,11 @@ export type InlineKeyboardButton = {
    * messages sent on behalf of a Telegram Business account.
    */
   switch_inline_query_chosen_chat?: SwitchInlineQueryChosenChat;
+
+  /**
+   * Optional. Description of the button that copies the specified text to the clipboard.
+   */
+  copy_text?: CopyTextButton;
 
   /**
    * Optional. Description of the game that will be launched when the user presses the button.

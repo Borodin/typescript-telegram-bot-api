@@ -20,7 +20,7 @@ export type MessageEntity = {
       /**
        * Type of the entity. Currently, can be
        * “mention” (@username),
-       * “hashtag” (#hashtag),
+       * “hashtag” (#hashtag or #hashtag@chatusername),
        * “cashtag” ($USD),
        * “bot_command” (/start@jobs_bot),
        * “url” (https://telegram.org),

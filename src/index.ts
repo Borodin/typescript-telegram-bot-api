@@ -459,6 +459,13 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
 
     /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
+
+    /**
      * Unique identifier of the message effect to be added to the message; for private chats only
      */
     message_effect_id?: string;
@@ -541,6 +548,13 @@ export class TelegramBot extends EventEmitter {
     show_caption_above_media?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<MessageId> {
@@ -596,6 +610,13 @@ export class TelegramBot extends EventEmitter {
     has_spoiler?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -630,6 +651,13 @@ export class TelegramBot extends EventEmitter {
     thumbnail?: InputFile | string;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -658,6 +686,13 @@ export class TelegramBot extends EventEmitter {
     disable_content_type_detection?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -693,6 +728,13 @@ export class TelegramBot extends EventEmitter {
     supports_streaming?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -727,6 +769,13 @@ export class TelegramBot extends EventEmitter {
     has_spoiler?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -757,6 +806,13 @@ export class TelegramBot extends EventEmitter {
     duration?: number;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -784,6 +840,13 @@ export class TelegramBot extends EventEmitter {
     thumbnail?: InputFile | string;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -811,6 +874,13 @@ export class TelegramBot extends EventEmitter {
     show_caption_above_media?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -836,6 +906,13 @@ export class TelegramBot extends EventEmitter {
     media: (InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo)[];
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
   }): Promise<Message[]> {
@@ -862,6 +939,13 @@ export class TelegramBot extends EventEmitter {
     proximity_alert_radius?: number;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -891,6 +975,13 @@ export class TelegramBot extends EventEmitter {
     google_place_type?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -916,6 +1007,13 @@ export class TelegramBot extends EventEmitter {
     vcard?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -951,6 +1049,13 @@ export class TelegramBot extends EventEmitter {
     is_closed?: boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -976,6 +1081,13 @@ export class TelegramBot extends EventEmitter {
     emoji?: '🎲' | '🎯' | '🏀' | '⚽' | '🎳' | '🎰';
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -1836,11 +1948,13 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editMessageMedia
-   * Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message
-   * album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a
-   * photo or a video otherwise. When an inline message is edited, a new file can't be uploaded; use a previously
-   * uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the
-   * edited Message is returned, otherwise True is returned.
+   * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If
+   * a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document
+   * for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be
+   * uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not
+   * an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that
+   * were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time
+   * they were sent.
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
   async editMessageMedia(
@@ -1979,6 +2093,13 @@ export class TelegramBot extends EventEmitter {
     emoji?: string;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
@@ -2242,6 +2363,13 @@ export class TelegramBot extends EventEmitter {
     is_flexible?: T extends 'XTR' ? never : boolean;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup;
@@ -2377,6 +2505,13 @@ export class TelegramBot extends EventEmitter {
     game_short_name: string;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
     message_effect_id?: string;
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup;
