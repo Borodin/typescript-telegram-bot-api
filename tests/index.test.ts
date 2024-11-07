@@ -3,7 +3,7 @@ import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { FileOptions, TelegramBot } from '../src';
 import { TelegramError } from '../src/errors';
-import { ForumTopic, File, User, StickerSet, Update } from '../src/types';
+import { ForumTopic, File, User, StickerSet, Update } from '../src';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
@@ -250,6 +250,16 @@ describe('.sendMessage()', () => {
         text: '0'.repeat(4096 + 1),
       }),
     ).rejects.toThrow('400 Bad Request: message is too long');
+  });
+
+  it('should fail when allow_paid_broadcast is true and not balance is insufficient', async () => {
+    await expect(
+      bot.sendMessage({
+        chat_id: USERID,
+        text: 'paid message text',
+        allow_paid_broadcast: true,
+      }),
+    ).rejects.toThrow('400 Bad Request: FLOODSKIP_NOT_ALLOWED');
   });
 
   it('should send message with link preview disabled', async () => {
