@@ -1844,7 +1844,7 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
   async editMessageMedia(
-    options: ({ chat_id: number; message_id: number } | { inline_message_id: string }) & {
+    options: ({ chat_id: number | string; message_id: number } | { inline_message_id: string }) & {
       business_connection_id?: string;
       media: InputMedia;
       reply_markup?: InlineKeyboardMarkup;
