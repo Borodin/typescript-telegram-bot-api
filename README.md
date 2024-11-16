@@ -215,6 +215,12 @@ process.on('SIGINT', async () => {
 ```bash
 npm test
 ```
+
+```bash
+docker build -t typescript-bot-api .
+docker run --rm --env-file .env typescript-bot-api run test
+```
+
 CI/CD is set up with GitHub Actions. Tests and linters are run on every pull request.
 
 If you want to run tests locally, follow the instructions in [tests/README.md](tests/).

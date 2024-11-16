@@ -1,9 +1,8 @@
 import 'dotenv/config';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
-import { FileOptions, TelegramBot } from '../src';
+import { FileOptions, TelegramBot, ForumTopic, File, User, StickerSet, Update  } from '../src';
 import { TelegramError } from '../src/errors';
-import { ForumTopic, File, User, StickerSet, Update } from '../src/types';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);
@@ -11,14 +10,10 @@ const TEST_GROUP_ID = parseInt(process.env.TEST_GROUP_ID as string);
 const TEST_CHANNEL_ID = parseInt(process.env.TEST_CHANNEL_ID as string);
 const TEST_GROUP_MEMBER_ID = parseInt(process.env.TEST_GROUP_MEMBER_ID as string);
 
-let bot: TelegramBot;
-
-beforeAll(async () => {
-  bot = new TelegramBot({
-    botToken: TOKEN,
-    autoRetry: true,
-    autoRetryLimit: 120,
-  });
+const bot = new TelegramBot({
+  botToken: TOKEN,
+  autoRetry: true,
+  autoRetryLimit: 120,
 });
 
 describe('TelegramBot', () => {
