@@ -3,6 +3,7 @@
 [![npm](https://img.shields.io/npm/v/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
 [![npm](https://img.shields.io/npm/dt/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
 [![codecov](https://codecov.io/github/Borodin/typescript-telegram-bot-api/graph/badge.svg?token=509N5AZDTV)](https://codecov.io/github/Borodin/typescript-telegram-bot-api)
+[![codesandbox](https://img.shields.io/badge/Open_in-sandbox-eaff96)](https://codesandbox.io/p/sandbox/interesting-wave-qgspfs)
 [![GitHub](https://img.shields.io/badge/Bot_API-v7.11-0088cc)](https://core.telegram.org/bots/api#october-31-2024)
 
 
