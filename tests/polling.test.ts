@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import axios from 'axios';
-import { Message, Update } from '../src/types/';
-import { TelegramBot } from '../src';
+import { TelegramBot, Message, Update } from '../src';
 import MockAdapter from 'axios-mock-adapter';
 
 const mock = new MockAdapter(axios);
@@ -13,7 +12,7 @@ describe('Polling ', () => {
     mock.reset();
   });
 
-  it('should handle delayed response in private chat', async () => {
+  test('should handle delayed response in private chat', async () => {
     const botToken = 'token';
     const bot = new TelegramBot({ botToken });
     const result: Update[] = [
@@ -55,7 +54,7 @@ describe('Parallel Polling', () => {
     warnSpy = jest.spyOn(console, 'warn').mockImplementation();
   });
 
-  it('should handle parallel polling without errors', async () => {
+  test('should handle parallel polling without errors', async () => {
     await expect(bot1.startPolling()).resolves.not.toThrow();
     await expect(bot2.startPolling()).resolves.not.toThrow();
     await new Promise((resolve) => setTimeout(resolve, 3000));

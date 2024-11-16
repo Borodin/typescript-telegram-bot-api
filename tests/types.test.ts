@@ -5,7 +5,7 @@ const bot = new TelegramBot({
 });
 
 describe('Types', () => {
-  it('should handle types', async () => {
+  test('should handle types', async () => {
     bot.on('message:text', (message) => {
       message.text.toUpperCase();
     });

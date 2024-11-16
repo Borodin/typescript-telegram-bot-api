@@ -11,14 +11,18 @@ const TEST_GROUP_ID = parseInt(process.env.TEST_GROUP_ID as string);
 const TEST_CHANNEL_ID = parseInt(process.env.TEST_CHANNEL_ID as string);
 const TEST_GROUP_MEMBER_ID = parseInt(process.env.TEST_GROUP_MEMBER_ID as string);
 
-const bot = new TelegramBot({
-  botToken: TOKEN,
-  autoRetry: true,
-  autoRetryLimit: 120,
+let bot: TelegramBot;
+
+beforeAll(async () => {
+  bot = new TelegramBot({
+    botToken: TOKEN,
+    autoRetry: true,
+    autoRetryLimit: 120,
+  });
 });
 
 describe('TelegramBot', () => {
-  it('should throw error when botToken is empty', async () => {
+  test('should throw error when botToken is empty', async () => {
     await expect(
       new TelegramBot({
         botToken: '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
@@ -26,7 +30,7 @@ describe('TelegramBot', () => {
     ).rejects.toThrow('401 Unauthorized');
   });
 
-  it('should throw error when botToken is invalid', async () => {
+  test('should throw error when botToken is invalid', async () => {
     await expect(
       new TelegramBot({
         botToken: '000:invalid_token',
@@ -34,7 +38,7 @@ describe('TelegramBot', () => {
     ).rejects.toThrow('401 Unauthorized: invalid token specified');
   });
 
-  it('should throw "Invalid response" error with a valid baseURL', async () => {
+  test('should throw "Invalid response" error with a valid baseURL', async () => {
     await expect(
       new TelegramBot({
         botToken: 'TOKEN',
@@ -43,7 +47,7 @@ describe('TelegramBot', () => {
     ).rejects.toThrow('Invalid response');
   });
 
-  it('should throw "getaddrinfo ENOTFOUND" error with an invalid baseURL', async () => {
+  test('should throw "getaddrinfo ENOTFOUND" error with an invalid baseURL', async () => {
     await expect(
       new TelegramBot({
         botToken: 'TOKEN',
@@ -52,7 +56,7 @@ describe('TelegramBot', () => {
     ).rejects.toThrow(/getaddrinfo (ENOTFOUND|EAI_AGAIN) invalid_url/);
   });
 
-  it('should throw "401 Unauthorized" error with a valid botToken', async () => {
+  test('should throw "401 Unauthorized" error with a valid botToken', async () => {
     await expect(
       new TelegramBot({
         botToken: TOKEN,
@@ -73,13 +77,13 @@ describe('.processUpdate()', () => {
     },
   };
 
-  it('should emit message event', () => {
+  test('should emit message event', () => {
     const spy = jest.spyOn(bot, 'emit');
     bot.processUpdate(update);
     expect(spy).toHaveBeenCalledWith('message', update.message);
   });
 
-  it('should emit message text event', () => {
+  test('should emit message text event', () => {
     const spy = jest.spyOn(bot, 'emit');
     bot.processUpdate(update);
     expect(spy).toHaveBeenCalledWith('message:text', update.message);
@@ -87,7 +91,7 @@ describe('.processUpdate()', () => {
 });
 
 describe('.startPolling()', () => {
-  it('should start polling', async () => {
+  test('should start polling', async () => {
     expect(() => bot.startPolling()).not.toThrow();
     await new Promise((resolve) => setTimeout(resolve, 5000));
     await bot.stopPolling();
@@ -99,13 +103,13 @@ describe('.stopPolling()', () => {
     bot.startPolling();
   });
 
-  it('should stop polling', () => {
+  test('should stop polling', () => {
     expect(() => bot.stopPolling()).not.toThrow();
   });
 });
 
 describe('.setWebhook()', () => {
-  it('should set webhook', async () => {
+  test('should set webhook', async () => {
     await expect(
       bot.setWebhook({
         url: 'https://example.com',
@@ -119,20 +123,20 @@ describe('.setWebhook()', () => {
 });
 
 describe('.deleteWebhook()', () => {
-  it('should delete webhook', async () => {
+  test('should delete webhook', async () => {
     await expect(bot.deleteWebhook()).resolves.toBe(true);
   });
 });
 
 describe('.getWebhookInfo()', () => {
-  it('should get webhook info', async () => {
+  test('should get webhook info', async () => {
     await bot.setWebhook({
       url: 'https://example.com',
     });
     await expect(bot.getWebhookInfo()).resolves.toHaveProperty('url', 'https://example.com');
   });
 
-  it('should return empty url when webhook is not set', async () => {
+  test('should return empty url when webhook is not set', async () => {
     await expect(bot.getWebhookInfo()).resolves.toHaveProperty('url', '');
   });
 
@@ -142,7 +146,7 @@ describe('.getWebhookInfo()', () => {
 });
 
 describe('.isTelegramError()', () => {
-  it('should return true for Telegram-related errors', () => {
+  test('should return true for Telegram-related errors', () => {
     const telegramError = new TelegramError({
       ok: false,
       description: 'Conflict: terminated by other getUpdates request; make sure that only one bot instance is running',
@@ -151,24 +155,24 @@ describe('.isTelegramError()', () => {
     expect(TelegramBot.isTelegramError(telegramError)).toBe(true);
   });
 
-  it('should return false for non-Telegram-related errors', () => {
+  test('should return false for non-Telegram-related errors', () => {
     const nonTelegramError = new Error('Database connection failed');
     expect(TelegramBot.isTelegramError(nonTelegramError)).toBe(false);
   });
 });
 
 describe('.getMe()', () => {
-  it('should return bot info', async () => {
+  test('should return bot info', async () => {
     await expect(bot.getMe()).resolves.toHaveProperty('is_bot', true);
   });
 });
 
 describe('.logOut()', () => {
-  it('should have a logOut method', () => {
+  test('should have a logOut method', () => {
     expect(bot.logOut).toBeDefined();
   });
 
-  it('should log out the bot', async () => {
+  test('should log out the bot', async () => {
     await expect(
       new TelegramBot({
         botToken: '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
@@ -178,11 +182,11 @@ describe('.logOut()', () => {
 });
 
 describe('.close()', () => {
-  it('should have a close method', () => {
+  test('should have a close method', () => {
     expect(bot.close).toBeDefined();
   });
 
-  it('should close the bot', async () => {
+  test('should close the bot', async () => {
     await expect(
       new TelegramBot({
         botToken: '123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11',
@@ -192,7 +196,7 @@ describe('.close()', () => {
 });
 
 describe('.sendMessage()', () => {
-  it('should send message', async () => {
+  test('should send message', async () => {
     await expect(
       bot.sendMessage({
         chat_id: USERID,
@@ -208,7 +212,7 @@ describe('.sendMessage()', () => {
     ).resolves.toHaveProperty('text', 'sendMessage');
   });
 
-  it('should send message reply', async () => {
+  test('should send message reply', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
       text: 'Original message',
@@ -225,7 +229,7 @@ describe('.sendMessage()', () => {
     ).resolves.toHaveProperty('text', 'Reply message');
   });
 
-  it('should fail when chat_id is 1', async () => {
+  test('should fail when chat_id is 1', async () => {
     await expect(
       bot.sendMessage({
         chat_id: 1,
@@ -234,7 +238,7 @@ describe('.sendMessage()', () => {
     ).rejects.toThrow('400 Bad Request: chat not found');
   });
 
-  it('should fail when message text is empty', async () => {
+  test('should fail when message text is empty', async () => {
     await expect(
       bot.sendMessage({
         chat_id: USERID,
@@ -243,7 +247,7 @@ describe('.sendMessage()', () => {
     ).rejects.toThrow('400 Bad Request: message text is empty');
   });
 
-  it('should fail when message text is too long', async () => {
+  test('should fail when message text is too long', async () => {
     await expect(
       bot.sendMessage({
         chat_id: USERID,
@@ -252,7 +256,7 @@ describe('.sendMessage()', () => {
     ).rejects.toThrow('400 Bad Request: message is too long');
   });
 
-  it('should fail when allow_paid_broadcast is true and not balance is insufficient', async () => {
+  test('should fail when allow_paid_broadcast is true and not balance is insufficient', async () => {
     await expect(
       bot.sendMessage({
         chat_id: USERID,
@@ -262,7 +266,7 @@ describe('.sendMessage()', () => {
     ).rejects.toThrow('400 Bad Request: FLOODSKIP_NOT_ALLOWED');
   });
 
-  it('should send message with link preview disabled', async () => {
+  test('should send message with link preview disabled', async () => {
     await expect(
       bot.sendMessage({
         chat_id: USERID,
@@ -276,7 +280,7 @@ describe('.sendMessage()', () => {
 });
 
 describe('.forwardMessage()', () => {
-  it('should forward message', async () => {
+  test('should forward message', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
       text: 'Original message',
@@ -297,7 +301,7 @@ describe('.forwardMessage()', () => {
 });
 
 describe('.forwardMessages()', () => {
-  it('should forward messages', async () => {
+  test('should forward messages', async () => {
     const [firstMessage, lastMessage] = [
       await bot.sendMessage({
         chat_id: USERID,
@@ -322,7 +326,7 @@ describe('.forwardMessages()', () => {
 });
 
 describe('.copyMessage()', () => {
-  it('should copy message', async () => {
+  test('should copy message', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
       text: 'message to copy',
@@ -340,7 +344,7 @@ describe('.copyMessage()', () => {
 });
 
 describe('.copyMessages()', () => {
-  it('should copy messages', async () => {
+  test('should copy messages', async () => {
     const [firstMessage, lastMessage] = [
       await bot.sendMessage({
         chat_id: USERID,
@@ -366,7 +370,7 @@ describe('.copyMessages()', () => {
 });
 
 describe('.sendPhoto()', () => {
-  it('should send photo from url', async () => {
+  test('should send photo from url', async () => {
     await expect(
       bot.sendPhoto({
         chat_id: USERID,
@@ -376,7 +380,7 @@ describe('.sendPhoto()', () => {
     ).resolves.toHaveProperty('photo');
   });
 
-  it('should send photo from stream', async () => {
+  test('should send photo from stream', async () => {
     await expect(
       bot.sendPhoto({
         chat_id: USERID,
@@ -386,7 +390,7 @@ describe('.sendPhoto()', () => {
     ).resolves.toHaveProperty('photo');
   });
 
-  it('should send photo from buffer', async () => {
+  test('should send photo from buffer', async () => {
     await expect(
       bot.sendPhoto({
         chat_id: USERID,
@@ -396,7 +400,7 @@ describe('.sendPhoto()', () => {
     ).resolves.toHaveProperty('photo');
   });
 
-  it('should send photo from file_id', async () => {
+  test('should send photo from file_id', async () => {
     await expect(
       bot.sendPhoto({
         chat_id: USERID,
@@ -406,7 +410,7 @@ describe('.sendPhoto()', () => {
     ).resolves.toHaveProperty('photo');
   });
 
-  it('should fail when photo is invalid', async () => {
+  test('should fail when photo is invalid', async () => {
     await expect(
       bot.sendPhoto({
         chat_id: USERID,
@@ -417,7 +421,7 @@ describe('.sendPhoto()', () => {
 });
 
 describe('.sendAudio()', () => {
-  it('should send audio from url', async () => {
+  test('should send audio from url', async () => {
     await expect(
       bot.sendAudio({
         chat_id: USERID,
@@ -427,7 +431,7 @@ describe('.sendAudio()', () => {
     ).resolves.toHaveProperty('audio');
   });
 
-  it('should send audio from file', async () => {
+  test('should send audio from file', async () => {
     await expect(
       bot.sendAudio({
         chat_id: USERID,
@@ -440,7 +444,7 @@ describe('.sendAudio()', () => {
     ).resolves.toHaveProperty('audio');
   });
 
-  it('should send audio from file_id', async () => {
+  test('should send audio from file_id', async () => {
     await expect(
       bot.sendAudio({
         chat_id: USERID,
@@ -452,7 +456,7 @@ describe('.sendAudio()', () => {
 });
 
 describe('.sendDocument()', () => {
-  it('should send document from url', async () => {
+  test('should send document from url', async () => {
     await expect(
       bot.sendDocument({
         chat_id: USERID,
@@ -462,7 +466,7 @@ describe('.sendDocument()', () => {
     ).resolves.toHaveProperty('document.mime_type', 'application/pdf');
   });
 
-  it('should send document from FileOptions', async () => {
+  test('should send document from FileOptions', async () => {
     await expect(
       bot.sendDocument({
         chat_id: USERID,
@@ -476,7 +480,7 @@ describe('.sendDocument()', () => {
 });
 
 describe('.sendVideo()', () => {
-  it('should send video from url', async () => {
+  test('should send video from url', async () => {
     await expect(
       bot.sendVideo({
         chat_id: USERID,
@@ -489,7 +493,7 @@ describe('.sendVideo()', () => {
 });
 
 describe('.sendAnimation()', () => {
-  it('should send animation from file', async () => {
+  test('should send animation from file', async () => {
     await expect(
       bot.sendAnimation({
         chat_id: USERID,
@@ -500,7 +504,7 @@ describe('.sendAnimation()', () => {
 });
 
 describe('.sendVoice()', () => {
-  it('should send voice from file', async () => {
+  test('should send voice from file', async () => {
     await expect(
       bot.sendVoice({
         chat_id: USERID,
@@ -509,7 +513,7 @@ describe('.sendVoice()', () => {
     ).resolves.toHaveProperty('voice');
   });
 
-  it('should send voice from buffer', async () => {
+  test('should send voice from buffer', async () => {
     await expect(
       bot.sendVoice({
         chat_id: USERID,
@@ -520,7 +524,7 @@ describe('.sendVoice()', () => {
 });
 
 describe('.sendVideoNote()', () => {
-  it('should send video note from file', async () => {
+  test('should send video note from file', async () => {
     await expect(
       bot.sendVideoNote({
         chat_id: USERID,
@@ -531,7 +535,7 @@ describe('.sendVideoNote()', () => {
 });
 
 describe('.sendPaidMedia()', () => {
-  it('should send paid media: photo', async () => {
+  test('should send paid media: photo', async () => {
     await expect(
       bot.sendPaidMedia({
         chat_id: TEST_CHANNEL_ID,
@@ -547,7 +551,7 @@ describe('.sendPaidMedia()', () => {
     ).resolves.toHaveProperty('paid_media');
   });
 
-  it('should send paid media: video', async () => {
+  test('should send paid media: video', async () => {
     await expect(
       bot.sendPaidMedia({
         chat_id: TEST_CHANNEL_ID,
@@ -563,7 +567,7 @@ describe('.sendPaidMedia()', () => {
     ).resolves.toHaveProperty('paid_media');
   });
 
-  it('should send paid media: photo and video', async () => {
+  test('should send paid media: photo and video', async () => {
     await expect(
       bot.sendPaidMedia({
         chat_id: TEST_CHANNEL_ID,
@@ -580,7 +584,7 @@ describe('.sendPaidMedia()', () => {
     ).resolves.toHaveProperty('paid_media');
   });
 
-  it('should send paid media from file', async () => {
+  test('should send paid media from file', async () => {
     await expect(
       bot.sendPaidMedia({
         chat_id: TEST_CHANNEL_ID,
@@ -598,7 +602,7 @@ describe('.sendPaidMedia()', () => {
 });
 
 describe('.sendMediaGroup()', () => {
-  it('should send media group with urls', async () => {
+  test('should send media group with urls', async () => {
     await expect(
       bot.sendMediaGroup({
         chat_id: USERID,
@@ -613,7 +617,7 @@ describe('.sendMediaGroup()', () => {
     ).resolves.toHaveLength(5);
   });
 
-  it('should send media group with files', async () => {
+  test('should send media group with files', async () => {
     await expect(
       bot.sendMediaGroup({
         chat_id: USERID,
@@ -628,7 +632,7 @@ describe('.sendMediaGroup()', () => {
 });
 
 describe('.sendLocation()', () => {
-  it('should send location', async () => {
+  test('should send location', async () => {
     await expect(
       bot.sendLocation({
         chat_id: USERID,
@@ -640,7 +644,7 @@ describe('.sendLocation()', () => {
 });
 
 describe('.sendVenue()', () => {
-  it('should send venue', async () => {
+  test('should send venue', async () => {
     await expect(
       bot.sendVenue({
         chat_id: USERID,
@@ -654,7 +658,7 @@ describe('.sendVenue()', () => {
 });
 
 describe('.sendContact()', () => {
-  it('should send contact', async () => {
+  test('should send contact', async () => {
     await expect(
       bot.sendContact({
         chat_id: USERID,
@@ -667,7 +671,7 @@ describe('.sendContact()', () => {
 });
 
 describe('.sendPoll()', () => {
-  it('should send poll', async () => {
+  test('should send poll', async () => {
     await expect(
       bot.sendPoll({
         chat_id: USERID,
@@ -680,7 +684,7 @@ describe('.sendPoll()', () => {
 });
 
 describe('.sendDice()', () => {
-  it('should default to 6-sided dice', async () => {
+  test('should default to 6-sided dice', async () => {
     await expect(
       bot.sendDice({
         chat_id: USERID,
@@ -688,7 +692,7 @@ describe('.sendDice()', () => {
     ).resolves.toHaveProperty('dice.value', expect.any(Number));
   });
 
-  it('should send dice with emoji', async () => {
+  test('should send dice with emoji', async () => {
     await expect(
       bot.sendDice({
         chat_id: USERID,
@@ -699,7 +703,7 @@ describe('.sendDice()', () => {
 });
 
 describe('.sendChatAction()', () => {
-  it('should send chat action', async () => {
+  test('should send chat action', async () => {
     await expect(
       bot.sendChatAction({
         chat_id: USERID,
@@ -710,7 +714,7 @@ describe('.sendChatAction()', () => {
 });
 
 describe('.setMessageReaction()', () => {
-  it('should set message reaction', async () => {
+  test('should set message reaction', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
       text: 'Message to react',
@@ -727,7 +731,7 @@ describe('.setMessageReaction()', () => {
 });
 
 describe('.getUserProfilePhotos()', () => {
-  it('should get user profile photos', async () => {
+  test('should get user profile photos', async () => {
     await expect(
       bot.getUserProfilePhotos({
         user_id: USERID,
@@ -737,7 +741,7 @@ describe('.getUserProfilePhotos()', () => {
 });
 
 describe('.getFile()', () => {
-  it('should get file', async () => {
+  test('should get file', async () => {
     await expect(
       bot.getFile({
         file_id: 'AgACAgIAAxkDAAM1ZnG8LabTxno661-KX9W17Je_uekAArXgMRtNXZFLifTnv9tqCs8BAAMCAANzAAM1BA',
@@ -747,7 +751,7 @@ describe('.getFile()', () => {
 });
 
 describe('.sendSticker()', () => {
-  it('should send sticker from file', async () => {
+  test('should send sticker from file', async () => {
     await expect(
       bot.sendSticker({
         chat_id: USERID,
@@ -759,7 +763,7 @@ describe('.sendSticker()', () => {
 });
 
 describe('.getStickerSet()', () => {
-  it('should get sticker set', async () => {
+  test('should get sticker set', async () => {
     await expect(
       bot.getStickerSet({
         name: 'Animals',
@@ -769,7 +773,7 @@ describe('.getStickerSet()', () => {
 });
 
 describe('.getStarTransactions()', () => {
-  it('should get star transactions', async () => {
+  test('should get star transactions', async () => {
     await expect(
       bot.getStarTransactions({
         offset: 0,
@@ -778,13 +782,13 @@ describe('.getStarTransactions()', () => {
     ).resolves.toHaveProperty('transactions');
   });
 
-  it('should get star transactions without options', async () => {
+  test('should get star transactions without options', async () => {
     await expect(bot.getStarTransactions()).resolves.toHaveProperty('transactions');
   });
 });
 
 describe('.setMyName()', () => {
-  it('should set my name', async () => {
+  test('should set my name', async () => {
     try {
       const result = await bot.setMyName({
         name: 'typescript-telegram-bot-api',
@@ -802,7 +806,7 @@ describe('.setMyName()', () => {
 });
 
 describe('.getMyName()', () => {
-  it('should get my name', async () => {
+  test('should get my name', async () => {
     await expect(
       bot.getMyName({
         language_code: 'en',
@@ -812,7 +816,7 @@ describe('.getMyName()', () => {
 });
 
 describe('.setMyDescription()', () => {
-  it('should set my description', async () => {
+  test('should set my description', async () => {
     await expect(
       bot.setMyDescription({
         //long description
@@ -824,7 +828,7 @@ describe('.setMyDescription()', () => {
 });
 
 describe('.getMyDescription()', () => {
-  it('should get my description', async () => {
+  test('should get my description', async () => {
     await expect(
       bot.getMyDescription({
         language_code: 'en',
@@ -834,7 +838,7 @@ describe('.getMyDescription()', () => {
 });
 
 describe('.setMyShortDescription()', () => {
-  it('should set my short description', async () => {
+  test('should set my short description', async () => {
     await expect(
       bot.setMyShortDescription({
         short_description: 'A Telegram Bot API for TypeScript',
@@ -845,7 +849,7 @@ describe('.setMyShortDescription()', () => {
 });
 
 describe('.getMyShortDescription()', () => {
-  it('should get my short description', async () => {
+  test('should get my short description', async () => {
     await expect(
       bot.getMyShortDescription({
         language_code: 'en',
@@ -855,7 +859,7 @@ describe('.getMyShortDescription()', () => {
 });
 
 describe('.setMyCommands()', () => {
-  it('should set my commands', async () => {
+  test('should set my commands', async () => {
     await expect(
       bot.setMyCommands({
         commands: [
@@ -869,20 +873,20 @@ describe('.setMyCommands()', () => {
 });
 
 describe('.getMyCommands()', () => {
-  it('should get my commands', async () => {
+  test('should get my commands', async () => {
     await expect(
       bot.getMyCommands({
         language_code: 'en',
       }),
     ).resolves.toBeInstanceOf(Array);
   });
-  it('should get my commands without options', async () => {
+  test('should get my commands without options', async () => {
     await expect(bot.getMyCommands()).resolves.toBeInstanceOf(Array);
   });
 });
 
 describe('.deleteMyCommands()', () => {
-  it('should delete my commands', async () => {
+  test('should delete my commands', async () => {
     await expect(
       bot.deleteMyCommands({
         scope: { type: 'default' },
@@ -893,7 +897,7 @@ describe('.deleteMyCommands()', () => {
 });
 
 describe('.banChatMember()', () => {
-  it('should ban chat member', async () => {
+  test('should ban chat member', async () => {
     await expect(
       bot.banChatMember({
         chat_id: TEST_GROUP_ID,
@@ -904,7 +908,7 @@ describe('.banChatMember()', () => {
 });
 
 describe('.unbanChatMember()', () => {
-  it('should unban chat member', async () => {
+  test('should unban chat member', async () => {
     await expect(
       bot.unbanChatMember({
         chat_id: TEST_GROUP_ID,
@@ -915,7 +919,7 @@ describe('.unbanChatMember()', () => {
 });
 
 describe('.restrictChatMember()', () => {
-  it('should restrict chat member', async () => {
+  test('should restrict chat member', async () => {
     await expect(
       bot.restrictChatMember({
         chat_id: TEST_GROUP_ID,
@@ -929,7 +933,7 @@ describe('.restrictChatMember()', () => {
 });
 
 describe('.promoteChatMember()', () => {
-  it('should promote chat member', async () => {
+  test('should promote chat member', async () => {
     await expect(
       bot.promoteChatMember({
         chat_id: TEST_GROUP_ID,
@@ -941,7 +945,7 @@ describe('.promoteChatMember()', () => {
 });
 
 describe('.SetChatAdministratorCustomTitle()', () => {
-  it('should set chat administrator custom title', async () => {
+  test('should set chat administrator custom title', async () => {
     await expect(
       bot.setChatAdministratorCustomTitle({
         chat_id: TEST_GROUP_ID,
@@ -953,7 +957,7 @@ describe('.SetChatAdministratorCustomTitle()', () => {
 });
 
 describe('.banChatSenderChat()', () => {
-  it('should ban chat sender chat', async () => {
+  test('should ban chat sender chat', async () => {
     await expect(
       bot.banChatSenderChat({
         chat_id: TEST_GROUP_ID,
@@ -964,7 +968,7 @@ describe('.banChatSenderChat()', () => {
 });
 
 describe('.unbanChatSenderChat()', () => {
-  it('should unban chat sender chat', async () => {
+  test('should unban chat sender chat', async () => {
     await expect(
       bot.unbanChatSenderChat({
         chat_id: TEST_GROUP_ID,
@@ -975,7 +979,7 @@ describe('.unbanChatSenderChat()', () => {
 });
 
 describe('.setChatPermissions()', () => {
-  it('should set chat permissions', async () => {
+  test('should set chat permissions', async () => {
     await expect(
       bot.setChatPermissions({
         chat_id: TEST_GROUP_ID,
@@ -1001,7 +1005,7 @@ describe('.setChatPermissions()', () => {
 });
 
 describe('.exportChatInviteLink()', () => {
-  it('should export chat invite link', async () => {
+  test('should export chat invite link', async () => {
     await expect(
       bot.exportChatInviteLink({
         chat_id: TEST_GROUP_ID,
@@ -1011,7 +1015,7 @@ describe('.exportChatInviteLink()', () => {
 });
 
 describe('.createChatInviteLink()', () => {
-  it('should create chat invite link', async () => {
+  test('should create chat invite link', async () => {
     await expect(
       bot.createChatInviteLink({
         chat_id: TEST_GROUP_ID,
@@ -1021,7 +1025,7 @@ describe('.createChatInviteLink()', () => {
 });
 
 describe('.editChatInviteLink()', () => {
-  it('should edit chat invite link', async () => {
+  test('should edit chat invite link', async () => {
     const { invite_link } = await bot.createChatInviteLink({
       chat_id: TEST_GROUP_ID,
     });
@@ -1038,7 +1042,7 @@ describe('.editChatInviteLink()', () => {
 });
 
 describe('.createChatSubscriptionInviteLink()', () => {
-  it('should create chat subscription invite link', async () => {
+  test('should create chat subscription invite link', async () => {
     await expect(
       bot.createChatSubscriptionInviteLink({
         chat_id: TEST_CHANNEL_ID,
@@ -1050,7 +1054,7 @@ describe('.createChatSubscriptionInviteLink()', () => {
 });
 
 describe('.editChatSubscriptionInviteLink()', () => {
-  it('should edit chat subscription invite link', async () => {
+  test('should edit chat subscription invite link', async () => {
     const { invite_link } = await bot.createChatSubscriptionInviteLink({
       chat_id: TEST_CHANNEL_ID,
       name: 'name',
@@ -1069,7 +1073,7 @@ describe('.editChatSubscriptionInviteLink()', () => {
 });
 
 describe('.revokeChatInviteLink()', () => {
-  it('should revoke chat invite link', async () => {
+  test('should revoke chat invite link', async () => {
     const { invite_link } = await bot.createChatInviteLink({
       chat_id: TEST_GROUP_ID,
     });
@@ -1084,7 +1088,7 @@ describe('.revokeChatInviteLink()', () => {
 });
 
 describe('.setChatPhoto()', () => {
-  it('should set chat photo', async () => {
+  test('should set chat photo', async () => {
     await expect(
       bot.setChatPhoto({
         chat_id: TEST_GROUP_ID,
@@ -1102,7 +1106,7 @@ describe('.deleteChatPhoto()', () => {
     });
   });
 
-  it('should delete chat photo', async () => {
+  test('should delete chat photo', async () => {
     await expect(
       bot.deleteChatPhoto({
         chat_id: TEST_GROUP_ID,
@@ -1112,7 +1116,7 @@ describe('.deleteChatPhoto()', () => {
 });
 
 describe('.setChatTitle()', () => {
-  it('should set chat title', async () => {
+  test('should set chat title', async () => {
     await expect(
       bot.setChatTitle({
         chat_id: TEST_GROUP_ID,
@@ -1125,7 +1129,7 @@ describe('.setChatTitle()', () => {
 describe('.setChatDescription()', () => {
   const unixTime = Math.floor(Date.now() / 1000);
 
-  it('should set chat description', async () => {
+  test('should set chat description', async () => {
     await expect(
       bot.setChatDescription({
         chat_id: TEST_GROUP_ID,
@@ -1136,7 +1140,7 @@ describe('.setChatDescription()', () => {
 });
 
 describe('.pinChatMessage()', () => {
-  it('should pin chat message', async () => {
+  test('should pin chat message', async () => {
     const message = await bot.sendMessage({
       chat_id: TEST_GROUP_ID,
       text: 'Message to pin',
@@ -1154,7 +1158,7 @@ describe('.pinChatMessage()', () => {
 describe('.unpinChatMessage()', () => {
   const unixTime = Math.floor(Date.now() / 1000);
 
-  it('should unpin chat message', async () => {
+  test('should unpin chat message', async () => {
     const message = await bot.sendMessage({
       chat_id: TEST_GROUP_ID,
       text: `Message to unpin ${unixTime}`,
@@ -1174,7 +1178,7 @@ describe('.unpinChatMessage()', () => {
 });
 
 describe('.unpinAllChatMessages()', () => {
-  it('should unpin all chat messages', async () => {
+  test('should unpin all chat messages', async () => {
     await expect(
       bot.unpinAllChatMessages({
         chat_id: TEST_GROUP_ID,
@@ -1184,7 +1188,7 @@ describe('.unpinAllChatMessages()', () => {
 });
 
 describe('.getChat()', () => {
-  it('should get chat (group)', async () => {
+  test('should get chat (group)', async () => {
     await expect(
       bot.getChat({
         chat_id: TEST_GROUP_ID,
@@ -1192,7 +1196,7 @@ describe('.getChat()', () => {
     ).resolves.toHaveProperty('id', TEST_GROUP_ID);
   });
 
-  it('should get chat (user)', async () => {
+  test('should get chat (user)', async () => {
     await expect(
       bot.getChat({
         chat_id: USERID,
@@ -1200,7 +1204,7 @@ describe('.getChat()', () => {
     ).resolves.toHaveProperty('id', USERID);
   });
 
-  it('should get chat (chat not found)', async () => {
+  test('should get chat (chat not found)', async () => {
     await expect(
       bot.getChat({
         chat_id: 1,
@@ -1210,7 +1214,7 @@ describe('.getChat()', () => {
 });
 
 describe('.getChatAdministrators()', () => {
-  it('should get chat administrators', async () => {
+  test('should get chat administrators', async () => {
     await expect(
       bot.getChatAdministrators({
         chat_id: TEST_GROUP_ID,
@@ -1220,7 +1224,7 @@ describe('.getChatAdministrators()', () => {
 });
 
 describe('.getChatMemberCount()', () => {
-  it('should get chat members count', async () => {
+  test('should get chat members count', async () => {
     await expect(
       bot.getChatMemberCount({
         chat_id: TEST_GROUP_ID,
@@ -1230,7 +1234,7 @@ describe('.getChatMemberCount()', () => {
 });
 
 describe('.getChatMember()', () => {
-  it('should get chat member', async () => {
+  test('should get chat member', async () => {
     await expect(
       bot.getChatMember({
         chat_id: TEST_GROUP_ID,
@@ -1241,7 +1245,7 @@ describe('.getChatMember()', () => {
 });
 
 describe('.setChatStickerSet()', () => {
-  it('should set chat sticker set', async () => {
+  test('should set chat sticker set', async () => {
     await expect(
       bot.setChatStickerSet({
         chat_id: TEST_GROUP_ID,
@@ -1252,7 +1256,7 @@ describe('.setChatStickerSet()', () => {
 });
 
 describe('.deleteChatStickerSet()', () => {
-  it('should delete chat sticker set', async () => {
+  test('should delete chat sticker set', async () => {
     await expect(
       bot.deleteChatStickerSet({
         chat_id: TEST_GROUP_ID,
@@ -1262,7 +1266,7 @@ describe('.deleteChatStickerSet()', () => {
 });
 
 describe('.getForumTopicIconStickers()', () => {
-  it('should get forum topic icon stickers', async () => {
+  test('should get forum topic icon stickers', async () => {
     await expect(bot.getForumTopicIconStickers()).resolves.toBeInstanceOf(Array);
   });
 });
@@ -1270,7 +1274,7 @@ describe('.getForumTopicIconStickers()', () => {
 describe('.createForumTopic()', () => {
   let createdTopic = null as null | ForumTopic;
 
-  it('should create forum topic', async () => {
+  test('should create forum topic', async () => {
     createdTopic = await bot.createForumTopic({
       chat_id: TEST_GROUP_ID,
       name: 'Topic to create',
@@ -1296,7 +1300,7 @@ describe('.editForumTopic()', () => {
     });
   });
 
-  it('should edit forum topic', async () => {
+  test('should edit forum topic', async () => {
     if (createdTopic) {
       await expect(
         bot.editForumTopic({
@@ -1329,7 +1333,7 @@ describe('.closeForumTopic()', () => {
     });
   });
 
-  it('should close forum topic', async () => {
+  test('should close forum topic', async () => {
     expect(createdTopic).not.toBeNull();
     if (createdTopic) {
       await expect(
@@ -1365,7 +1369,7 @@ describe('.reopenForumTopic()', () => {
     });
   });
 
-  it('should reopen forum topic', async () => {
+  test('should reopen forum topic', async () => {
     expect(createdTopic).not.toBeNull();
     if (createdTopic) {
       await expect(
@@ -1397,7 +1401,7 @@ describe('.deleteForumTopic()', () => {
     });
   });
 
-  it('should delete forum topic', async () => {
+  test('should delete forum topic', async () => {
     expect(createdTopic).not.toBeNull();
     if (createdTopic) {
       await expect(
@@ -1420,7 +1424,7 @@ describe('.unpinAllForumTopicMessages()', () => {
     });
   });
 
-  it('should unpin all forum topic messages', async () => {
+  test('should unpin all forum topic messages', async () => {
     expect(createdTopic).not.toBeNull();
     if (createdTopic) {
       await expect(
@@ -1445,7 +1449,7 @@ describe('.unpinAllForumTopicMessages()', () => {
 describe('.editGeneralForumTopic()', () => {
   const unixTime = Math.floor(Date.now() / 1000);
 
-  it('should edit general forum topic', async () => {
+  test('should edit general forum topic', async () => {
     await expect(
       bot.editGeneralForumTopic({
         chat_id: TEST_GROUP_ID,
@@ -1466,7 +1470,7 @@ describe('.closeGeneralForumTopic()', () => {
     }
   });
 
-  it('should close general forum topic', async () => {
+  test('should close general forum topic', async () => {
     await expect(
       bot.closeGeneralForumTopic({
         chat_id: TEST_GROUP_ID,
@@ -1492,7 +1496,7 @@ describe('.reopenGeneralForumTopic()', () => {
     }
   });
 
-  it('should reopen general forum topic', async () => {
+  test('should reopen general forum topic', async () => {
     await expect(
       bot.reopenGeneralForumTopic({
         chat_id: TEST_GROUP_ID,
@@ -1502,7 +1506,7 @@ describe('.reopenGeneralForumTopic()', () => {
 });
 
 describe('.hideGeneralForumTopic()', () => {
-  it('should hide general forum topic', async () => {
+  test('should hide general forum topic', async () => {
     await expect(
       bot.hideGeneralForumTopic({
         chat_id: TEST_GROUP_ID,
@@ -1522,7 +1526,7 @@ describe('.unhideGeneralForumTopic()', () => {
     }
   });
 
-  it('should unhide general forum topic', async () => {
+  test('should unhide general forum topic', async () => {
     await expect(
       bot.unhideGeneralForumTopic({
         chat_id: TEST_GROUP_ID,
@@ -1532,7 +1536,7 @@ describe('.unhideGeneralForumTopic()', () => {
 });
 
 describe('.unpinAllGeneralForumTopicMessages()', () => {
-  it('should unpin all general forum topic messages', async () => {
+  test('should unpin all general forum topic messages', async () => {
     await expect(
       bot.unpinAllGeneralForumTopicMessages({
         chat_id: TEST_GROUP_ID,
@@ -1542,7 +1546,7 @@ describe('.unpinAllGeneralForumTopicMessages()', () => {
 });
 
 describe('.answerCallbackQuery()', () => {
-  it('should answer callback query', async () => {
+  test('should answer callback query', async () => {
     await expect(
       bot.answerCallbackQuery({
         callback_query_id: 'QUERY_ID_INVALID',
@@ -1553,7 +1557,7 @@ describe('.answerCallbackQuery()', () => {
 });
 
 describe('.getUserChatBoosts()', () => {
-  it('should get user chat boosts', async () => {
+  test('should get user chat boosts', async () => {
     await expect(
       bot.getUserChatBoosts({
         chat_id: TEST_GROUP_ID,
@@ -1564,7 +1568,7 @@ describe('.getUserChatBoosts()', () => {
 });
 
 describe('.getBusinessConnection()', () => {
-  it('should get business connection', async () => {
+  test('should get business connection', async () => {
     await expect(
       bot.getBusinessConnection({
         business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
@@ -1574,7 +1578,7 @@ describe('.getBusinessConnection()', () => {
 });
 
 describe('.setChatMenuButton()', () => {
-  it('should set chat menu button', async () => {
+  test('should set chat menu button', async () => {
     await expect(
       bot.setChatMenuButton({
         chat_id: USERID,
@@ -1587,7 +1591,7 @@ describe('.setChatMenuButton()', () => {
 });
 
 describe('.getChatMenuButton()', () => {
-  it('should get chat menu button', async () => {
+  test('should get chat menu button', async () => {
     await expect(
       bot.getChatMenuButton({
         chat_id: USERID,
@@ -1597,7 +1601,7 @@ describe('.getChatMenuButton()', () => {
 });
 
 describe('.setMyDefaultAdministratorRights()', () => {
-  it('should set my default administrator rights', async () => {
+  test('should set my default administrator rights', async () => {
     await expect(
       bot.setMyDefaultAdministratorRights({
         rights: {
@@ -1619,13 +1623,13 @@ describe('.setMyDefaultAdministratorRights()', () => {
 });
 
 describe('.getMyDefaultAdministratorRights()', () => {
-  it('should get my default administrator rights', async () => {
+  test('should get my default administrator rights', async () => {
     await expect(bot.getMyDefaultAdministratorRights({})).resolves.toHaveProperty('is_anonymous');
   });
 });
 
 describe('.approveChatJoinRequest()', () => {
-  it('should approve chat join request', async () => {
+  test('should approve chat join request', async () => {
     await expect(
       bot.approveChatJoinRequest({
         chat_id: TEST_GROUP_ID,
@@ -1636,7 +1640,7 @@ describe('.approveChatJoinRequest()', () => {
 });
 
 describe('.declineChatJoinRequest()', () => {
-  it('should decline chat join request', async () => {
+  test('should decline chat join request', async () => {
     await expect(
       bot.declineChatJoinRequest({
         chat_id: TEST_GROUP_ID,
@@ -1647,7 +1651,7 @@ describe('.declineChatJoinRequest()', () => {
 });
 
 describe('.leaveChat()', () => {
-  it('should leave chat', async () => {
+  test('should leave chat', async () => {
     await expect(
       bot.leaveChat({
         chat_id: 1,
@@ -1657,7 +1661,7 @@ describe('.leaveChat()', () => {
 });
 
 describe('.editMessageText()', () => {
-  it('should edit message text', async () => {
+  test('should edit message text', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
       text: 'Message to edit',
@@ -1674,7 +1678,7 @@ describe('.editMessageText()', () => {
 });
 
 describe('.editMessageCaption()', () => {
-  it('should edit message caption', async () => {
+  test('should edit message caption', async () => {
     const message = await bot.sendPhoto({
       chat_id: USERID,
       photo: 'https://unsplash.it/640/480',
@@ -1692,7 +1696,7 @@ describe('.editMessageCaption()', () => {
 });
 
 describe('.editMessageMedia()', () => {
-  it('should edit message media', async () => {
+  test('should edit message media', async () => {
     const message = await bot.sendPhoto({
       chat_id: USERID,
       photo: 'https://unsplash.it/640/480',
@@ -1713,7 +1717,7 @@ describe('.editMessageMedia()', () => {
 });
 
 describe('.editMessageLiveLocation()', () => {
-  it('should edit message live location', async () => {
+  test('should edit message live location', async () => {
     const message = await bot.sendLocation({
       chat_id: USERID,
       latitude: 40.76799,
@@ -1733,7 +1737,7 @@ describe('.editMessageLiveLocation()', () => {
 });
 
 describe('.stopMessageLiveLocation()', () => {
-  it('should stop message live location', async () => {
+  test('should stop message live location', async () => {
     const message = await bot.sendLocation({
       chat_id: USERID,
       latitude: 40.76799,
@@ -1751,7 +1755,7 @@ describe('.stopMessageLiveLocation()', () => {
 });
 
 describe('.editMessageReplyMarkup()', () => {
-  it('should edit message reply markup', async () => {
+  test('should edit message reply markup', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
       text: 'Message to edit',
@@ -1773,7 +1777,7 @@ describe('.editMessageReplyMarkup()', () => {
 });
 
 describe('.stopPoll()', () => {
-  it('should stop poll', async () => {
+  test('should stop poll', async () => {
     const message = await bot.sendPoll({
       chat_id: USERID,
       question: 'Do you like polls?',
@@ -1791,7 +1795,7 @@ describe('.stopPoll()', () => {
 });
 
 describe('.deleteMessage()', () => {
-  it('should delete message', async () => {
+  test('should delete message', async () => {
     const message = await bot.sendMessage({
       chat_id: USERID,
       text: 'Message to delete',
@@ -1807,7 +1811,7 @@ describe('.deleteMessage()', () => {
 });
 
 describe('.deleteMessages()', () => {
-  it('should delete messages', async () => {
+  test('should delete messages', async () => {
     const [message1, message2] = await Promise.all([
       bot.sendMessage({
         chat_id: USERID,
@@ -1829,7 +1833,7 @@ describe('.deleteMessages()', () => {
 });
 
 describe('.answerInlineQuery()', () => {
-  it('should answer inline query', async () => {
+  test('should answer inline query', async () => {
     await expect(
       bot.answerInlineQuery({
         inline_query_id: 'QUERY_ID',
@@ -1849,7 +1853,7 @@ describe('.answerInlineQuery()', () => {
 });
 
 describe('.answerWebAppQuery()', () => {
-  it('should answer web app query', async () => {
+  test('should answer web app query', async () => {
     await expect(
       bot.answerWebAppQuery({
         web_app_query_id: 'QUERY_ID',
@@ -1867,7 +1871,7 @@ describe('.answerWebAppQuery()', () => {
 });
 
 describe('.sendInvoice()', () => {
-  it('should send invoice', async () => {
+  test('should send invoice', async () => {
     await expect(
       bot.sendInvoice({
         chat_id: USERID,
@@ -1889,7 +1893,7 @@ describe('.sendInvoice()', () => {
 });
 
 describe('.createInvoiceLink()', () => {
-  it('should create invoice link', async () => {
+  test('should create invoice link', async () => {
     await expect(
       bot.createInvoiceLink({
         title: 'Invoice',
@@ -1905,7 +1909,7 @@ describe('.createInvoiceLink()', () => {
 });
 
 describe('.answerShippingQuery()', () => {
-  it('should throw an error for outdated or invalid query ID on error response', async () => {
+  test('should throw an error for outdated or invalid query ID on error response', async () => {
     await expect(
       bot.answerShippingQuery({
         shipping_query_id: 'QUERY_ID',
@@ -1915,7 +1919,7 @@ describe('.answerShippingQuery()', () => {
     ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 
-  it('should throw an error for outdated or invalid query ID on success response', async () => {
+  test('should throw an error for outdated or invalid query ID on success response', async () => {
     await expect(
       bot.answerShippingQuery({
         shipping_query_id: 'QUERY_ID',
@@ -1933,7 +1937,7 @@ describe('.answerShippingQuery()', () => {
 });
 
 describe('.answerPreCheckoutQuery()', () => {
-  it('should throw an error for outdated or invalid query ID on error response', async () => {
+  test('should throw an error for outdated or invalid query ID on error response', async () => {
     await expect(
       bot.answerPreCheckoutQuery({
         pre_checkout_query_id: 'QUERY_ID',
@@ -1943,7 +1947,7 @@ describe('.answerPreCheckoutQuery()', () => {
     ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
   });
 
-  it('should throw an error for outdated or invalid query ID on success response', async () => {
+  test('should throw an error for outdated or invalid query ID on success response', async () => {
     await expect(
       bot.answerPreCheckoutQuery({
         pre_checkout_query_id: 'QUERY_ID',
@@ -1954,7 +1958,7 @@ describe('.answerPreCheckoutQuery()', () => {
 });
 
 describe('.refundStarPayment()', () => {
-  it('should refund star payment', async () => {
+  test('should refund star payment', async () => {
     await expect(
       bot.refundStarPayment({
         user_id: USERID,
@@ -1965,13 +1969,13 @@ describe('.refundStarPayment()', () => {
 });
 
 describe('.getStickerSet()', () => {
-  it('should get custom emoji stickers', async () => {
+  test('should get custom emoji stickers', async () => {
     await expect(bot.getStickerSet({ name: 'Animals' })).resolves.toHaveProperty('name', 'Animals');
   });
 });
 
 describe('.getCustomEmojiStickers()', () => {
-  it('should get custom emoji stickers', async () => {
+  test('should get custom emoji stickers', async () => {
     await expect(
       bot.getCustomEmojiStickers({
         custom_emoji_ids: ['5380109565226391871'],
@@ -1981,7 +1985,7 @@ describe('.getCustomEmojiStickers()', () => {
 });
 
 describe('.uploadStickerFile()', () => {
-  it('should upload sticker file', async () => {
+  test('should upload sticker file', async () => {
     await expect(
       bot.uploadStickerFile({
         user_id: USERID,
@@ -1999,7 +2003,7 @@ describe('.createNewStickerSet()', () => {
     me = await bot.getMe();
   });
 
-  it('should create new sticker set', async () => {
+  test('should create new sticker set', async () => {
     expect(me).not.toBeNull();
     if (me) {
       await expect(
@@ -2033,7 +2037,7 @@ describe('.createNewStickerSet()', () => {
     }
   });
 
-  it('should have 3 stickers in the set', async () => {
+  test('should have 3 stickers in the set', async () => {
     expect(me).not.toBeNull();
     if (me) {
       const stickerSet = await bot.getStickerSet({
@@ -2065,7 +2069,7 @@ describe('.addStickerToSet()', () => {
     me = await bot.getMe();
   });
 
-  it('should add sticker to set', async () => {
+  test('should add sticker to set', async () => {
     expect(stickerFile).not.toBeNull();
     if (stickerFile && me) {
       await expect(
@@ -2120,7 +2124,7 @@ setStickerSetThumbnail(), setStickerMaskPosition(), .replaceStickerInSet()`, () 
     });
   });
 
-  it('should set sticker emoji list', async () => {
+  test('should set sticker emoji list', async () => {
     expect(stickerSet).not.toBeNull();
     expect(me).not.toBeNull();
     if (stickerSet && me) {
@@ -2133,7 +2137,7 @@ setStickerSetThumbnail(), setStickerMaskPosition(), .replaceStickerInSet()`, () 
     }
   });
 
-  it('should set sticker keywords', async () => {
+  test('should set sticker keywords', async () => {
     expect(stickerSet).not.toBeNull();
     expect(me).not.toBeNull();
     if (stickerSet && me) {
@@ -2146,7 +2150,7 @@ setStickerSetThumbnail(), setStickerMaskPosition(), .replaceStickerInSet()`, () 
     }
   });
 
-  it('should set sticker title', async () => {
+  test('should set sticker title', async () => {
     expect(stickerSet).not.toBeNull();
     expect(me).not.toBeNull();
     if (stickerSet && me) {
@@ -2159,7 +2163,7 @@ setStickerSetThumbnail(), setStickerMaskPosition(), .replaceStickerInSet()`, () 
     }
   });
 
-  it('should set sticker set thumbnail', async () => {
+  test('should set sticker set thumbnail', async () => {
     expect(stickerSet).not.toBeNull();
     expect(me).not.toBeNull();
     if (stickerSet && me) {
@@ -2174,7 +2178,7 @@ setStickerSetThumbnail(), setStickerMaskPosition(), .replaceStickerInSet()`, () 
     }
   });
 
-  it('should set sticker mask position', async () => {
+  test('should set sticker mask position', async () => {
     expect(stickerSet).not.toBeNull();
     expect(me).not.toBeNull();
     if (stickerSet && me) {
@@ -2192,7 +2196,7 @@ setStickerSetThumbnail(), setStickerMaskPosition(), .replaceStickerInSet()`, () 
     }
   });
 
-  it('should replace sticker in set', async () => {
+  test('should replace sticker in set', async () => {
     expect(stickerSet).not.toBeNull();
     expect(me).not.toBeNull();
     if (stickerSet && me) {
@@ -2259,7 +2263,7 @@ describe('.setStickerPositionInSet(), setCustomEmojiStickerSetThumbnail()', () =
     });
   });
 
-  it('should set sticker position in set', async () => {
+  test('should set sticker position in set', async () => {
     expect(stickerSet).not.toBeNull();
     if (stickerSet) {
       await expect(
@@ -2271,7 +2275,7 @@ describe('.setStickerPositionInSet(), setCustomEmojiStickerSetThumbnail()', () =
     }
   });
 
-  it('should set custom emoji sticker set thumbnail', async () => {
+  test('should set custom emoji sticker set thumbnail', async () => {
     expect(stickerSet).not.toBeNull();
     expect(me).not.toBeNull();
     if (stickerSet && me) {
@@ -2294,7 +2298,7 @@ describe('.setStickerPositionInSet(), setCustomEmojiStickerSetThumbnail()', () =
 });
 
 describe('.sendGame()', () => {
-  it('should send game', async () => {
+  test('should send game', async () => {
     await expect(
       bot.sendGame({
         chat_id: USERID,
@@ -2315,7 +2319,7 @@ describe('.setGameScore()', () => {
     message_id = message.message_id;
   });
 
-  it('should set game score', async () => {
+  test('should set game score', async () => {
     expect(message_id).not.toBeNull();
     if (message_id) {
       await expect(
@@ -2341,7 +2345,7 @@ describe('.setGameScore()', () => {
     message_id = message.message_id;
   });
 
-  it('should set game score', async () => {
+  test('should set game score', async () => {
     expect(message_id).not.toBeNull();
     await expect(
       bot.setGameScore({
@@ -2366,7 +2370,7 @@ describe('.getGameHighScores()', () => {
     message_id = message.message_id;
   });
 
-  it('should get game high scores', async () => {
+  test('should get game high scores', async () => {
     expect(message_id).not.toBeNull();
     await expect(
       bot.getGameHighScores({
@@ -2379,7 +2383,7 @@ describe('.getGameHighScores()', () => {
 });
 
 describe('.setPassportDataErrors()', () => {
-  it('should set passport data errors', async () => {
+  test('should set passport data errors', async () => {
     await expect(
       bot.setPassportDataErrors({
         user_id: USERID,
