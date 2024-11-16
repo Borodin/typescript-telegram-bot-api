@@ -3,7 +3,7 @@ import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
 import { FileOptions, TelegramBot } from '../src';
 import { TelegramError } from '../src/errors';
-import { ForumTopic, File, User, StickerSet, Update } from '../src';
+import { ForumTopic, File, User, StickerSet, Update } from '../src/types';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
 const USERID = parseInt(process.env.TEST_USER_ID as string);

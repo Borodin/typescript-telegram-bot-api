@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import axios from 'axios';
-import { TelegramBot, Message, Update } from '../src';
+import { Update, Message } from '../src/types';
+import { TelegramBot } from '../src';
 import MockAdapter from 'axios-mock-adapter';
 
 const mock = new MockAdapter(axios);

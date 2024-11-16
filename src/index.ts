@@ -2589,5 +2589,3 @@ export type MethodReturn<T extends keyof TelegramBot> = T extends unknown
       ? U
       : never
   : never;
-
-export * from './types';
