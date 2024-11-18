@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { createReadStream } from 'fs';
 import { readFile } from 'fs/promises';
-import { FileOptions, TelegramBot, ForumTopic, File, User, StickerSet, Update  } from '../src';
+import { FileOptions, TelegramBot, ForumTopic, File, User, StickerSet, Update } from '../src';
 import { TelegramError } from '../src/errors';
 
 const TOKEN = process.env.TEST_TELEGRAM_TOKEN as string;
@@ -163,10 +163,6 @@ describe('.getMe()', () => {
 });
 
 describe('.logOut()', () => {
-  test('should have a logOut method', () => {
-    expect(bot.logOut).toBeDefined();
-  });
-
   test('should log out the bot', async () => {
     await expect(
       new TelegramBot({
@@ -177,10 +173,6 @@ describe('.logOut()', () => {
 });
 
 describe('.close()', () => {
-  test('should have a close method', () => {
-    expect(bot.close).toBeDefined();
-  });
-
   test('should close the bot', async () => {
     await expect(
       new TelegramBot({
