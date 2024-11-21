@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest --detectOpenHandles --coverage",
+    "test": "jest --runInBand --verbose --detectOpenHandles --coverage",
     "lint": "eslint '{src,tests}/**/*.ts'",
     "format": "prettier --write '{src,tests}/**/*.ts'",
     "format:check": "prettier --check '{src,tests}/**/*.ts'",
