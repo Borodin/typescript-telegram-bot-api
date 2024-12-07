@@ -75,6 +75,8 @@ export * from './Game';
 export * from './GameHighScore';
 export * from './GeneralForumTopicHidden';
 export * from './GeneralForumTopicUnhidden';
+export * from './Gift';
+export * from './Gifts';
 export * from './Giveaway';
 export * from './GiveawayCompleted';
 export * from './GiveawayCreated';

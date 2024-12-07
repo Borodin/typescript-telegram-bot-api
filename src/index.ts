@@ -64,6 +64,7 @@ import {
   InputPaidMedia,
   WebhookInfo,
   Currencies,
+  Gifts,
 } from './types/';
 import * as TelegramTypes from './types/';
 
@@ -1155,6 +1156,20 @@ export class TelegramBot extends EventEmitter {
     limit?: number;
   }): Promise<UserProfilePhotos> {
     return await this.callApi('getUserProfilePhotos', options);
+  }
+
+  /**
+   * ## setUserEmojiStatus
+   * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the
+   * Mini App method requestEmojiStatusAccess. Returns True on success.
+   * @see https://core.telegram.org/bots/api#setuseremojistatus
+   */
+  async setUserEmojiStatus(options: {
+    user_id: number;
+    emoji_status_custom_emoji_id?: string;
+    emoji_status_expiration_date?: number;
+  }): Promise<boolean> {
+    return await this.callApi('setUserEmojiStatus', options);
   }
 
   /**
@@ -2388,12 +2403,14 @@ export class TelegramBot extends EventEmitter {
    * @see https://core.telegram.org/bots/api#createinvoicelink
    */
   async createInvoiceLink<T extends Currencies | 'XTR'>(options: {
+    business_connection_id?: string;
     title: string;
     description: string;
     payload: string;
     provider_token?: string;
     currency: T;
     prices: T extends 'XTR' ? [LabeledPrice] : LabeledPrice[];
+    subscription_period?: T extends 'XTR' ? number : never;
     max_tip_amount?: T extends 'XTR' ? never : number;
     suggested_tip_amounts?: number[];
     provider_data?: string;
@@ -2477,6 +2494,19 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## editUserStarSubscription
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success.
+   * @see https://core.telegram.org/bots/api#edituserstarsubscription
+   */
+  async editUserStarSubscription(options: {
+    user_id: number;
+    telegram_payment_charge_id: string;
+    is_canceled: boolean;
+  }): Promise<true> {
+    return await this.callApi('editUserStarSubscription', options);
+  }
+
+  /**
    * ## setPassportDataErrors
    * Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able
    * to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the
@@ -2555,6 +2585,33 @@ export class TelegramBot extends EventEmitter {
     },
   ): Promise<GameHighScore[]> {
     return await this.callApi('getGameHighScores', options);
+  }
+
+  /**
+   * ## getAvailableGifts
+   * Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object.
+   * @see https://core.telegram.org/bots/api#getavailablegifts
+   */
+  async getAvailableGifts(): Promise<Gifts> {
+    return await this.callApi('getAvailableGifts');
+  }
+
+  /**
+   * ## sendGift
+   * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success.
+   * @see https://core.telegram.org/bots/api#sendgift
+   */
+  async sendGift(options: {
+    user_id: number;
+    gift_id: string;
+    text?: string;
+    text_parse_mode?: ParseMode;
+    text_entities?: MessageEntity[];
+  }): Promise<true> {
+    return await this.callApi('sendGift', {
+      ...options,
+      text_entities: new JSONSerialized(options.text_entities),
+    });
   }
 
   on<U extends keyof allEmittedTypes>(event: U, listener: (eventData: NonNullable<allEmittedTypes[U]>) => void): this {

@@ -727,6 +727,17 @@ describe('.getUserProfilePhotos()', () => {
   });
 });
 
+describe('.setUserEmojiStatus()', () => {
+  test('should set user emoji status', async () => {
+    await expect(
+      bot.setUserEmojiStatus({
+        user_id: USERID,
+        emoji_status_custom_emoji_id: '',
+      }),
+    ).rejects.toThrow("403 Forbidden: not enough rights to change the user's emoji status");
+  });
+});
+
 describe('.getFile()', () => {
   test('should get file', async () => {
     await expect(
@@ -1951,7 +1962,19 @@ describe('.refundStarPayment()', () => {
         user_id: USERID,
         telegram_payment_charge_id: 'PAYMENT_ID',
       }),
-    ).rejects.toThrow('400 Bad Request: CHARGE_NOT_FOUND');
+    ).rejects.toThrow('400 Bad Request: CHARGE_ID_EMPTY');
+  });
+});
+
+describe('.editUserStarSubscription()', () => {
+  test('should edit user star subscription', async () => {
+    await expect(
+      bot.editUserStarSubscription({
+        user_id: USERID,
+        telegram_payment_charge_id: 'CHARGE_ID',
+        is_canceled: true,
+      }),
+    ).rejects.toThrow('400 Bad Request: CHARGE_ID_INVALID');
   });
 });
 
@@ -2385,5 +2408,25 @@ describe('.setPassportDataErrors()', () => {
         ],
       }),
     ).rejects.toThrow('400 Bad Request: DATA_HASH_SIZE_INVALID');
+  });
+});
+
+describe('.getAvailableGifts()', () => {
+  test('should get available gifts', async () => {
+    await expect(bot.getAvailableGifts()).resolves.toHaveProperty('gifts');
+  });
+});
+
+describe('.sendGift()', () => {
+  test('should send gift', async () => {
+    const gifts = (await bot.getAvailableGifts()).gifts;
+
+    await expect(
+      bot.sendGift({
+        user_id: USERID,
+        gift_id: gifts[0].id,
+        text: 'text',
+      }),
+    ).rejects.toThrow('400 Bad Request: BALANCE_TOO_LOW');
   });
 });
