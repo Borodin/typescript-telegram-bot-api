@@ -1,4 +1,4 @@
-import { TransactionPartner } from './TransactionPartner';
+import { TransactionPartner } from './';
 
 /**
  * ## StarTransaction
@@ -17,6 +17,11 @@ export type StarTransaction = {
    * Number of Telegram Stars transferred by the transaction
    */
   amount: number;
+
+  /**
+   * Optional. The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999
+   */
+  nanostar_amount?: number;
 
   /**
    * Date the transaction was created in Unix time

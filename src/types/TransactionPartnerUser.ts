@@ -1,6 +1,4 @@
-import { User } from './User';
-import { PaidMedia } from './PaidMedia';
-import { Gift } from './Gift';
+import { User, PaidMedia, Gift, AffiliateInfo } from './';
 
 /**
  * ## TransactionPartnerUser
@@ -17,6 +15,11 @@ export type TransactionPartnerUser = {
    * Information about the user
    */
   user: User;
+
+  /**
+   * Optional. Information about the affiliate that received a commission via this transaction
+   */
+  affiliate?: AffiliateInfo;
 
   /**
    * Optional. Bot-specified invoice payload

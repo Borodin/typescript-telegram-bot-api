@@ -1,3 +1,4 @@
+export * from './AffiliateInfo';
 export * from './Animation';
 export * from './Audio';
 export * from './BackgroundFill';
@@ -206,6 +207,7 @@ export * from './PaidMediaPreview';
 export * from './PaidMediaPurchased';
 export * from './PaidMediaVideo';
 export * from './TransactionPartner';
+export * from './TransactionPartnerAffiliateProgram';
 export * from './TransactionPartnerFragment';
 export * from './TransactionPartnerOther';
 export * from './TransactionPartnerTelegramAds';
