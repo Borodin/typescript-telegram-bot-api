@@ -24,6 +24,21 @@ export type SuccessfulPayment = {
   invoice_payload: string;
 
   /**
+   * Optional. Expiration date of the subscription, in Unix time; for recurring payments only
+   */
+  subscription_expiration_date?: number;
+
+  /**
+   * Optional. True, if the payment is a recurring payment for a subscription
+   */
+  is_recurring?: boolean;
+
+  /**
+   * Optional. True, if the payment is the first payment for a subscription
+   */
+  is_first_recurring?: boolean;
+
+  /**
    * Optional. Identifier of the shipping option chosen by the user
    */
   shipping_option_id?: string;

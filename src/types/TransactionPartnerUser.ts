@@ -1,5 +1,6 @@
 import { User } from './User';
 import { PaidMedia } from './PaidMedia';
+import { Gift } from './Gift';
 
 /**
  * ## TransactionPartnerUser
@@ -23,6 +24,11 @@ export type TransactionPartnerUser = {
   invoice_payload: string;
 
   /**
+   * Optional. The duration of the paid subscription
+   */
+  subscription_period?: number;
+
+  /**
    * Optional. Information about the paid media bought by the user
    */
   paid_media: PaidMedia[];
@@ -31,4 +37,9 @@ export type TransactionPartnerUser = {
    * Optional. Bot-specified paid media payload
    */
   paid_media_payload: string;
+
+  /**
+   * Optional. The gift sent to the user by the bot
+   */
+  gift?: Gift;
 };
