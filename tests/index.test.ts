@@ -2430,3 +2430,45 @@ describe('.sendGift()', () => {
     ).rejects.toThrow('400 Bad Request: BALANCE_TOO_LOW');
   });
 });
+
+describe('.verifyUser()', () => {
+  test('should verify user', async () => {
+    await expect(
+      bot.verifyUser({
+        user_id: USERID,
+        custom_description: 'description',
+      }),
+    ).rejects.toThrow('400 Bad Request: BOT_VERIFIER_FORBIDDEN');
+  });
+});
+
+describe('.verifyChat()', () => {
+  test('should verify chat', async () => {
+    await expect(
+      bot.verifyChat({
+        chat_id: USERID,
+        custom_description: 'description',
+      }),
+    ).rejects.toThrow('400 Bad Request: BOT_VERIFIER_FORBIDDEN');
+  });
+});
+
+describe('.removeUserVerification()', () => {
+  test('should remove user verification', async () => {
+    await expect(
+      bot.removeUserVerification({
+        user_id: USERID,
+      }),
+    ).rejects.toThrow('400 Bad Request: BOT_VERIFIER_FORBIDDEN');
+  });
+});
+
+describe('.removeChatVerification()', () => {
+  test('should remove chat verification', async () => {
+    await expect(
+      bot.removeChatVerification({
+        chat_id: USERID,
+      }),
+    ).rejects.toThrow('400 Bad Request: BOT_VERIFIER_FORBIDDEN');
+  });
+});

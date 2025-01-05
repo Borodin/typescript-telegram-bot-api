@@ -37,11 +37,6 @@ export type InlineQueryResultArticle = {
   url?: string;
 
   /**
-   * Optional. Pass True if you don't want the URL to be shown in the message
-   */
-  hide_url?: boolean;
-
-  /**
    * Optional. Short description of the result
    */
   description?: string;

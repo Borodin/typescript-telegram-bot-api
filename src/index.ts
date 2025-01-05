@@ -2604,6 +2604,7 @@ export class TelegramBot extends EventEmitter {
   async sendGift(options: {
     user_id: number;
     gift_id: string;
+    pay_for_upgrade?: boolean;
     text?: string;
     text_parse_mode?: ParseMode;
     text_entities?: MessageEntity[];
@@ -2612,6 +2613,44 @@ export class TelegramBot extends EventEmitter {
       ...options,
       text_entities: new JSONSerialized(options.text_entities),
     });
+  }
+
+  /**
+   * ## verifyUser
+   * Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.
+   * @see https://core.telegram.org/bots/api#verifyuser
+   */
+  async verifyUser(options: { user_id: number; custom_description?: string }): Promise<true> {
+    return await this.callApi('verifyUser', options);
+  }
+
+  /**
+   * ## verifyChat
+   * Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
+   * @see https://core.telegram.org/bots/api#verifychat
+   */
+  async verifyChat(options: { chat_id: number | string; custom_description?: string }): Promise<true> {
+    return await this.callApi('verifyChat', options);
+  }
+
+  /**
+   * ## removeUserVerification
+   * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#removeuserverification
+   */
+  async removeUserVerification(options: { user_id: number }): Promise<true> {
+    return await this.callApi('removeUserVerification', options);
+  }
+
+  /**
+   * ## removeChatVerification
+   * Removes verification from a chat which is currently verified on behalf of the organization represented by the bot.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#removechatverification
+   */
+  async removeChatVerification(options: { chat_id: number | string }): Promise<true> {
+    return await this.callApi('removeChatVerification', options);
   }
 
   on<U extends keyof allEmittedTypes>(event: U, listener: (eventData: NonNullable<allEmittedTypes[U]>) => void): this {
