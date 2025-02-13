@@ -184,6 +184,12 @@ export type ChatFullInfo = {
    * Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only
    * for channel chats.
    */
+  can_send_gift?: true;
+
+  /**
+   * Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only
+   * for channel chats.
+   */
   can_send_paid_media?: boolean;
 
   /**

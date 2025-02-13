@@ -38,6 +38,16 @@ export type Video = {
   thumbnail?: PhotoSize;
 
   /**
+   * Optional. Available sizes of the cover of the video in the message
+   */
+  cover?: PhotoSize[];
+
+  /**
+   * Optional. Timestamp in seconds from which the video will play in the message
+   */
+  start_timestamp?: number;
+
+  /**
    * Optional. Original filename as defined by the sender
    */
   file_name?: string;

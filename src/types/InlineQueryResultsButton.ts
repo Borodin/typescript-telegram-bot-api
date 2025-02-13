@@ -1,5 +1,5 @@
 import { WebAppInfo } from './';
-import { AtMostOne } from './Update';
+import { AtMostOne } from '../utils';
 
 /**
  * ## InlineQueryResultsButton

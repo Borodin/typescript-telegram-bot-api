@@ -208,6 +208,7 @@ export * from './PaidMediaPurchased';
 export * from './PaidMediaVideo';
 export * from './TransactionPartner';
 export * from './TransactionPartnerAffiliateProgram';
+export * from './TransactionPartnerChat';
 export * from './TransactionPartnerFragment';
 export * from './TransactionPartnerOther';
 export * from './TransactionPartnerTelegramAds';

@@ -1,5 +1,5 @@
 import { WebAppInfo, KeyboardButtonRequestChat, KeyboardButtonPollType, KeyboardButtonRequestUsers } from './';
-import { AtMostOne } from './Update';
+import { AtMostOne } from '../utils';
 
 /**
  * ## KeyboardButton

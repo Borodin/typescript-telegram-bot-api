@@ -67,6 +67,7 @@ import {
   Gifts,
 } from './types/';
 import * as TelegramTypes from './types/';
+import { ExactlyOne } from './utils';
 
 const wait: (ms: number) => Promise<void> = promisify(setTimeout);
 
@@ -499,6 +500,7 @@ export class TelegramBot extends EventEmitter {
     chat_id: number | string;
     message_thread_id?: number;
     from_chat_id: number | string;
+    video_start_timestamp?: number;
     disable_notification?: boolean;
     protect_content?: boolean;
     message_id: number;
@@ -543,6 +545,7 @@ export class TelegramBot extends EventEmitter {
     message_thread_id?: number;
     from_chat_id: number | string;
     message_id: number;
+    video_start_timestamp?: number;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
@@ -721,6 +724,8 @@ export class TelegramBot extends EventEmitter {
     width?: number;
     height?: number;
     thumbnail?: InputFile | string;
+    cover?: InputFile | string;
+    start_timestamp?: number;
     caption?: string;
     parse_mode?: ParseMode;
     caption_entities?: MessageEntity[];
@@ -2601,14 +2606,19 @@ export class TelegramBot extends EventEmitter {
    * Sends a gift to the given user. The gift can't be converted to Telegram Stars by the user. Returns True on success.
    * @see https://core.telegram.org/bots/api#sendgift
    */
-  async sendGift(options: {
-    user_id: number;
-    gift_id: string;
-    pay_for_upgrade?: boolean;
-    text?: string;
-    text_parse_mode?: ParseMode;
-    text_entities?: MessageEntity[];
-  }): Promise<true> {
+
+  async sendGift(
+    options: ExactlyOne<{
+      user_id?: number;
+      chat_id?: number | string;
+    }> & {
+      gift_id: string;
+      pay_for_upgrade?: boolean;
+      text?: string;
+      text_parse_mode?: ParseMode;
+      text_entities?: MessageEntity[];
+    },
+  ): Promise<true> {
     return await this.callApi('sendGift', {
       ...options,
       text_entities: new JSONSerialized(options.text_entities),
