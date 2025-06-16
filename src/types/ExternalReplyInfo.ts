@@ -21,6 +21,7 @@ import {
   Dice,
   Invoice,
   PaidMediaInfo,
+  Checklist,
 } from './';
 
 /**
@@ -105,6 +106,11 @@ export type ExternalReplyInfo = {
    * Optional. True, if the message media is covered by a spoiler animation
    */
   has_media_spoiler?: boolean;
+
+  /**
+   * Optional. Message is a checklist
+   */
+  checklist?: Checklist;
 
   /**
    * Optional. Message is a shared contact, information about the contact

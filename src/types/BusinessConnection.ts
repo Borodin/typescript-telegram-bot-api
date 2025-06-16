@@ -1,4 +1,4 @@
-import { User } from './';
+import { User, BusinessBotRights } from './';
 
 /**
  * ## BusinessConnection
@@ -30,9 +30,9 @@ export type BusinessConnection = {
   date: number;
 
   /**
-   * True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
+   * Optional. Rights of the business bot
    */
-  can_reply: boolean;
+  rights?: BusinessBotRights;
 
   /**
    * True, if the connection is active

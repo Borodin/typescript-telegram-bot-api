@@ -26,6 +26,7 @@ import {
   InputMediaPhoto,
   InputMediaVideo,
   InputPollOption,
+  InputProfilePhoto,
   UserProfilePhotos,
   ChatPermissions,
   ChatInviteLink,
@@ -65,6 +66,13 @@ import {
   WebhookInfo,
   Currencies,
   Gifts,
+  AcceptedGiftTypes,
+  StarAmount,
+  OwnedGifts,
+  InputStoryContent,
+  Story,
+  StoryArea,
+  Checklist,
 } from './types/';
 import * as TelegramTypes from './types/';
 import { ExactlyOne } from './utils';
@@ -2481,6 +2489,16 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## getMyStarBalance
+   * A method to get the current Telegram Stars balance of the bot. Requires no parameters.
+   * On success, returns a StarAmount object.
+   * @see https://core.telegram.org/bots/api#getmystarbalance
+   */
+  async getMyStarBalance(): Promise<StarAmount> {
+    return await this.callApi('getMyStarBalance');
+  }
+
+  /**
    * ## getStarTransactions
    * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
    * @see https://core.telegram.org/bots/api#getstartransactions
@@ -2661,6 +2679,338 @@ export class TelegramBot extends EventEmitter {
    */
   async removeChatVerification(options: { chat_id: number | string }): Promise<true> {
     return await this.callApi('removeChatVerification', options);
+  }
+
+  /**
+   * ## readBusinessMessage
+   * Marks incoming message as read on behalf of a business account. Requires
+   * the can_read_messages business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#readbusinessmessage
+   */
+  async readBusinessMessage(options: {
+    business_connection_id: string;
+    chat_id: number | string;
+    message_id: number;
+  }): Promise<true> {
+    return await this.callApi('readBusinessMessage', options);
+  }
+
+  /**
+   * ## deleteBusinessMessages
+   * Delete messages on behalf of a business account. Requires
+   * the can_delete_sent_messages business bot right to delete messages sent by
+   * the bot itself, or the can_delete_all_messages business bot right to delete
+   * any message. Returns True on success.
+   * @see https://core.telegram.org/bots/api#deletebusinessmessages
+   */
+  async deleteBusinessMessages(options: { business_connection_id: string; message_ids: number[] }): Promise<true> {
+    return await this.callApi('deleteBusinessMessages', options);
+  }
+
+  /**
+   * ## setBusinessAccountName
+   * Changes the first and last name of a managed business account. Requires the
+   * can_change_name business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#setbusinessaccountname
+   */
+  async setBusinessAccountName(options: {
+    business_connection_id: string;
+    first_name: string;
+    last_name?: string;
+  }): Promise<true> {
+    return await this.callApi('setBusinessAccountName', options);
+  }
+
+  /**
+   * ## setBusinessAccountUsername
+   * Changes the username of a managed business account. Requires the
+   * can_change_username business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#setbusinessaccountusername
+   */
+  async setBusinessAccountUsername(options: { business_connection_id: string; username: string }): Promise<true> {
+    return await this.callApi('setBusinessAccountUsername', options);
+  }
+
+  /**
+   * ## setBusinessAccountBio
+   * Changes the bio of a managed business account. Requires the
+   * can_change_bio business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#setbusinessaccountbio
+   */
+  async setBusinessAccountBio(options: { business_connection_id: string; bio: string }): Promise<true> {
+    return await this.callApi('setBusinessAccountBio', options);
+  }
+
+  /**
+   * ## setBusinessAccountProfilePhoto
+   * Changes the profile photo of a managed business account. Requires the
+   * can_edit_profile_photo business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#setbusinessaccountprofilephoto
+   */
+  async setBusinessAccountProfilePhoto(options: {
+    business_connection_id: string;
+    photo: InputProfilePhoto;
+    is_public?: boolean;
+  }): Promise<true> {
+    return await this.callApi('setBusinessAccountProfilePhoto', {
+      ...options,
+      photo: new JSONSerialized(options.photo),
+    });
+  }
+
+  /**
+   * ## removeBusinessAccountProfilePhoto
+   * Removes the current profile photo of a managed business account.
+   * Requires the can_edit_profile_photo business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#removebusinessaccountprofilephoto
+   */
+  async removeBusinessAccountProfilePhoto(options: {
+    business_connection_id: string;
+    is_public?: boolean;
+  }): Promise<true> {
+    return await this.callApi('removeBusinessAccountProfilePhoto', options);
+  }
+
+  /**
+   * ## setBusinessAccountGiftSettings
+   * Changes the privacy settings pertaining to incoming gifts in a managed
+   * business account. Requires the can_change_gift_settings business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#setbusinessaccountgiftsettings
+   */
+  async setBusinessAccountGiftSettings(options: {
+    business_connection_id: string;
+    show_gift_button: boolean;
+    accepted_gift_types: AcceptedGiftTypes;
+  }): Promise<true> {
+    return await this.callApi('setBusinessAccountGiftSettings', {
+      ...options,
+      accepted_gift_types: new JSONSerialized(options.accepted_gift_types),
+    });
+  }
+
+  /**
+   * ## getBusinessAccountStarBalance
+   * Returns the amount of Telegram Stars owned by a managed business account.
+   * Requires the can_view_gifts_and_stars business bot right.
+   * Returns StarAmount on success.
+   * @see https://core.telegram.org/bots/api#getbusinessaccountstarbalance
+   */
+  async getBusinessAccountStarBalance(options: { business_connection_id: string }): Promise<StarAmount> {
+    return await this.callApi('getBusinessAccountStarBalance', options);
+  }
+
+  /**
+   * ## transferBusinessAccountStars
+   * Transfers Telegram Stars from the business account balance to the bot's
+   * balance. Requires the can_transfer_stars business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#transferbusinessaccountstars
+   */
+  async transferBusinessAccountStars(options: { business_connection_id: string; star_count: number }): Promise<true> {
+    return await this.callApi('transferBusinessAccountStars', options);
+  }
+
+  /**
+   * ## getBusinessAccountGifts
+   * Returns the gifts received and owned by a managed business account.
+   * Requires the can_view_gifts_and_stars business bot right.
+   * Returns OwnedGifts on success.
+   * @see https://core.telegram.org/bots/api#getbusinessaccountgifts
+   */
+  async getBusinessAccountGifts(options: {
+    business_connection_id: string;
+    exclude_unsaved?: boolean;
+    exclude_saved?: boolean;
+    exclude_unlimited?: boolean;
+    exclude_limited?: boolean;
+    exclude_unique?: boolean;
+    sort_by_price?: boolean;
+    offset?: string;
+    limit?: number;
+  }): Promise<OwnedGifts> {
+    return await this.callApi('getBusinessAccountGifts', {
+      ...options,
+    });
+  }
+
+  /**
+   * ## convertGiftToStars
+   * Converts a given regular gift to Telegram Stars. Requires the
+   * can_convert_gifts_to_stars business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#convertgifttostars
+   */
+  async convertGiftToStars(options: { business_connection_id: string; owned_gift_id: string }): Promise<true> {
+    return await this.callApi('convertGiftToStars', options);
+  }
+
+  /**
+   * ## upgradeGift
+   * Upgrades a given regular gift to a unique gift. Requires the
+   * can_transfer_and_upgrade_gifts business bot right. Additionally requires
+   * the can_transfer_stars business bot right if the upgrade is paid.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#upgradegift
+   */
+  async upgradeGift(options: {
+    business_connection_id: string;
+    owned_gift_id: string;
+    keep_original_details?: boolean;
+    star_count?: number;
+  }): Promise<true> {
+    return await this.callApi('upgradeGift', {
+      ...options,
+    });
+  }
+
+  /**
+   * ## transferGift
+   * Transfers an owned unique gift to another user. Requires the
+   * can_transfer_and_upgrade_gifts business bot right. Requires
+   * can_transfer_stars business bot right if the transfer is paid.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#transfertgift
+   */
+  async transferGift(options: {
+    business_connection_id: string;
+    owned_gift_id: string;
+    new_owner_chat_id: number;
+    star_count?: number;
+  }): Promise<true> {
+    return await this.callApi('transferGift', {
+      ...options,
+    });
+  }
+
+  /**
+   * ## postStory
+   * Posts a story on behalf of a managed business account. Requires the
+   * can_manage_stories business bot right.
+   * Returns Story on success.
+   * @see https://core.telegram.org/bots/api#poststory
+   */
+  async postStory(options: {
+    business_connection_id: string;
+    content: InputStoryContent;
+    active_period: number;
+    caption?: string;
+    parse_mode?: string;
+    caption_entities?: MessageEntity[];
+    areas?: StoryArea[];
+    post_to_chat_page?: boolean;
+    protect_content?: boolean;
+  }): Promise<Story> {
+    return await this.callApi('postStory', {
+      ...options,
+      caption_entities: new JSONSerialized(options.caption_entities),
+      content: new JSONSerialized(options.content),
+      areas: new JSONSerialized(options.areas),
+    });
+  }
+
+  /**
+   * ## editStory
+   * Edits a story previously posted by the bot on behalf of a managed business
+   * account. Requires the can_manage_stories business bot right.
+   * Returns Story on success.
+   * @see https://core.telegram.org/bots/api#editstory
+   */
+  async editStory(options: {
+    business_connection_id: string;
+    story_id: string;
+    content?: InputStoryContent;
+    caption?: string;
+    parse_mode?: string;
+    caption_entities?: MessageEntity[];
+    areas?: StoryArea[];
+  }): Promise<Story> {
+    return await this.callApi('editStory', {
+      ...options,
+      caption_entities: new JSONSerialized(options.caption_entities),
+      content: options.content ? new JSONSerialized(options.content) : undefined,
+      areas: options.areas ? new JSONSerialized(options.areas) : undefined,
+    });
+  }
+
+  /**
+   * ## deleteStory
+   * Deletes a story previously posted by the bot on behalf of a managed
+   * business account. Requires the can_manage_stories business bot right.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#deletestory
+   */
+  async deleteStory(options: { business_connection_id: string; story_id: string }): Promise<true> {
+    return await this.callApi('deleteStory', options);
+  }
+
+  /**
+   * ## giftPremiumSubscription
+   * Gifts a Telegram Premium subscription to the given user.
+   * Returns True on success.
+   * @see https://core.telegram.org/bots/api#giftpremiumsubscription
+   */
+  async giftPremiumSubscription(options: {
+    user_id: number;
+    month_count: number;
+    star_count: number;
+    text?: string;
+    text_parse_mode?: string;
+    text_entities?: MessageEntity[];
+  }): Promise<true> {
+    return await this.callApi('giftPremiumSubscription', {
+      ...options,
+      text_entities: new JSONSerialized(options.text_entities),
+    });
+  }
+
+  /**
+   * ## sendChecklist
+   * Use this method to send a checklist on behalf of a connected business account.
+   * On success, the sent Message is returned.
+   * @see https://core.telegram.org/bots/api#sendchecklist
+   */
+  async sendChecklist(options: {
+    business_connection_id: string;
+    chat_id: number;
+    message_thread_id?: number;
+    checklist: Checklist;
+    disable_notification?: boolean;
+    protect_content?: boolean;
+    message_effect_id?: string;
+    reply_parameters?: ReplyParameters;
+    reply_markup?: InlineKeyboardMarkup;
+  }): Promise<Message> {
+    return await this.callApi('sendChecklist', {
+      ...options,
+      checklist: new JSONSerialized(options.checklist),
+    });
+  }
+
+  /**
+   * ## editMessageChecklist
+   * Use this method to edit a checklist on behalf of a connected business account.
+   * On success, the edited Message is returned.
+   * @see https://core.telegram.org/bots/api#editmessagechecklist
+   */
+  async editMessageChecklist(options: {
+    business_connection_id: string;
+    chat_id: number;
+    message_id: number;
+    checklist: Checklist;
+    reply_markup?: InlineKeyboardMarkup;
+  }): Promise<Message> {
+    return await this.callApi('editMessageChecklist', {
+      ...options,
+      checklist: new JSONSerialized(options.checklist),
+      reply_markup: new JSONSerialized(options.reply_markup),
+    });
   }
 
   on<U extends keyof allEmittedTypes>(event: U, listener: (eventData: NonNullable<allEmittedTypes[U]>) => void): this {

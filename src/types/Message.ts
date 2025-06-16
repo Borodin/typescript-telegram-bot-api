@@ -50,6 +50,13 @@ import {
   ChatShared,
   ChatBoostAdded,
   PaidMediaInfo,
+  GiftInfo,
+  UniqueGiftInfo,
+  PaidMessagePriceChanged,
+  Checklist,
+  ChecklistTasksDone,
+  ChecklistTasksAdded,
+  DirectMessagePriceChanged,
 } from './';
 
 /**
@@ -179,6 +186,11 @@ export type Message = {
   author_signature?: string;
 
   /**
+   * Optional. The number of Telegram Stars that were paid by the sender of the message to send it
+   */
+  paid_star_count?: number;
+
+  /**
    * Optional. For text messages, the actual UTF-8 text of the message
    */
   text?: string;
@@ -270,6 +282,11 @@ export type Message = {
    * Optional. True, if the message media is covered by a spoiler animation
    */
   has_media_spoiler?: boolean;
+
+  /**
+   * Optional. Optional. Message is a checklist
+   */
+  checklist?: Checklist;
 
   /**
    * Optional. Message is a shared contact, information about the contact
@@ -400,6 +417,16 @@ export type Message = {
   chat_shared?: ChatShared;
 
   /**
+   * Optional. Service message: a regular gift was sent or received
+   */
+  gift?: GiftInfo;
+
+  /**
+   * Optional. Service message: a unique gift was sent or received
+   */
+  unique_gift?: UniqueGiftInfo;
+
+  /**
    * Optional. The domain name of the website on which the user has logged in. [More about Telegram Login](https://core.telegram.org/widgets/login)
    */
   connected_website?: string;
@@ -431,6 +458,22 @@ export type Message = {
    * Optional. Service message: chat background set
    */
   chat_background_set?: ChatBackground;
+
+  /**
+   * Optional. Service message: some tasks in a checklist were marked as done or not done
+   */
+  checklist_tasks_done?: ChecklistTasksDone;
+
+  /**
+   * Optional. Service message: tasks were added to a checklist
+   */
+  checklist_tasks_added?: ChecklistTasksAdded;
+
+  /**
+   * Optional. Service message: the price for paid messages in the corresponding
+   * direct messages chat of a channel has changed
+   */
+  direct_message_price_changed?: DirectMessagePriceChanged;
 
   /**
    * Optional. Service message: forum topic created
@@ -481,6 +524,11 @@ export type Message = {
    * Optional. Service message: a giveaway without public winners was completed
    */
   giveaway_completed?: GiveawayCompleted;
+
+  /**
+   * Optional. Service message: the price for paid messages has changed in the chat
+   */
+  paid_message_price_changed?: PaidMessagePriceChanged;
 
   /**
    * Optional. Service message: video chat scheduled
