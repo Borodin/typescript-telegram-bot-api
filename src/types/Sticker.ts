@@ -44,6 +44,11 @@ export type Sticker = {
   is_voice: boolean;
 
   /**
+   * True, if the sticker is a video sticker
+   */
+  is_video: boolean;
+
+  /**
    * Optional. Sticker thumbnail in the .WEBP or .JPG format
    */
   thumbnail?: PhotoSize;
