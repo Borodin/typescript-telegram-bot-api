@@ -9,6 +9,7 @@ import {
   ReactionType,
   ChatLocation,
   BusinessOpeningHours,
+  AcceptedGiftTypes,
 } from './';
 
 /**
@@ -181,10 +182,9 @@ export type ChatFullInfo = {
   permissions?: ChatPermissions;
 
   /**
-   * Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only
-   * for channel chats.
+   * Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
    */
-  can_send_gift?: true;
+  accepted_gift_types: AcceptedGiftTypes;
 
   /**
    * Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only
