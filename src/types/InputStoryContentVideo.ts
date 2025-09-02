@@ -1,49 +1,36 @@
+import { InputFile } from './InputFile';
+
 /**
  * ## InputStoryContentVideo
- * Represents a video to be used as story content.
+ * Describes a video to post as a story.
  * @see https://core.telegram.org/bots/api#inputstorycontentvideo
  */
 export type InputStoryContentVideo = {
   /**
-   * Type of the story content, must be 'video'
+   * Type of the content, must be video
    */
   type: 'video';
 
   /**
-   * File to send. Pass a file_id to send a file that exists on the Telegram
-   * servers (recommended), pass an HTTP URL for Telegram to get a file from the
-   * Internet, or pass “attach://<file_attach_name>” to upload a new one using
-   * multipart/form-data under <file_attach_name> name.
+   * The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec,
+   * with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can
+   * only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the video was uploaded using
+   * multipart/form-data under <file_attach_name>.
    */
-  media: string;
+  video: InputFile | string;
 
   /**
-   * Optional. Thumbnail of the file sent; can be ignored if thumbnail
-   * generation for the file is supported server-side. The thumbnail should be
-   * in JPEG format and less than 200 kB in size. A thumbnail's width and height
-   * should not exceed 320. Thumbnails can't be reused and can be only uploaded
-   * as a new file, so you can pass “attach://<file_attach_name>” if the
-   * thumbnail was uploaded using multipart/form-data under <file_attach_name>.
-   */
-  thumbnail?: string;
-
-  /**
-   * Optional. Video width
-   */
-  width?: number;
-
-  /**
-   * Optional. Video height
-   */
-  height?: number;
-
-  /**
-   * Optional. Video duration in seconds
+   * Optional. Precise duration of the video in seconds; 0-60
    */
   duration?: number;
 
   /**
-   * Optional. Pass True if the uploaded video is suitable for streaming
+   * Optional. Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0.
    */
-  supports_streaming?: boolean;
+  cover_frame_timestamp?: number;
+
+  /**
+   * Optional. Pass True if the video has no sound
+   */
+  is_animation?: boolean;
 };

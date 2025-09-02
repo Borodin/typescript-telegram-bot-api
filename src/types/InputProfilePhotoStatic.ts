@@ -1,11 +1,13 @@
+import { InputFile } from './InputFile';
+
 /**
  * ## InputProfilePhotoStatic
- * Represents a static profile photo in the .JPG format.
+ * A static profile photo in the .JPG format.
  * @see https://core.telegram.org/bots/api#inputprofilephotostatic
  */
 export type InputProfilePhotoStatic = {
   /**
-   * Type of the profile photo, must be 'static'
+   * Type of the profile photo, must be static
    */
   type: 'static';
 
@@ -14,5 +16,5 @@ export type InputProfilePhotoStatic = {
    * uploaded as a new file, so you can pass “attach://<file_attach_name>” if
    * the photo was uploaded using multipart/form-data under <file_attach_name>.
    */
-  photo: string;
+  photo: InputFile | string;
 };

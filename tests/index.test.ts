@@ -2472,3 +2472,259 @@ describe('.removeChatVerification()', () => {
     ).rejects.toThrow('400 Bad Request: BOT_VERIFIER_FORBIDDEN');
   });
 });
+
+describe('.readBusinessMessage()', () => {
+  test('should read business message', async () => {
+    await expect(
+      bot.readBusinessMessage({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        chat_id: USERID,
+        message_id: 1,
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.deleteBusinessMessages()', () => {
+  test('should delete business messages', async () => {
+    await expect(
+      bot.deleteBusinessMessages({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        message_ids: [1, 2],
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.setBusinessAccountName()', () => {
+  test('should set business account name', async () => {
+    await expect(
+      bot.setBusinessAccountName({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        first_name: 'John',
+        last_name: 'Doe',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.setBusinessAccountUsername()', () => {
+  test('should set business account username', async () => {
+    await expect(
+      bot.setBusinessAccountUsername({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        username: 'testusername',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.setBusinessAccountBio()', () => {
+  test('should set business account bio', async () => {
+    await expect(
+      bot.setBusinessAccountBio({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        bio: 'Test bio',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.setBusinessAccountProfilePhoto()', () => {
+  test('should set business account profile photo', async () => {
+    await expect(
+      bot.setBusinessAccountProfilePhoto({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        photo: { type: 'static', photo: await readFile('tests/data/photo.jpg') },
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.removeBusinessAccountProfilePhoto()', () => {
+  test('should remove business account profile photo', async () => {
+    await expect(
+      bot.removeBusinessAccountProfilePhoto({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.setBusinessAccountGiftSettings()', () => {
+  test('should set business account gift settings', async () => {
+    await expect(
+      bot.setBusinessAccountGiftSettings({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        show_gift_button: true,
+        accepted_gift_types: {
+          unlimited_gifts: true,
+          limited_gifts: true,
+          unique_gifts: true,
+          premium_subscription: true,
+        },
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.getBusinessAccountStarBalance()', () => {
+  test('should get business account star balance', async () => {
+    await expect(
+      bot.getBusinessAccountStarBalance({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.transferBusinessAccountStars()', () => {
+  test('should transfer business account stars', async () => {
+    await expect(
+      bot.transferBusinessAccountStars({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        star_count: 100,
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.getBusinessAccountGifts()', () => {
+  test('should get business account gifts', async () => {
+    await expect(
+      bot.getBusinessAccountGifts({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.convertGiftToStars()', () => {
+  test('should convert gift to stars', async () => {
+    await expect(
+      bot.convertGiftToStars({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        owned_gift_id: 'INVALID_GIFT_ID',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.upgradeGift()', () => {
+  test('should upgrade gift', async () => {
+    await expect(
+      bot.upgradeGift({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        owned_gift_id: 'INVALID_GIFT_ID',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.transferGift()', () => {
+  test('should transfer gift', async () => {
+    await expect(
+      bot.transferGift({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        owned_gift_id: 'INVALID_GIFT_ID',
+        new_owner_chat_id: USERID,
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.postStory()', () => {
+  test('should post story', async () => {
+    await expect(
+      bot.postStory({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        content: {
+          type: 'photo',
+          photo: await readFile('tests/data/photo.jpg'),
+        },
+        active_period: 86400,
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.editStory()', () => {
+  test('should edit story', async () => {
+    await expect(
+      bot.editStory({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        story_id: 'INVALID_STORY_ID',
+        content: {
+          type: 'photo',
+          photo: await readFile('tests/data/photo.jpg'),
+        },
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.deleteStory()', () => {
+  test('should delete story', async () => {
+    await expect(
+      bot.deleteStory({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        story_id: 'INVALID_STORY_ID',
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.giftPremiumSubscription()', () => {
+  test('should gift premium subscription', async () => {
+    await expect(
+      bot.giftPremiumSubscription({
+        user_id: USERID,
+        month_count: 6,
+        star_count: 1500,
+      }),
+    ).rejects.toThrow('400 Bad Request: BALANCE_TOO_LOW');
+  });
+});
+
+describe('.sendChecklist()', () => {
+  test('should send checklist', async () => {
+    await expect(
+      bot.sendChecklist({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        chat_id: USERID,
+        checklist: {
+          title: 'Test Checklist',
+          tasks: [
+            { id: 1, text: 'Task 1' },
+            { id: 2, text: 'Task 2' },
+          ],
+        },
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.editMessageChecklist()', () => {
+  test('should edit message checklist', async () => {
+    await expect(
+      bot.editMessageChecklist({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        chat_id: USERID,
+        message_id: 1,
+        checklist: {
+          title: 'Updated Checklist',
+          tasks: [
+            { id: 1, text: 'Updated Task 1', completion_date: Date.now() / 1000 },
+            { id: 2, text: 'Updated Task 2' },
+          ],
+        },
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
+  });
+});
+
+describe('.getMyStarBalance()', () => {
+  test('should get my star balance', async () => {
+    await expect(bot.getMyStarBalance()).resolves.toHaveProperty('amount', 0);
+  });
+});

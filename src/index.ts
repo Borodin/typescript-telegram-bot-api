@@ -2990,6 +2990,8 @@ export class TelegramBot extends EventEmitter {
     return await this.callApi('sendChecklist', {
       ...options,
       checklist: new JSONSerialized(options.checklist),
+      reply_parameters: new JSONSerialized(options.reply_parameters),
+      reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
 
