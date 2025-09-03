@@ -57,6 +57,12 @@ import {
   ChecklistTasksDone,
   ChecklistTasksAdded,
   DirectMessagePriceChanged,
+  DirectMessagesTopic,
+  SuggestedPostInfo,
+  SuggestedPostApprovalFailed,
+  SuggestedPostDeclined,
+  SuggestedPostPaid,
+  SuggestedPostRefunded,
 } from './';
 
 /**
@@ -74,6 +80,11 @@ export type Message = {
    * Optional. Unique identifier of a message thread to which the message belongs; for supergroups only
    */
   message_thread_id?: number;
+
+  /**
+   * Optional. Information about the direct messages chat topic that contains the message
+   */
+  direct_messages_topic?: DirectMessagesTopic;
 
   /**
    * Optional. Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the
@@ -154,6 +165,11 @@ export type Message = {
   reply_to_story?: Story;
 
   /**
+   * Optional. Identifier of the specific checklist task that is being replied to
+   */
+  reply_to_checklist_task_id?: number;
+
+  /**
    * Optional. Bot through which the message was sent
    */
   via_bot?: User;
@@ -166,13 +182,19 @@ export type Message = {
   /**
    * Optional. True, if the message can't be forwarded
    */
-  has_protected_content?: boolean;
+  has_protected_content?: true;
 
   /**
    * Optional. True, if the message was sent by an implicit action, for example, as an away or a greeting business
    * message, or as a scheduled message
    */
-  is_from_offline?: boolean;
+  is_from_offline?: true;
+
+  /**
+   * Optional. True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the
+   * payment and can't be edited.
+   */
+  is_paid_post?: true;
 
   /**
    * Optional. The unique identifier of a media message group this message belongs to
@@ -205,6 +227,12 @@ export type Message = {
    * options were changed
    */
   link_preview_options?: LinkPreviewOptions;
+
+  /**
+   * Optional. Information about suggested post parameters if the message is a suggested post in a channel direct
+   * messages chat. If the message is an approved or declined suggested post, then it can't be edited.
+   */
+  suggested_post_info?: SuggestedPostInfo;
 
   /**
    * Optional. Unique identifier of the message effect added to the message
@@ -531,6 +559,31 @@ export type Message = {
   paid_message_price_changed?: PaidMessagePriceChanged;
 
   /**
+   * Optional. Service message: a suggested post was approved
+   */
+  suggested_post_approved?: SuggestedPostInfo;
+
+  /**
+   * Optional. Service message: approval of a suggested post has failed
+   */
+  suggested_post_approval_failed?: SuggestedPostApprovalFailed;
+
+  /**
+   * Optional. Service message: a suggested post was declined
+   */
+  suggested_post_declined?: SuggestedPostDeclined;
+
+  /**
+   * Optional. Service message: payment for a suggested post was received
+   */
+  suggested_post_paid?: SuggestedPostPaid;
+
+  /**
+   * Optional. Service message: payment for a suggested post was refunded
+   */
+  suggested_post_refunded?: SuggestedPostRefunded;
+
+  /**
    * Optional. Service message: video chat scheduled
    */
   video_chat_scheduled?: VideoChatScheduled;
@@ -563,35 +616,68 @@ export type Message = {
 
 export const messageTypes = [
   'text',
+  'suggested_post_info',
   'animation',
   'audio',
-  'contact',
-  'dice',
   'document',
-  'game',
-  'invoice',
-  'location',
-  'passport_data',
+  'paid_media',
   'photo',
-  'pinned_message',
-  'poll',
   'sticker',
+  'story',
   'video',
   'video_note',
   'voice',
-  'successful_payment',
-  'refunded_payment',
-  'migrate_from_chat_id',
-  'migrate_to_chat_id',
+  'checklist',
+  'contact',
+  'dice',
+  'game',
+  'poll',
+  'venue',
+  'location',
   'new_chat_members',
-  'new_chat_photo',
-  'new_chat_title',
   'left_chat_member',
+  'new_chat_title',
+  'new_chat_photo',
   'delete_chat_photo',
   'group_chat_created',
   'supergroup_chat_created',
   'channel_chat_created',
   'message_auto_delete_timer_changed',
+  'migrate_to_chat_id',
+  'migrate_from_chat_id',
+  'pinned_message',
+  'invoice',
+  'successful_payment',
+  'refunded_payment',
+  'users_shared',
+  'chat_shared',
+  'gift',
+  'unique_gift',
+  'connected_website',
+  'write_access_allowed',
+  'passport_data',
+  'proximity_alert_triggered',
+  'boost_added',
+  'chat_background_set',
+  'checklist_tasks_done',
+  'checklist_tasks_added',
+  'direct_message_price_changed',
+  'forum_topic_created',
+  'forum_topic_edited',
+  'forum_topic_closed',
+  'forum_topic_reopened',
+  'general_forum_topic_hidden',
+  'general_forum_topic_unhidden',
+  'giveaway_created',
+  'giveaway',
+  'giveaway_winners',
+  'giveaway_completed',
+  'paid_message_price_changed',
+  'suggested_post_approved',
+  'suggested_post_approval_failed',
+  'suggested_post_declined',
+  'suggested_post_paid',
+  'suggested_post_refunded',
   'video_chat_scheduled',
   'video_chat_started',
   'video_chat_ended',

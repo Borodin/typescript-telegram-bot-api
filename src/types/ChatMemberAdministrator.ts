@@ -83,22 +83,28 @@ export type ChatMemberAdministrator = {
    * Optional. True, if the administrator can post messages in the channel, or access channel statistics; for channels
    * only
    */
-  can_post_messages: boolean;
+  can_post_messages?: boolean;
 
   /**
    * Optional. True, if the administrator can edit messages of other users and can pin messages; for channels only
    */
-  can_edit_messages: boolean;
+  can_edit_messages?: boolean;
 
   /**
    * Optional. True, if the user is allowed to pin messages; for groups and supergroups only
    */
-  can_pin_messages: boolean;
+  can_pin_messages?: boolean;
 
   /**
    * Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
    */
-  can_manage_topics: boolean;
+  can_manage_topics?: boolean;
+
+  /**
+   * Optional. True, if the administrator can manage direct messages of the channel and decline suggested posts; for
+   * channels only
+   */
+  can_manage_direct_messages?: boolean;
 
   /**
    * Optional. Custom title for this user

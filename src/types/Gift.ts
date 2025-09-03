@@ -1,4 +1,4 @@
-import { Sticker } from './';
+import { Chat, Sticker } from './';
 
 /**
  * ## Gift
@@ -35,4 +35,9 @@ export type Gift = {
    * Optional. The number of remaining gifts of this type that can be sent; for limited gifts only
    */
   remaining_count?: number;
+
+  /**
+   * Optional. Information about the chat that published the gift
+   */
+  publisher_chat?: Chat;
 };

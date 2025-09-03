@@ -73,6 +73,7 @@ import {
   Story,
   StoryArea,
   Checklist,
+  SuggestedPostParameters,
 } from './types/';
 import * as TelegramTypes from './types/';
 import { ExactlyOne } from './utils';
@@ -438,6 +439,12 @@ export class TelegramBot extends EventEmitter {
     message_thread_id?: number;
 
     /**
+     * Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a
+     * direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
+    /**
      * Text of the message to be sent, 1-4096 characters after entities parsing
      */
     text: string;
@@ -481,6 +488,12 @@ export class TelegramBot extends EventEmitter {
     message_effect_id?: string;
 
     /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
+    /**
      * Description of the message to reply to
      */
     reply_parameters?: ReplyParameters;
@@ -494,6 +507,7 @@ export class TelegramBot extends EventEmitter {
     return await this.callApi('sendMessage', {
       ...options,
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -507,13 +521,30 @@ export class TelegramBot extends EventEmitter {
   async forwardMessage(options: {
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     from_chat_id: number | string;
     video_start_timestamp?: number;
     disable_notification?: boolean;
     protect_content?: boolean;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     message_id: number;
   }): Promise<Message> {
-    return await this.callApi('forwardMessage', options);
+    return await this.callApi('forwardMessage', {
+      ...options,
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
+    });
   }
 
   /**
@@ -529,6 +560,13 @@ export class TelegramBot extends EventEmitter {
   async forwardMessages(options: {
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     from_chat_id: number | string;
     message_ids: number[];
     disable_notification?: boolean;
@@ -551,6 +589,13 @@ export class TelegramBot extends EventEmitter {
   async copyMessage(options: {
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     from_chat_id: number | string;
     message_id: number;
     video_start_timestamp?: number;
@@ -567,6 +612,13 @@ export class TelegramBot extends EventEmitter {
      * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
      */
     allow_paid_broadcast?: boolean;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<MessageId> {
@@ -574,6 +626,7 @@ export class TelegramBot extends EventEmitter {
       ...options,
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -589,6 +642,13 @@ export class TelegramBot extends EventEmitter {
   async copyMessages(options: {
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     from_chat_id: number | string;
     message_ids: number[];
     disable_notification?: boolean;
@@ -614,6 +674,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     photo: InputFile | string;
     caption?: string;
     parse_mode?: ParseMode;
@@ -630,6 +697,13 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -637,6 +711,7 @@ export class TelegramBot extends EventEmitter {
       ...options,
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -653,6 +728,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     audio: InputFile | string;
     caption?: string;
     parse_mode?: ParseMode;
@@ -671,6 +753,13 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -678,6 +767,7 @@ export class TelegramBot extends EventEmitter {
       ...options,
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -690,6 +780,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     document: InputFile | string;
     thumbnail?: InputFile | string;
     caption?: string;
@@ -706,6 +803,13 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -713,6 +817,7 @@ export class TelegramBot extends EventEmitter {
       ...options,
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -727,6 +832,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     video: InputFile | string;
     duration?: number;
     width?: number;
@@ -750,6 +862,13 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -757,6 +876,7 @@ export class TelegramBot extends EventEmitter {
       ...options,
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -771,6 +891,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     animation: InputFile | string;
     duration?: number;
     width?: number;
@@ -791,6 +918,13 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -798,6 +932,7 @@ export class TelegramBot extends EventEmitter {
       ...options,
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -813,6 +948,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     voice: InputFile | string;
     caption?: string;
     parse_mode?: ParseMode;
@@ -828,6 +970,13 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -835,6 +984,7 @@ export class TelegramBot extends EventEmitter {
       ...options,
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -848,6 +998,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     video_note: InputFile | string;
     duration?: number;
     length?: number;
@@ -862,12 +1019,20 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendVideoNote', {
       ...options,
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -879,6 +1044,14 @@ export class TelegramBot extends EventEmitter {
   async sendPaidMedia(options: {
     business_connection_id?: string;
     chat_id: number | string;
+    message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     star_count: number;
     media: InputPaidMedia[];
     payload?: string;
@@ -895,6 +1068,13 @@ export class TelegramBot extends EventEmitter {
      * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
      */
     allow_paid_broadcast?: boolean;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -903,6 +1083,7 @@ export class TelegramBot extends EventEmitter {
       media: new JSONSerialized(options.media),
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -917,6 +1098,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     media: (InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo)[];
     disable_notification?: boolean;
     protect_content?: boolean;
@@ -945,6 +1133,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     latitude: number;
     longitude: number;
     horizontal_accuracy?: number;
@@ -961,12 +1156,20 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendLocation', {
       ...options,
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -979,6 +1182,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     latitude: number;
     longitude: number;
     title: string;
@@ -997,6 +1207,13 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
@@ -1015,6 +1232,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     phone_number: string;
     first_name: string;
     last_name?: string;
@@ -1029,12 +1253,20 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendContact', {
       ...options,
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -1092,6 +1324,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     emoji?: '🎲' | '🎯' | '🏀' | '⚽' | '🎳' | '🎰';
     disable_notification?: boolean;
     protect_content?: boolean;
@@ -1103,12 +1342,20 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendDice', {
       ...options,
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -1277,6 +1524,12 @@ export class TelegramBot extends EventEmitter {
     can_edit_messages?: boolean;
     can_pin_messages?: boolean;
     can_manage_topics?: boolean;
+
+    /**
+     * Pass True if the administrator can manage direct messages within the channel and decline suggested posts;
+     * for channels only
+     */
+    can_manage_direct_messages?: boolean;
   }): Promise<true> {
     return await this.callApi('promoteChatMember', options);
   }
@@ -2117,6 +2370,13 @@ export class TelegramBot extends EventEmitter {
     business_connection_id?: string;
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     sticker: InputFile | string;
     emoji?: string;
     disable_notification?: boolean;
@@ -2129,12 +2389,20 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
   }): Promise<Message> {
     return await this.callApi('sendSticker', {
       ...options,
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -2368,6 +2636,13 @@ export class TelegramBot extends EventEmitter {
   async sendInvoice<T extends Currencies | 'XTR'>(options: {
     chat_id: number | string;
     message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be forwarded; required if the message is
+     * forwarded to a direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
     title: string;
     description: string;
     payload: string;
@@ -2399,6 +2674,13 @@ export class TelegramBot extends EventEmitter {
      */
     allow_paid_broadcast?: boolean;
     message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
     reply_parameters?: ReplyParameters;
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message> {
@@ -2407,6 +2689,7 @@ export class TelegramBot extends EventEmitter {
       prices: new JSONSerialized(options.prices),
       suggested_tip_amounts: new JSONSerialized(options.suggested_tip_amounts),
       reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
   }
 
@@ -3013,6 +3296,58 @@ export class TelegramBot extends EventEmitter {
       checklist: new JSONSerialized(options.checklist),
       reply_markup: new JSONSerialized(options.reply_markup),
     });
+  }
+
+  /**
+   * ## approveSuggestedPost
+   * Use this method to approve a suggested post in a direct messages chat. The bot must have the 'can_post_messages'
+   * administrator right in the corresponding channel chat. Returns True on success.
+   * @see https://core.telegram.org/bots/api#approvesuggestedpost
+   */
+  async approveSuggestedPost(options: {
+    /**
+     * Unique identifier for the target direct messages chat
+     */
+    chat_id: number;
+
+    /**
+     * Identifier of a suggested post message to approve
+     */
+    message_id: number;
+
+    /**
+     * Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been
+     * specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds
+     * (30 days) in the future
+     */
+    send_date?: number;
+  }): Promise<true> {
+    return await this.callApi('approveSuggestedPost', options);
+  }
+
+  /**
+   * ## declineSuggestedPost
+   * Use this method to decline a suggested post in a direct messages chat. The bot must have the
+   * 'can_manage_direct_messages' administrator right in the corresponding channel chat. Returns True on success.
+   * @see https://core.telegram.org/bots/api#declinesuggestedpost
+   */
+  async declineSuggestedPost(options: {
+    /**
+     * Unique identifier for the target direct messages chat
+     */
+    chat_id: number;
+
+    /**
+     * Identifier of a suggested post message to decline
+     */
+    message_id: number;
+
+    /**
+     * Comment for the creator of the suggested post; 0-128 characters
+     */
+    comment?: string;
+  }): Promise<true> {
+    return await this.callApi('declineSuggestedPost', options);
   }
 
   on<U extends keyof allEmittedTypes>(event: U, listener: (eventData: NonNullable<allEmittedTypes[U]>) => void): this {

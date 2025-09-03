@@ -41,8 +41,14 @@ export type ReplyParameters = {
    * quote_parse_mode.
    */
   quote_entities?: string; // todo: JSON 	Array of MessageEntity
+
   /**
    * Optional. Position of the quote in the original message in UTF-16 code units
    */
   quote_position?: number;
+
+  /**
+   * Optional. Identifier of the specific checklist task to be replied to
+   */
+  checklist_task_id?: number;
 };

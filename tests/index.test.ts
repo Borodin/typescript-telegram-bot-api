@@ -2728,3 +2728,26 @@ describe('.getMyStarBalance()', () => {
     await expect(bot.getMyStarBalance()).resolves.toHaveProperty('amount', 0);
   });
 });
+
+describe('.approveSuggestedPost()', () => {
+  test('should approve suggested post', async () => {
+    await expect(
+      bot.approveSuggestedPost({
+        chat_id: USERID,
+        message_id: 1,
+      }),
+    ).rejects.toThrow("message can't be used in the method");
+  });
+});
+
+describe('.declineSuggestedPost()', () => {
+  test('should decline suggested post', async () => {
+    await expect(
+      bot.declineSuggestedPost({
+        chat_id: USERID,
+        message_id: 1,
+        comment: 'Not suitable for our channel',
+      }),
+    ).rejects.toThrow("message can't be used in the method");
+  });
+});

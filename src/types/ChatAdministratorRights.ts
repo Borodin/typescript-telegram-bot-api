@@ -81,4 +81,10 @@ export type ChatAdministratorRights = {
    * Optional. True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
    */
   can_manage_topics?: boolean;
+
+  /**
+   * Optional. True, if the administrator can manage direct messages of the channel and decline suggested posts; for
+   * channels only
+   */
+  can_manage_direct_messages?: boolean;
 };

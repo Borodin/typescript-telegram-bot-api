@@ -1,4 +1,4 @@
-import { UniqueGiftModel, UniqueGiftSymbol, UniqueGiftBackdrop } from './';
+import { UniqueGiftModel, UniqueGiftSymbol, UniqueGiftBackdrop, Chat } from './';
 
 /**
  * ## UniqueGift
@@ -35,4 +35,9 @@ export type UniqueGift = {
    * Backdrop of the gift
    */
   backdrop: UniqueGiftBackdrop;
+
+  /**
+   * Optional. Information about the chat that published the gift
+   */
+  publisher_chat?: Chat;
 };

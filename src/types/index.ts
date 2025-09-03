@@ -267,6 +267,14 @@ export * from './UniqueGiftBackdropColors';
 export * from './UniqueGiftInfo';
 export * from './UniqueGiftModel';
 export * from './UniqueGiftSymbol';
+export * from './DirectMessagesTopic';
+export * from './SuggestedPostPrice';
+export * from './SuggestedPostParameters';
+export * from './SuggestedPostInfo';
+export * from './SuggestedPostApprovalFailed';
+export * from './SuggestedPostDeclined';
+export * from './SuggestedPostPaid';
+export * from './SuggestedPostRefunded';
 
 import { ResponseParameters } from './ResponseParameters';
 import { InputFile } from './InputFile';

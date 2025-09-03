@@ -41,6 +41,11 @@ export type Sticker = {
   /**
    * True, if the sticker is a video sticker
    */
+  is_video: boolean;
+
+  /**
+   * True, if the sticker is a video sticker
+   */
   is_voice: boolean;
 
   /**

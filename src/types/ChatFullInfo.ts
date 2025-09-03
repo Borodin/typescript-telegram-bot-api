@@ -53,7 +53,12 @@ export type ChatFullInfo = {
   /**
    * Optional. True, if the supergroup chat is a forum (has topics enabled)
    */
-  is_forum?: boolean;
+  is_forum?: true;
+
+  /**
+   * Optional. True, if the chat is the direct messages chat of a channel
+   */
+  is_direct_messages?: true;
 
   /**
    * Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link
@@ -100,6 +105,11 @@ export type ChatFullInfo = {
    * Optional. For private chats, the personal channel of the user
    */
   personal_chat?: Chat;
+
+  /**
+   * Optional. Information about the corresponding channel chat; for direct messages chats only
+   */
+  parent_chat?: Chat;
 
   /**
    * Optional. List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed.

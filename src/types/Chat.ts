@@ -39,5 +39,10 @@ export type Chat = {
   /**
    * Optional. True, if the supergroup chat is a forum (has topics enabled)
    */
-  is_forum?: boolean;
+  is_forum?: true;
+
+  /**
+   * Optional. True, if the chat is the direct messages chat of a channel
+   */
+  is_direct_messages?: true;
 };
