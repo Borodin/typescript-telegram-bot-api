@@ -10,6 +10,8 @@ import {
   ChatLocation,
   BusinessOpeningHours,
   AcceptedGiftTypes,
+  UserRating,
+  UniqueGiftColors,
 } from './';
 
 /**
@@ -267,4 +269,20 @@ export type ChatFullInfo = {
    * Optional. For supergroups, the location to which the supergroup is connected
    */
   location?: ChatLocation;
+
+  /**
+   * Optional. For private chats, the rating of the user if any
+   */
+  rating?: UserRating;
+
+  /**
+   * Optional. The color scheme based on a unique gift that must be used for the chat's name, message replies and
+   * link previews
+   */
+  unique_gift_colors?: UniqueGiftColors;
+
+  /**
+   * Optional. The number of Telegram Stars a general user have to pay to send a message to the chat
+   */
+  paid_message_star_count?: number;
 };

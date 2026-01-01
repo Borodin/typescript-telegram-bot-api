@@ -1,4 +1,4 @@
-import { UniqueGiftModel, UniqueGiftSymbol, UniqueGiftBackdrop, Chat } from './';
+import { UniqueGiftModel, UniqueGiftSymbol, UniqueGiftBackdrop, UniqueGiftColors, Chat } from './';
 
 /**
  * ## UniqueGift
@@ -6,6 +6,11 @@ import { UniqueGiftModel, UniqueGiftSymbol, UniqueGiftBackdrop, Chat } from './'
  * @see https://core.telegram.org/bots/api#uniquegift
  */
 export type UniqueGift = {
+  /**
+   * Identifier of the regular gift from which the gift was upgraded
+   */
+  gift_id: string;
+
   /**
    * Human-readable name of the regular gift from which this unique gift was upgraded
    */
@@ -35,6 +40,22 @@ export type UniqueGift = {
    * Backdrop of the gift
    */
   backdrop: UniqueGiftBackdrop;
+
+  /**
+   * Optional. True, if the original regular gift was exclusively purchaseable by Telegram Premium subscribers
+   */
+  is_premium?: true;
+
+  /**
+   * Optional. True, if the gift is assigned from the TON blockchain and can't be resold or transferred in Telegram
+   */
+  is_from_blockchain?: true;
+
+  /**
+   * Optional. The color scheme that can be used by the gift's owner for the chat's name, replies to messages and
+   * link previews; for business account gifts and gifts that are currently on sale only
+   */
+  colors?: UniqueGiftColors;
 
   /**
    * Optional. Information about the chat that published the gift

@@ -30,6 +30,11 @@ export type GiftInfo = {
   prepaid_upgrade_star_count?: number;
 
   /**
+   * Optional. True, if the gift's upgrade was purchased after the gift was sent
+   */
+  is_upgrade_separate?: true;
+
+  /**
    * Optional. True, if the gift can be upgraded to a unique gift
    */
   can_be_upgraded?: true;
@@ -49,4 +54,9 @@ export type GiftInfo = {
    * receiver; otherwise, everyone will be able to see them
    */
   is_private?: true;
+
+  /**
+   * Optional. Unique number reserved for this gift when upgraded. See the number field in UniqueGift
+   */
+  unique_gift_number?: number;
 };

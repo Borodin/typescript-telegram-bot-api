@@ -23,4 +23,9 @@ export type AcceptedGiftTypes = {
    * True, if a Telegram Premium subscription is accepted
    */
   premium_subscription: boolean;
+
+  /**
+   * True, if transfers of unique gifts from channels are accepted
+   */
+  gifts_from_channels: boolean;
 };

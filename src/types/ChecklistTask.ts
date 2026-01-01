@@ -1,4 +1,4 @@
-import { MessageEntity, User } from './';
+import { Chat, MessageEntity, User } from './';
 
 /**
  * ## ChecklistTask
@@ -22,9 +22,14 @@ export type ChecklistTask = {
   text_entities?: MessageEntity[];
 
   /**
-   * Optional. User that completed the task; omitted if the task wasn't completed
+   * Optional. User that completed the task; omitted if the task wasn't completed by a user
    */
   completed_by_user?: User;
+
+  /**
+   * Optional. Chat that completed the task; omitted if the task wasn't completed by a chat
+   */
+  completed_by_chat?: Chat;
 
   /**
    * Optional. Point in time (Unix timestamp) when the task was completed; 0 if the task wasn't completed

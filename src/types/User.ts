@@ -71,4 +71,9 @@ export type User = {
    * Optional. True, if the bot has a main Web App. Returned only in getMe.
    */
   has_main_web_app?: boolean;
+
+  /**
+   * Optional. True, if the bot has forum topic mode enabled in private chats. Returned only in getMe.
+   */
+  has_topics_enabled?: boolean;
 };

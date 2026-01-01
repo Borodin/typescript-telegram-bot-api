@@ -77,7 +77,8 @@ export type Message = {
   message_id: number;
 
   /**
-   * Optional. Unique identifier of a message thread to which the message belongs; for supergroups only
+   * Optional. Unique identifier of a message thread or forum topic to which the message belongs; for supergroups and
+   * private chats only
    */
   message_thread_id?: number;
 
@@ -134,7 +135,7 @@ export type Message = {
   forward_origin?: MessageOrigin;
 
   /**
-   * Optional. True, if the message is sent to a forum topic
+   * Optional. True, if the message is sent to a topic in a forum supergroup or a private chat with the bot
    */
   is_topic_message?: boolean;
 
@@ -455,6 +456,11 @@ export type Message = {
   unique_gift?: UniqueGiftInfo;
 
   /**
+   * Optional. Service message: upgrade of a gift was purchased after the gift was sent
+   */
+  gift_upgrade_sent?: GiftInfo;
+
+  /**
    * Optional. The domain name of the website on which the user has logged in. [More about Telegram Login](https://core.telegram.org/widgets/login)
    */
   connected_website?: string;
@@ -653,6 +659,7 @@ export const messageTypes = [
   'chat_shared',
   'gift',
   'unique_gift',
+  'gift_upgrade_sent',
   'connected_website',
   'write_access_allowed',
   'passport_data',

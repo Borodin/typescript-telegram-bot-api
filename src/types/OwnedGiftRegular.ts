@@ -74,4 +74,15 @@ export type OwnedGiftRegular = {
    * Optional. Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift
    */
   prepaid_upgrade_star_count?: number;
+
+  /**
+   * Optional. True, if the gift's upgrade was purchased after the gift was sent; for gifts received on behalf of
+   * business accounts only
+   */
+  is_upgrade_separate?: true;
+
+  /**
+   * Optional. Unique number reserved for this gift when upgraded. See the number field in UniqueGift
+   */
+  unique_gift_number?: number;
 };

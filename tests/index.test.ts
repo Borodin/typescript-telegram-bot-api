@@ -689,6 +689,39 @@ describe('.sendDice()', () => {
   });
 });
 
+describe('.sendMessageDraft()', () => {
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  test('should send message draft', async () => {
+    const result = await bot.sendMessageDraft({
+      chat_id: USERID,
+      draft_id: 1,
+      text: 'Draft message',
+    });
+    expect(result).toBe(true);
+  });
+
+  test('should send message draft with formatting', async () => {
+    const result = await bot.sendMessageDraft({
+      chat_id: USERID,
+      draft_id: 2,
+      text: '*Bold* and _italic_ text',
+      parse_mode: 'Markdown',
+    });
+    expect(result).toBe(true);
+  });
+
+  test('should stream multiple drafts', async () => {
+    const draftId = Date.now();
+
+    await bot.sendMessageDraft({ chat_id: USERID, draft_id: draftId, text: 'Loading...' });
+    await delay(100);
+    const result = await bot.sendMessageDraft({ chat_id: USERID, draft_id: draftId, text: 'Done!' });
+
+    expect(result).toBe(true);
+  });
+});
+
 describe('.sendChatAction()', () => {
   test('should send chat action', async () => {
     await expect(
@@ -2562,6 +2595,7 @@ describe('.setBusinessAccountGiftSettings()', () => {
           limited_gifts: true,
           unique_gifts: true,
           premium_subscription: true,
+          gifts_from_channels: true,
         },
       }),
     ).rejects.toThrow('400 Bad Request: business connection not found');
@@ -2749,5 +2783,38 @@ describe('.declineSuggestedPost()', () => {
         comment: 'Not suitable for our channel',
       }),
     ).rejects.toThrow("message can't be used in the method");
+  });
+});
+
+describe('.getUserGifts()', () => {
+  test('should get user gifts', async () => {
+    await expect(
+      bot.getUserGifts({
+        user_id: USERID,
+      }),
+    ).resolves.toHaveProperty('gifts');
+  });
+});
+
+describe('.getChatGifts()', () => {
+  test('should get chat gifts', async () => {
+    await expect(
+      bot.getChatGifts({
+        chat_id: TEST_GROUP_ID,
+      }),
+    ).resolves.toHaveProperty('gifts');
+  });
+});
+
+describe('.repostStory()', () => {
+  test('should repost story', async () => {
+    await expect(
+      bot.repostStory({
+        business_connection_id: 'INVALID_BUSINESS_CONNECTION_ID',
+        from_chat_id: USERID,
+        from_story_id: 1,
+        active_period: 86400,
+      }),
+    ).rejects.toThrow('400 Bad Request: business connection not found');
   });
 });

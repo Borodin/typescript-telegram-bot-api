@@ -534,6 +534,12 @@ export class TelegramBot extends EventEmitter {
     protect_content?: boolean;
 
     /**
+     * Unique identifier of the message effect to be added to the message; only available when forwarding to private
+     * chats
+     */
+    message_effect_id?: string;
+
+    /**
      * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
      * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
      */
@@ -612,6 +618,11 @@ export class TelegramBot extends EventEmitter {
      * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
      */
     allow_paid_broadcast?: boolean;
+
+    /**
+     * Unique identifier of the message effect to be added to the message; only available when copying to private chats
+     */
+    message_effect_id?: string;
 
     /**
      * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
@@ -1356,6 +1367,50 @@ export class TelegramBot extends EventEmitter {
       ...options,
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
+    });
+  }
+
+  /**
+   * ## sendMessageDraft
+   * Use this method to stream a partial message to a user while the message is being generated; supported only for bots
+   * with forum topic mode enabled. Returns True on success.
+   * @see https://core.telegram.org/bots/api#sendmessagedraft
+   */
+  async sendMessageDraft(options: {
+    /**
+     * Unique identifier for the target private chat
+     */
+    chat_id: number;
+
+    /**
+     * Unique identifier for the target message thread
+     */
+    message_thread_id?: number;
+
+    /**
+     * Unique identifier of the message draft; must be non-zero. Changes of drafts with the same identifier are animated
+     */
+    draft_id: number;
+
+    /**
+     * Text of the message to be sent, 1-4096 characters after entities parsing
+     */
+    text: string;
+
+    /**
+     * Mode for parsing entities in the message text. See formatting options for more details.
+     */
+    parse_mode?: ParseMode;
+
+    /**
+     * A JSON-serialized list of special entities that appear in message text, which can be specified instead of
+     * parse_mode
+     */
+    entities?: MessageEntity[];
+  }): Promise<true> {
+    return await this.callApi('sendMessageDraft', {
+      ...options,
+      entities: new JSONSerialized(options.entities),
     });
   }
 
@@ -3112,8 +3167,16 @@ export class TelegramBot extends EventEmitter {
     exclude_unsaved?: boolean;
     exclude_saved?: boolean;
     exclude_unlimited?: boolean;
-    exclude_limited?: boolean;
+    /** Pass True to exclude gifts that can be purchased a limited number of times and can be upgraded to unique */
+    exclude_limited_upgradable?: boolean;
+    /** Pass True to exclude gifts that can be purchased a limited number of times and can't be upgraded to unique */
+    exclude_limited_non_upgradable?: boolean;
     exclude_unique?: boolean;
+    /**
+     * Pass True to exclude gifts that were assigned from the TON blockchain
+     * and can't be resold or transferred in Telegram
+     */
+    exclude_from_blockchain?: boolean;
     sort_by_price?: boolean;
     offset?: string;
     limit?: number;
@@ -3121,6 +3184,105 @@ export class TelegramBot extends EventEmitter {
     return await this.callApi('getBusinessAccountGifts', {
       ...options,
     });
+  }
+
+  /**
+   * ## getUserGifts
+   * Returns the gifts owned and hosted by a user. Returns OwnedGifts on success.
+   * @see https://core.telegram.org/bots/api#getusergifts
+   */
+  async getUserGifts(options: {
+    /** Unique identifier of the user */
+    user_id: number;
+    /** Pass True to exclude gifts that can be purchased an unlimited number of times */
+    exclude_unlimited?: boolean;
+    /**
+     * Pass True to exclude gifts that can be purchased a limited number of times
+     * and can be upgraded to unique
+     */
+    exclude_limited_upgradable?: boolean;
+    /**
+     * Pass True to exclude gifts that can be purchased a limited number of times
+     * and can't be upgraded to unique
+     */
+    exclude_limited_non_upgradable?: boolean;
+    /**
+     * Pass True to exclude gifts that were assigned from the TON blockchain
+     * and can't be resold or transferred in Telegram
+     */
+    exclude_from_blockchain?: boolean;
+    /** Pass True to exclude unique gifts */
+    exclude_unique?: boolean;
+    /**
+     * Pass True to sort results by gift price instead of send date.
+     * Sorting is applied before pagination.
+     */
+    sort_by_price?: boolean;
+    /**
+     * Offset of the first entry to return as received from the previous request;
+     * use an empty string to get the first chunk of results
+     */
+    offset?: string;
+    /** The maximum number of gifts to be returned; 1-100. Defaults to 100 */
+    limit?: number;
+  }): Promise<OwnedGifts> {
+    return await this.callApi('getUserGifts', options);
+  }
+
+  /**
+   * ## getChatGifts
+   * Returns the gifts owned by a chat. Returns OwnedGifts on success.
+   * @see https://core.telegram.org/bots/api#getchatgifts
+   */
+  async getChatGifts(options: {
+    /**
+     * Unique identifier for the target chat or username of the target channel
+     * (in the format @channelusername)
+     */
+    chat_id: number | string;
+    /**
+     * Pass True to exclude gifts that aren't saved to the chat's profile page.
+     * Always True, unless the bot has the can_post_messages administrator right in the channel.
+     */
+    exclude_unsaved?: boolean;
+    /**
+     * Pass True to exclude gifts that are saved to the chat's profile page.
+     * Always False, unless the bot has the can_post_messages administrator right in the channel.
+     */
+    exclude_saved?: boolean;
+    /** Pass True to exclude gifts that can be purchased an unlimited number of times */
+    exclude_unlimited?: boolean;
+    /**
+     * Pass True to exclude gifts that can be purchased a limited number of times
+     * and can be upgraded to unique
+     */
+    exclude_limited_upgradable?: boolean;
+    /**
+     * Pass True to exclude gifts that can be purchased a limited number of times
+     * and can't be upgraded to unique
+     */
+    exclude_limited_non_upgradable?: boolean;
+    /**
+     * Pass True to exclude gifts that were assigned from the TON blockchain
+     * and can't be resold or transferred in Telegram
+     */
+    exclude_from_blockchain?: boolean;
+    /** Pass True to exclude unique gifts */
+    exclude_unique?: boolean;
+    /**
+     * Pass True to sort results by gift price instead of send date.
+     * Sorting is applied before pagination.
+     */
+    sort_by_price?: boolean;
+    /**
+     * Offset of the first entry to return as received from the previous request;
+     * use an empty string to get the first chunk of results
+     */
+    offset?: string;
+    /** The maximum number of gifts to be returned; 1-100. Defaults to 100 */
+    limit?: number;
+  }): Promise<OwnedGifts> {
+    return await this.callApi('getChatGifts', options);
   }
 
   /**
@@ -3196,6 +3358,34 @@ export class TelegramBot extends EventEmitter {
       content: new JSONSerialized(options.content),
       areas: new JSONSerialized(options.areas),
     });
+  }
+
+  /**
+   * ## repostStory
+   * Reposts a story on behalf of a business account from another business account.
+   * Both business accounts must be managed by the same bot, and the story on the source
+   * account must have been posted (or reposted) by the bot. Requires the can_manage_stories
+   * business bot right for both business accounts. Returns Story on success.
+   * @see https://core.telegram.org/bots/api#repoststory
+   */
+  async repostStory(options: {
+    /** Unique identifier of the business connection */
+    business_connection_id: string;
+    /** Unique identifier of the chat which posted the story that should be reposted */
+    from_chat_id: number;
+    /** Unique identifier of the story that should be reposted */
+    from_story_id: number;
+    /**
+     * Period after which the story is moved to the archive, in seconds;
+     * must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400
+     */
+    active_period: number;
+    /** Pass True to keep the story accessible after it expires */
+    post_to_chat_page?: boolean;
+    /** Pass True if the content of the story must be protected from forwarding and screenshotting */
+    protect_content?: boolean;
+  }): Promise<Story> {
+    return await this.callApi('repostStory', options);
   }
 
   /**

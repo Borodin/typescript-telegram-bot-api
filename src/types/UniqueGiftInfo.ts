@@ -13,14 +13,21 @@ export type UniqueGiftInfo = {
 
   /**
    * Origin of the gift. Currently, either "upgrade" for gifts upgraded from regular gifts, "transfer" for gifts
-   * transferred from other users or channels, or "resale" for gifts bought from other users
+   * transferred from other users or channels, "resale" for gifts bought from other users, "gifted_upgrade" for
+   * upgrades purchased after the gift was sent, or "offer" for gifts bought or sold through gift purchase offers
    */
   origin: string;
 
   /**
-   * Optional. For gifts bought from other users, the price paid for the gift
+   * Optional. For gifts bought from other users, the currency in which the payment for the gift was done.
+   * Currently, one of "XTR" for Telegram Stars or "TON" for toncoins.
    */
-  last_resale_star_count?: number;
+  last_resale_currency?: string;
+
+  /**
+   * Optional. For gifts bought from other users, the price paid for the gift in either Telegram Stars or nanotoncoins
+   */
+  last_resale_amount?: number;
 
   /**
    * Optional. Unique identifier of the received gift for the bot; only present for gifts received on behalf of
