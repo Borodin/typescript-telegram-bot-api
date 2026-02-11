@@ -47,6 +47,11 @@ export type UniqueGift = {
   is_premium?: true;
 
   /**
+   * Optional. True, if the gift was used to craft another gift and isn't available anymore
+   */
+  is_burned?: true;
+
+  /**
    * Optional. True, if the gift is assigned from the TON blockchain and can't be resold or transferred in Telegram
    */
   is_from_blockchain?: true;

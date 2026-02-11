@@ -1,4 +1,4 @@
-import { PhotoSize } from './';
+import { PhotoSize, VideoQuality } from './';
 
 /**
  * ## Video
@@ -46,6 +46,11 @@ export type Video = {
    * Optional. Timestamp in seconds from which the video will play in the message
    */
   start_timestamp?: number;
+
+  /**
+   * Optional. List of available qualities of the video
+   */
+  qualities?: VideoQuality[];
 
   /**
    * Optional. Original filename as defined by the sender

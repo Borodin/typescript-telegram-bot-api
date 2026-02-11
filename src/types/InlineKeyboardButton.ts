@@ -2,8 +2,8 @@ import { CallbackGame, WebAppInfo, LoginUrl, SwitchInlineQueryChosenChat, CopyTe
 
 /**
  * ## InlineKeyboardButton
- * This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify
- * type of the button.
+ * This object represents one button of an inline keyboard. Exactly one of the fields other than text,
+ * icon_custom_emoji_id, and style must be used to specify the type of the button.
  * @see https://core.telegram.org/bots/api#inlinekeyboardbutton
  */
 export type InlineKeyboardButton = {
@@ -11,6 +11,19 @@ export type InlineKeyboardButton = {
    * Label text on the button
    */
   text: string;
+
+  /**
+   * Optional. Unique identifier of the custom emoji shown before the text of the button. Can only be used by bots
+   * that purchased additional usernames on Fragment or in the messages directly sent by the bot to private, group and
+   * supergroup chats if the owner of the bot has a Telegram Premium subscription.
+   */
+  icon_custom_emoji_id?: string;
+
+  /**
+   * Optional. Style of the button. Must be one of "danger" (red), "success" (green) or "primary" (blue). If omitted,
+   * then an app-specific style is used.
+   */
+  style?: string;
 
   /**
    * Optional. HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to
@@ -39,7 +52,8 @@ export type InlineKeyboardButton = {
   /**
    * Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert
    * the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's
-   * username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.
+   * username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a
+   * Telegram Business account.
    */
   switch_inline_query?: string;
 
@@ -48,15 +62,15 @@ export type InlineKeyboardButton = {
    * chat's input field. May be empty, in which case only the bot's username will be inserted.
    *
    * This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting
-   * something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business
-   * account.
+   * something from multiple options. Not supported in channels and for messages sent in channel direct messages chats
+   * and on behalf of a Telegram Business account.
    */
   switch_inline_query_current_chat?: string;
 
   /**
    * Optional. If set, pressing the button will prompt the user to select one of their chats of the specified type, open
    * that chat and insert the bot's username and the specified inline query in the input field. Not supported for
-   * messages sent on behalf of a Telegram Business account.
+   * messages sent in channel direct messages chats and on behalf of a Telegram Business account.
    */
   switch_inline_query_chosen_chat?: SwitchInlineQueryChosenChat;
 

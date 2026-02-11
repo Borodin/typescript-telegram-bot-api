@@ -28,6 +28,7 @@ import {
   InputPollOption,
   InputProfilePhoto,
   UserProfilePhotos,
+  UserProfileAudios,
   ChatPermissions,
   ChatInviteLink,
   ChatFullInfo,
@@ -1474,6 +1475,40 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## setMyProfilePhoto
+   * Changes the profile photo of the bot. Returns True on success.
+   * @see https://core.telegram.org/bots/api#setmyprofilephoto
+   */
+  async setMyProfilePhoto(options: { photo: InputProfilePhoto }): Promise<true> {
+    return await this.callApi('setMyProfilePhoto', {
+      ...options,
+      photo: new JSONSerialized(options.photo),
+    });
+  }
+
+  /**
+   * ## removeMyProfilePhoto
+   * Removes the profile photo of the bot. Requires no parameters. Returns True on success.
+   * @see https://core.telegram.org/bots/api#removemyprofilephoto
+   */
+  async removeMyProfilePhoto(): Promise<true> {
+    return await this.callApi('removeMyProfilePhoto');
+  }
+
+  /**
+   * ## getUserProfileAudios
+   * Use this method to get a list of profile audios for a user. Returns a UserProfileAudios object.
+   * @see https://core.telegram.org/bots/api#getuserprofileaudios
+   */
+  async getUserProfileAudios(options: {
+    user_id: number;
+    offset?: number;
+    limit?: number;
+  }): Promise<UserProfileAudios> {
+    return await this.callApi('getUserProfileAudios', options);
+  }
+
+  /**
    * ## setUserEmojiStatus
    * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the
    * Mini App method requestEmojiStatusAccess. Returns True on success.
@@ -1483,7 +1518,7 @@ export class TelegramBot extends EventEmitter {
     user_id: number;
     emoji_status_custom_emoji_id?: string;
     emoji_status_expiration_date?: number;
-  }): Promise<boolean> {
+  }): Promise<true> {
     return await this.callApi('setUserEmojiStatus', options);
   }
 
@@ -1913,9 +1948,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## createForumTopic
-   * Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this
-   * to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a
-   * ForumTopic object.
+   * Use this method to create a topic in a forum supergroup chat or a private chat with a user. In the case of a
+   * supergroup chat the bot must be an administrator in the chat for this to work and must have the can_manage_topics
+   * administrator right. Returns information about the created topic as a ForumTopic object.
    * @see https://core.telegram.org/bots/api#createforumtopic
    */
   async createForumTopic(options: {
@@ -1929,9 +1964,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editForumTopic
-   * Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in
-   * the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the
-   * topic. Returns True on success.
+   * Use this method to edit name and icon of a topic in a forum supergroup chat or a private chat with a user. In the
+   * case of a supergroup chat the bot must be an administrator in the chat for this to work and must have the
+   * can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.
    * @see https://core.telegram.org/bots/api#editforumtopic
    */
   async editForumTopic(options: {
@@ -1967,9 +2002,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## deleteForumTopic
-   * Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an
-   * administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True
-   * on success.
+   * Use this method to delete a forum topic along with all its messages in a forum supergroup chat or a private chat
+   * with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and
+   * must have the can_delete_messages administrator rights. Returns True on success.
    * @see https://core.telegram.org/bots/api#deleteforumtopic
    */
   async deleteForumTopic(options: { chat_id: number | string; message_thread_id: number }): Promise<true> {
@@ -1978,8 +2013,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## unpinAllForumTopicMessages
-   * Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat
-   * for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.
+   * Use this method to clear the list of pinned messages in a forum topic in a forum supergroup chat or a private chat
+   * with a user. In the case of a supergroup chat the bot must be an administrator in the chat for this to work and
+   * must have the can_pin_messages administrator right in the supergroup. Returns True on success.
    * @see https://core.telegram.org/bots/api#unpinallforumtopicmessages
    */
   async unpinAllForumTopicMessages(options: { chat_id: number | string; message_thread_id: number }): Promise<true> {

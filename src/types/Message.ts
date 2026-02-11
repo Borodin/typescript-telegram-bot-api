@@ -63,6 +63,8 @@ import {
   SuggestedPostDeclined,
   SuggestedPostPaid,
   SuggestedPostRefunded,
+  ChatOwnerLeft,
+  ChatOwnerChanged,
 } from './';
 
 /**
@@ -360,6 +362,16 @@ export type Message = {
   left_chat_member?: User;
 
   /**
+   * Optional. Service message: chat owner has left
+   */
+  chat_owner_left?: ChatOwnerLeft;
+
+  /**
+   * Optional. Service message: chat owner has changed
+   */
+  chat_owner_changed?: ChatOwnerChanged;
+
+  /**
    * Optional. A chat title was changed to this value
    */
   new_chat_title?: string;
@@ -642,6 +654,8 @@ export const messageTypes = [
   'location',
   'new_chat_members',
   'left_chat_member',
+  'chat_owner_left',
+  'chat_owner_changed',
   'new_chat_title',
   'new_chat_photo',
   'delete_chat_photo',

@@ -12,6 +12,7 @@ import {
   AcceptedGiftTypes,
   UserRating,
   UniqueGiftColors,
+  Audio,
 } from './';
 
 /**
@@ -274,6 +275,11 @@ export type ChatFullInfo = {
    * Optional. For private chats, the rating of the user if any
    */
   rating?: UserRating;
+
+  /**
+   * Optional. For private chats, the first audio added to the profile of the user
+   */
+  first_profile_audio?: Audio;
 
   /**
    * Optional. The color scheme based on a unique gift that must be used for the chat's name, message replies and
