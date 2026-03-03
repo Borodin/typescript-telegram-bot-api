@@ -10,7 +10,8 @@ export type ChatAdministratorRights = {
   is_anonymous: boolean;
   /**
    * True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel
-   * members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+   * members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars.
+   * Implied by any other administrator privilege.
    */
   can_manage_chat: boolean;
 
@@ -63,7 +64,8 @@ export type ChatAdministratorRights = {
   can_delete_stories: boolean;
 
   /**
-   * True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+   * Optional. True, if the administrator can post messages in the channel, approve suggested posts, or access channel
+   * statistics; for channels only
    */
   can_post_messages?: boolean;
 
@@ -87,4 +89,10 @@ export type ChatAdministratorRights = {
    * channels only
    */
   can_manage_direct_messages?: boolean;
+
+  /**
+   * Optional. True, if the administrator can edit the tags of regular members; for groups and supergroups only. If
+   * omitted defaults to the value of can_pin_messages.
+   */
+  can_manage_tags?: boolean;
 };

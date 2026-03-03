@@ -12,6 +12,11 @@ export type ChatMemberRestricted = {
   status: 'restricted';
 
   /**
+   * Optional. Tag of the member
+   */
+  tag?: string;
+
+  /**
    * Information about the user
    */
   user: User;
@@ -58,7 +63,7 @@ export type ChatMemberRestricted = {
   can_send_voice_notes: boolean;
 
   /**
-   * True, if the user is allowed to send polls
+   * True, if the user is allowed to send polls and checklists
    */
   can_send_polls: boolean;
 
@@ -71,6 +76,11 @@ export type ChatMemberRestricted = {
    * True, if the user is allowed to add web page previews to their messages
    */
   can_add_web_page_previews: boolean;
+
+  /**
+   * True, if the user is allowed to edit their own tag
+   */
+  can_edit_tag: boolean;
 
   /**
    * True, if the user is allowed to change the chat title, photo and other settings

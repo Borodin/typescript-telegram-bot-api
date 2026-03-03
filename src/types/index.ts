@@ -278,10 +278,17 @@ export * from './DirectMessagesTopic';
 export * from './SuggestedPostPrice';
 export * from './SuggestedPostParameters';
 export * from './SuggestedPostInfo';
+export * from './SuggestedPostApproved';
 export * from './SuggestedPostApprovalFailed';
 export * from './SuggestedPostDeclined';
 export * from './SuggestedPostPaid';
 export * from './SuggestedPostRefunded';
+export * from './RevenueWithdrawalState';
+export * from './RevenueWithdrawalStateFailed';
+export * from './RevenueWithdrawalStatePending';
+export * from './RevenueWithdrawalStateSucceeded';
+export * from './PreparedInlineMessage';
+export * from './UserChatBoosts';
 
 import { ResponseParameters } from './ResponseParameters';
 import { InputFile } from './InputFile';

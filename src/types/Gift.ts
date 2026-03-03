@@ -37,12 +37,12 @@ export type Gift = {
   has_colors?: true;
 
   /**
-   * Optional. The total number of the gifts of this type that can be sent; for limited gifts only
+   * Optional. The total number of gifts of this type that can be sent by all users; for limited gifts only
    */
   total_count?: number;
 
   /**
-   * Optional. The number of remaining gifts of this type that can be sent; for limited gifts only
+   * Optional. The number of remaining gifts of this type that can be sent by all users; for limited gifts only
    */
   remaining_count?: number;
 

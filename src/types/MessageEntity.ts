@@ -37,7 +37,8 @@ export type MessageEntity = {
        * “pre” (monowidth block),
        * “text_link” (for clickable text URLs),
        * “text_mention” (for users without usernames),
-       * “custom_emoji” (for inline custom emoji stickers)
+       * “custom_emoji” (for inline custom emoji stickers),
+       * “date_time” (for formatted date and time)
        */
       type:
         | 'mention'
@@ -54,14 +55,14 @@ export type MessageEntity = {
         | 'blockquote'
         | 'expandable_blockquote'
         | 'code'
-        | 'text_link';
+        | 'url';
     }
   | {
       /**
        * Type of the entity.
-       * “url” (https://telegram.org),
+       * “text_link” (for clickable text URLs),
        */
-      type: 'url';
+      type: 'text_link';
 
       /**
        * Optional. For “text_link” only, URL that will be opened after user taps on the text
@@ -105,5 +106,23 @@ export type MessageEntity = {
        * information about the sticker
        */
       custom_emoji_id: string;
+    }
+  | {
+      /**
+       * Type of the entity.
+       * "date_time" (for formatted date and time)
+       */
+      type: 'date_time';
+
+      /**
+       * Optional. For "date_time" only, the Unix time associated with the entity
+       */
+      unix_time?: number;
+
+      /**
+       * Optional. For "date_time" only, the string that defines the formatting of the date and time.
+       * See date-time entity formatting for more details.
+       */
+      date_time_format?: string;
     }
 );

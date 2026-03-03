@@ -12,6 +12,11 @@ export type ChatMemberMember = {
   status: 'member';
 
   /**
+   * Optional. Tag of the member
+   */
+  tag?: string;
+
+  /**
    * Information about the user
    */
   user: User;

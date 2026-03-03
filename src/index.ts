@@ -46,7 +46,8 @@ import {
   ChatAdministratorRights,
   InputMedia,
   Poll,
-  ChatBoost,
+  UserChatBoosts,
+  PreparedInlineMessage,
   StickerSet,
   InputSticker,
   InlineQueryResult,
@@ -73,7 +74,7 @@ import {
   InputStoryContent,
   Story,
   StoryArea,
-  Checklist,
+  InputChecklist,
   SuggestedPostParameters,
 } from './types/';
 import * as TelegramTypes from './types/';
@@ -435,7 +436,8 @@ export class TelegramBot extends EventEmitter {
     chat_id: number | string;
 
     /**
-     * Unique identifier for the target message thread (topic) of the forum; for forum supergroups only
+     * Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of
+     * bots with forum topic mode enabled only
      */
     message_thread_id?: number;
 
@@ -1373,8 +1375,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendMessageDraft
-   * Use this method to stream a partial message to a user while the message is being generated; supported only for bots
-   * with forum topic mode enabled. Returns True on success.
+   * Use this method to stream a partial message to a user while the message is being generated. Returns True on
+   * success.
    * @see https://core.telegram.org/bots/api#sendmessagedraft
    */
   async sendMessageDraft(options: {
@@ -1620,6 +1622,11 @@ export class TelegramBot extends EventEmitter {
      * for channels only
      */
     can_manage_direct_messages?: boolean;
+
+    /**
+     * Pass True if the administrator can edit the tags of regular members; for groups and supergroups only
+     */
+    can_manage_tags?: boolean;
   }): Promise<true> {
     return await this.callApi('promoteChatMember', options);
   }
@@ -1636,6 +1643,16 @@ export class TelegramBot extends EventEmitter {
     custom_title: string;
   }): Promise<true> {
     return await this.callApi('setChatAdministratorCustomTitle', options);
+  }
+
+  /**
+   * ## setChatMemberTag
+   * Use this method to set a tag for a regular member in a group or a supergroup. The bot must be an administrator in
+   * the chat for this to work and must have the can_manage_tags administrator right. Returns True on success.
+   * @see https://core.telegram.org/bots/api#setchatmembertag
+   */
+  async setChatMemberTag(options: { chat_id: number | string; user_id: number; tag?: string }): Promise<true> {
+    return await this.callApi('setChatMemberTag', options);
   }
 
   /**
@@ -2108,7 +2125,7 @@ export class TelegramBot extends EventEmitter {
    * Returns a UserChatBoosts object.
    * @see https://core.telegram.org/bots/api#getuserchatboosts
    */
-  async getUserChatBoosts(options: { chat_id: number | string; user_id: number }): Promise<ChatBoost[]> {
+  async getUserChatBoosts(options: { chat_id: number | string; user_id: number }): Promise<UserChatBoosts> {
     return await this.callApi('getUserChatBoosts', options);
   }
 
@@ -2714,6 +2731,48 @@ export class TelegramBot extends EventEmitter {
     result: InlineQueryResult;
   }): Promise<SentWebAppMessage> {
     return await this.callApi('answerWebAppQuery', {
+      ...options,
+      result: new JSONSerialized(options.result),
+    });
+  }
+
+  /**
+   * ## savePreparedInlineMessage
+   * Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.
+   * @see https://core.telegram.org/bots/api#savepreparedinlinemessage
+   */
+  async savePreparedInlineMessage(options: {
+    /**
+     * Unique identifier of the target user that can use the prepared message
+     */
+    user_id: number;
+
+    /**
+     * A JSON-serialized object describing the message to be sent
+     */
+    result: InlineQueryResult;
+
+    /**
+     * Pass True if the message can be sent to private chats with users
+     */
+    allow_user_chats?: boolean;
+
+    /**
+     * Pass True if the message can be sent to private chats with bots
+     */
+    allow_bot_chats?: boolean;
+
+    /**
+     * Pass True if the message can be sent to group and supergroup chats
+     */
+    allow_group_chats?: boolean;
+
+    /**
+     * Pass True if the message can be sent to channel chats
+     */
+    allow_channel_chats?: boolean;
+  }): Promise<PreparedInlineMessage> {
+    return await this.callApi('savePreparedInlineMessage', {
       ...options,
       result: new JSONSerialized(options.result),
     });
@@ -3488,8 +3547,7 @@ export class TelegramBot extends EventEmitter {
   async sendChecklist(options: {
     business_connection_id: string;
     chat_id: number;
-    message_thread_id?: number;
-    checklist: Checklist;
+    checklist: InputChecklist;
     disable_notification?: boolean;
     protect_content?: boolean;
     message_effect_id?: string;
@@ -3514,7 +3572,7 @@ export class TelegramBot extends EventEmitter {
     business_connection_id: string;
     chat_id: number;
     message_id: number;
-    checklist: Checklist;
+    checklist: InputChecklist;
     reply_markup?: InlineKeyboardMarkup;
   }): Promise<Message> {
     return await this.callApi('editMessageChecklist', {

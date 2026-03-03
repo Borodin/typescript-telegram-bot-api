@@ -16,5 +16,5 @@ export type SuggestedPostApprovalFailed = {
   /**
    * Expected price of the post
    */
-  price?: SuggestedPostPrice;
+  price: SuggestedPostPrice;
 };

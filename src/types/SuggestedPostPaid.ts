@@ -10,7 +10,7 @@ export type SuggestedPostPaid = {
    * Optional. Message containing the suggested post. Note that the Message object in this field will not contain the
    * reply_to_message field even if it itself is a reply.
    */
-  suggested_post_message: Message;
+  suggested_post_message?: Message;
 
   /**
    * Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for toncoins

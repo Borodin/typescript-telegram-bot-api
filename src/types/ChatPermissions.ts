@@ -41,7 +41,7 @@ export type ChatPermissions = {
   can_send_voice_notes?: boolean;
 
   /**
-   * Optional. True, if the user is allowed to send polls
+   * Optional. True, if the user is allowed to send polls and checklists
    */
   can_send_polls?: boolean;
 
@@ -54,6 +54,11 @@ export type ChatPermissions = {
    * Optional. True, if the user is allowed to add web page previews to their messages
    */
   can_add_web_page_previews?: boolean;
+
+  /**
+   * Optional. True, if the user is allowed to edit their own tag
+   */
+  can_edit_tag?: boolean;
 
   /**
    * Optional. True, if the user is allowed to change the chat title, photo and other settings. Ignored in public

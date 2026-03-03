@@ -1038,6 +1038,22 @@ describe('.SetChatAdministratorCustomTitle()', () => {
   });
 });
 
+describe('.setChatMemberTag()', () => {
+  test('should set chat member tag', async () => {
+    try {
+      const result = await bot.setChatMemberTag({
+        chat_id: TEST_GROUP_ID,
+        user_id: TEST_GROUP_MEMBER_ID,
+        tag: 'Test tag',
+      });
+      expect(result).toBe(true);
+    } catch (error) {
+      expect(error).toBeInstanceOf(TelegramError);
+      expect((error as TelegramError).message).toMatch('Bad Request');
+    }
+  });
+});
+
 describe('.banChatSenderChat()', () => {
   test('should ban chat sender chat', async () => {
     await expect(
@@ -1973,6 +1989,24 @@ describe('.answerWebAppQuery()', () => {
   });
 });
 
+describe('.savePreparedInlineMessage()', () => {
+  test('should save prepared inline message', async () => {
+    await expect(
+      bot.savePreparedInlineMessage({
+        user_id: USERID,
+        result: {
+          type: 'article',
+          id: '1',
+          title: 'Article',
+          input_message_content: {
+            message_text: 'Article content',
+          },
+        },
+      }),
+    ).rejects.toThrow('Bad Request');
+  });
+});
+
 describe('.sendInvoice()', () => {
   test('should send invoice', async () => {
     await expect(
@@ -2820,7 +2854,7 @@ describe('.editMessageChecklist()', () => {
         checklist: {
           title: 'Updated Checklist',
           tasks: [
-            { id: 1, text: 'Updated Task 1', completion_date: Date.now() / 1000 },
+            { id: 1, text: 'Updated Task 1' },
             { id: 2, text: 'Updated Task 2' },
           ],
         },

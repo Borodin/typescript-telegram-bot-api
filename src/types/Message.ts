@@ -59,6 +59,7 @@ import {
   DirectMessagePriceChanged,
   DirectMessagesTopic,
   SuggestedPostInfo,
+  SuggestedPostApproved,
   SuggestedPostApprovalFailed,
   SuggestedPostDeclined,
   SuggestedPostPaid,
@@ -113,6 +114,11 @@ export type Message = {
    * messages sent on behalf of the connected business account.
    */
   sender_business_bot?: User;
+
+  /**
+   * Optional. Tag or custom title of the sender of the message; for supergroups only
+   */
+  sender_tag?: string;
 
   /**
    * Date the message was sent in Unix time. It is always a positive number, representing a valid date.
@@ -579,7 +585,7 @@ export type Message = {
   /**
    * Optional. Service message: a suggested post was approved
    */
-  suggested_post_approved?: SuggestedPostInfo;
+  suggested_post_approved?: SuggestedPostApproved;
 
   /**
    * Optional. Service message: approval of a suggested post has failed
