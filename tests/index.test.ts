@@ -1696,6 +1696,26 @@ describe('.getBusinessConnection()', () => {
   });
 });
 
+describe('.getManagedBotToken()', () => {
+  test('should get managed bot token', async () => {
+    await expect(
+      bot.getManagedBotToken({
+        user_id: USERID,
+      }),
+    ).rejects.toThrow('Bad Request');
+  });
+});
+
+describe('.replaceManagedBotToken()', () => {
+  test('should replace managed bot token', async () => {
+    await expect(
+      bot.replaceManagedBotToken({
+        user_id: USERID,
+      }),
+    ).rejects.toThrow('Bad Request');
+  });
+});
+
 describe('.setChatMenuButton()', () => {
   test('should set chat menu button', async () => {
     await expect(
@@ -2004,6 +2024,22 @@ describe('.savePreparedInlineMessage()', () => {
         },
       }),
     ).rejects.toThrow('Bad Request');
+  });
+});
+
+describe('.savePreparedKeyboardButton()', () => {
+  test('should save prepared keyboard button', async () => {
+    await expect(
+      bot.savePreparedKeyboardButton({
+        user_id: USERID,
+        button: {
+          text: 'Request users',
+          request_users: {
+            request_id: 1,
+          },
+        },
+      }),
+    ).resolves.toHaveProperty('id');
   });
 });
 

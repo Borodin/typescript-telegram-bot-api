@@ -25,4 +25,9 @@ export type PollAnswer = {
    * 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
    */
   option_ids: number[];
+
+  /**
+   * Persistent identifiers of the chosen answer options. May be empty if the vote was retracted.
+   */
+  option_persistent_ids: string[];
 };

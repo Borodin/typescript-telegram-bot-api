@@ -51,4 +51,9 @@ export type ReplyParameters = {
    * Optional. Identifier of the specific checklist task to be replied to
    */
   checklist_task_id?: number;
+
+  /**
+   * Optional. Persistent identifier of the specific poll option to be replied to
+   */
+  poll_option_id?: string;
 };

@@ -66,6 +66,9 @@ import {
   SuggestedPostRefunded,
   ChatOwnerLeft,
   ChatOwnerChanged,
+  ManagedBotCreated,
+  PollOptionAdded,
+  PollOptionDeleted,
 } from './';
 
 /**
@@ -177,6 +180,11 @@ export type Message = {
    * Optional. Identifier of the specific checklist task that is being replied to
    */
   reply_to_checklist_task_id?: number;
+
+  /**
+   * Optional. Persistent identifier of the specific poll option that is being replied to
+   */
+  reply_to_poll_option_id?: string;
 
   /**
    * Optional. Bot through which the message was sent
@@ -578,9 +586,24 @@ export type Message = {
   giveaway_completed?: GiveawayCompleted;
 
   /**
+   * Optional. Service message: user created a bot that will be managed by the current bot
+   */
+  managed_bot_created?: ManagedBotCreated;
+
+  /**
    * Optional. Service message: the price for paid messages has changed in the chat
    */
   paid_message_price_changed?: PaidMessagePriceChanged;
+
+  /**
+   * Optional. Service message: answer option was added to a poll
+   */
+  poll_option_added?: PollOptionAdded;
+
+  /**
+   * Optional. Service message: answer option was deleted from a poll
+   */
+  poll_option_deleted?: PollOptionDeleted;
 
   /**
    * Optional. Service message: a suggested post was approved
@@ -699,7 +722,10 @@ export const messageTypes = [
   'giveaway',
   'giveaway_winners',
   'giveaway_completed',
+  'managed_bot_created',
   'paid_message_price_changed',
+  'poll_option_added',
+  'poll_option_deleted',
   'suggested_post_approved',
   'suggested_post_approval_failed',
   'suggested_post_declined',

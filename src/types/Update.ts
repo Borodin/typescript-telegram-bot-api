@@ -16,6 +16,7 @@ import {
   ChatBoostUpdated,
   ChatBoostRemoved,
   PaidMediaPurchased,
+  ManagedBotUpdated,
 } from './';
 import { AtMostOne } from '../utils';
 
@@ -149,6 +150,11 @@ export type EventTypes = {
    * A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.
    */
   removed_chat_boost: ChatBoostRemoved;
+
+  /**
+   * A new bot was created to be managed by the bot or token of a bot was changed
+   */
+  managed_bot: ManagedBotUpdated;
 };
 
 /**

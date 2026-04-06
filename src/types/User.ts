@@ -81,4 +81,9 @@ export type User = {
    * Optional. True, if the bot allows users to create and delete topics in private chats. Returned only in getMe.
    */
   allows_users_to_create_topics?: boolean;
+
+  /**
+   * Optional. True, if other bots can be created to be controlled by the bot. Returned only in getMe.
+   */
+  can_manage_bots?: boolean;
 };

@@ -1,4 +1,10 @@
-import { WebAppInfo, KeyboardButtonRequestChat, KeyboardButtonPollType, KeyboardButtonRequestUsers } from './';
+import {
+  WebAppInfo,
+  KeyboardButtonRequestChat,
+  KeyboardButtonPollType,
+  KeyboardButtonRequestUsers,
+  KeyboardButtonRequestManagedBot,
+} from './';
 import { AtMostOne } from '../utils';
 
 /**
@@ -42,6 +48,13 @@ export type KeyboardButton =
          * its identifier to the bot in a “chat_shared” service message. Available in private chats only.
          */
         request_chat?: KeyboardButtonRequestChat;
+
+        /**
+         * Optional. If specified, pressing the button will ask the user to create and share a bot that will be managed
+         * by the current bot. Available for bots that enabled management of other bots in the @BotFather Mini App.
+         * Available in private chats only.
+         */
+        request_managed_bot?: KeyboardButtonRequestManagedBot;
 
         /**
          * Optional. If True, the user's phone number will be sent as a contact when the button is pressed. Available in

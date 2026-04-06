@@ -48,6 +48,8 @@ import {
   Poll,
   UserChatBoosts,
   PreparedInlineMessage,
+  PreparedKeyboardButton,
+  KeyboardButton,
   StickerSet,
   InputSticker,
   InlineQueryResult,
@@ -1286,7 +1288,7 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendPoll
-   * se this method to send a native poll. On success, the sent Message is returned.
+   * Use this method to send a native poll. On success, the sent Message is returned.
    * @see https://core.telegram.org/bots/api#sendpoll
    */
   async sendPoll(options: {
@@ -1300,13 +1302,20 @@ export class TelegramBot extends EventEmitter {
     is_anonymous?: boolean;
     type?: 'quiz' | 'regular';
     allows_multiple_answers?: boolean;
-    correct_option_id?: number;
+    allows_revoting?: boolean;
+    shuffle_options?: boolean;
+    allow_adding_options?: boolean;
+    hide_results_until_closes?: boolean;
+    correct_option_ids?: number[];
     explanation?: string;
     explanation_parse_mode?: ParseMode;
     explanation_entities?: MessageEntity[];
     open_period?: number;
     close_date?: number;
     is_closed?: boolean;
+    description?: string;
+    description_parse_mode?: ParseMode;
+    description_entities?: MessageEntity[];
     disable_notification?: boolean;
     protect_content?: boolean;
 
@@ -1323,7 +1332,10 @@ export class TelegramBot extends EventEmitter {
     return await this.callApi('sendPoll', {
       ...options,
       options: new JSONSerialized(options.options),
+      question_entities: new JSONSerialized(options.question_entities),
+      correct_option_ids: new JSONSerialized(options.correct_option_ids),
       explanation_entities: new JSONSerialized(options.explanation_entities),
+      description_entities: new JSONSerialized(options.description_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
@@ -2140,6 +2152,35 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## getManagedBotToken
+   * Use this method to get the token of a managed bot. Returns the token as String on success.
+   * @see https://core.telegram.org/bots/api#getmanagedbottoken
+   */
+  async getManagedBotToken(options: {
+    /**
+     * User identifier of the managed bot whose token will be returned
+     */
+    user_id: number;
+  }): Promise<string> {
+    return await this.callApi('getManagedBotToken', options);
+  }
+
+  /**
+   * ## replaceManagedBotToken
+   * Use this method to revoke the current token of a managed bot and generate a new one. Returns the new token as
+   * String on success.
+   * @see https://core.telegram.org/bots/api#replacemanagedbottoken
+   */
+  async replaceManagedBotToken(options: {
+    /**
+     * User identifier of the managed bot whose token will be replaced
+     */
+    user_id: number;
+  }): Promise<string> {
+    return await this.callApi('replaceManagedBotToken', options);
+  }
+
+  /**
    * ## setMyCommands
    * Use this method to change the list of the bot's commands. See this manual for more details about bot commands.
    * Returns True on success.
@@ -2775,6 +2816,29 @@ export class TelegramBot extends EventEmitter {
     return await this.callApi('savePreparedInlineMessage', {
       ...options,
       result: new JSONSerialized(options.result),
+    });
+  }
+
+  /**
+   * ## savePreparedKeyboardButton
+   * Stores a keyboard button that can be used by a user within a Mini App. Returns a PreparedKeyboardButton object.
+   * @see https://core.telegram.org/bots/api#savepreparedkeyboardbutton
+   */
+  async savePreparedKeyboardButton(options: {
+    /**
+     * Unique identifier of the target user that can use the button
+     */
+    user_id: number;
+
+    /**
+     * A JSON-serialized object describing the button to be saved. The button must be of the type request_users,
+     * request_chat, or request_managed_bot
+     */
+    button: KeyboardButton;
+  }): Promise<PreparedKeyboardButton> {
+    return await this.callApi('savePreparedKeyboardButton', {
+      ...options,
+      button: new JSONSerialized(options.button as object),
     });
   }
 
