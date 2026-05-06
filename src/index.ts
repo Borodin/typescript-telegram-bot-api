@@ -117,6 +117,7 @@ export class TelegramBot extends EventEmitter {
   autoRetryLimit: number;
   allowedUpdates: UpdateType[];
   pollingTimeout: number;
+  agent?: { destroy(): void };
 
   constructor(options: {
     botToken: string;
@@ -126,6 +127,12 @@ export class TelegramBot extends EventEmitter {
     autoRetryLimit?: number;
     allowedUpdates?: UpdateType[];
     pollingTimeout?: number;
+    /**
+     * HTTP(S) agent used for all requests to the Telegram Bot API. Pass an instance of `HttpsProxyAgent`
+     * (`https-proxy-agent`) or `SocksProxyAgent` (`socks-proxy-agent`) to route traffic through a proxy.
+     * Node.js only — ignored in browser builds.
+     */
+    agent?: { destroy(): void };
   }) {
     super();
     this.testEnvironment = options.testEnvironment || false;
@@ -135,6 +142,7 @@ export class TelegramBot extends EventEmitter {
     this.autoRetryLimit = options.autoRetryLimit || 0;
     this.allowedUpdates = options.allowedUpdates || [];
     this.pollingTimeout = options.pollingTimeout || 50;
+    this.agent = options.agent;
     this.polling = new Polling(this);
   }
 
@@ -167,6 +175,8 @@ export class TelegramBot extends EventEmitter {
         forcedJSONParsing: false,
       },
       validateStatus: () => true,
+      httpAgent: this.agent,
+      httpsAgent: this.agent,
     });
     try {
       return JSON.parse(response.data.toString()) as Response;

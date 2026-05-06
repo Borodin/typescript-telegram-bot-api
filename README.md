@@ -211,6 +211,25 @@ process.on('SIGINT', async () => {
 ```
 
 
+## Proxy Support
+
+> Node.js only — the `agent` option is ignored in browser builds.
+
+Pass any `http.Agent`-compatible instance via the `agent` option using [`https-proxy-agent`](https://www.npmjs.com/package/https-proxy-agent) or [`socks-proxy-agent`](https://www.npmjs.com/package/socks-proxy-agent):
+
+```typescript
+import { TelegramBot } from 'typescript-telegram-bot-api';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { SocksProxyAgent } from 'socks-proxy-agent';
+
+// HTTP/HTTPS proxy
+new TelegramBot({ botToken: 'TOKEN', agent: new HttpsProxyAgent('http://user:pass@host:8080') });
+
+// SOCKS5 proxy
+new TelegramBot({ botToken: 'TOKEN', agent: new SocksProxyAgent('socks5://user:pass@host:1080') });
+```
+
+
 ## Tests
 ```bash
 npm test
