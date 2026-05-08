@@ -57,13 +57,17 @@ export type User = {
   can_read_all_group_messages?: boolean;
 
   /**
+   * Optional. True, if the bot supports guest queries from chats it is not a member of. Returned only in getMe.
+   */
+  supports_guest_queries?: boolean;
+
+  /**
    * Optional. True, if the bot supports inline queries. Returned only in getMe.
    */
   supports_inline_queries?: boolean;
 
   /**
-   * Optional. True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only
-   * in getMe.
+   * Optional. True, if the bot can be connected to a user account to manage it. Returned only in getMe.
    */
   can_connect_to_business?: boolean;
 

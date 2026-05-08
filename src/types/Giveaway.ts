@@ -9,7 +9,7 @@ export type Giveaway = {
   /**
    * The list of chats which the user must join to participate in the giveaway
    */
-  chat: Chat;
+  chats: Chat[];
 
   /**
    * Point in time (Unix timestamp) when winners of the giveaway will be selected
@@ -19,7 +19,7 @@ export type Giveaway = {
   /**
    * The number of users which are supposed to be selected as winners of the giveaway
    */
-  winner_count?: number;
+  winner_count: number;
 
   /**
    * Optional. True, if only users who join the chats after the giveaway started should be eligible to win

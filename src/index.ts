@@ -23,8 +23,10 @@ import {
   InputFile,
   InputMediaAudio,
   InputMediaDocument,
+  InputMediaLivePhoto,
   InputMediaPhoto,
   InputMediaVideo,
+  InputPollMedia,
   InputPollOption,
   InputProfilePhoto,
   UserProfilePhotos,
@@ -36,6 +38,7 @@ import {
   ReactionType,
   ChatMember,
   ForumTopic,
+  BotAccessSettings,
   BusinessConnection,
   BotCommandScope,
   BotCommand,
@@ -54,6 +57,7 @@ import {
   InputSticker,
   InlineQueryResult,
   InlineQueryResultsButton,
+  SentGuestMessage,
   SentWebAppMessage,
   LabeledPrice,
   ShippingOption,
@@ -1114,10 +1118,73 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## sendLivePhoto
+   * Use this method to send live photos. On success, the sent Message is returned.
+   * @see https://core.telegram.org/bots/api#sendlivephoto
+   */
+  async sendLivePhoto(options: {
+    business_connection_id?: string;
+    chat_id: number | string;
+    message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a
+     * direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
+    /**
+     * Live photo video to send. The video must be no longer than 10 seconds and must not exceed 10 MB in size. Pass a
+     * file_id as String to send a video that exists on the Telegram servers (recommended) or upload a new video using
+     * multipart/form-data. Sending live photos by a URL is currently unsupported.
+     */
+    live_photo: InputFile | string;
+
+    /**
+     * The static photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers
+     * (recommended) or upload a new video using multipart/form-data. Sending live photos by a URL is currently
+     * unsupported.
+     */
+    photo: InputFile | string;
+
+    caption?: string;
+    parse_mode?: ParseMode;
+    caption_entities?: MessageEntity[];
+    show_caption_above_media?: boolean;
+    has_spoiler?: boolean;
+    disable_notification?: boolean;
+    protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
+    message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
+    reply_parameters?: ReplyParameters;
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+  }): Promise<Message> {
+    return await this.callApi('sendLivePhoto', {
+      ...options,
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
+    });
+  }
+
+  /**
    * ## sendMediaGroup
-   * Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can
-   * be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is
-   * returned.
+   * Use this method to send a group of photos, live photos, videos, documents or audios as an album. Documents and
+   * audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that
+   * were sent is returned.
    * @see https://core.telegram.org/bots/api#sendmediagroup
    */
   async sendMediaGroup(options: {
@@ -1131,7 +1198,7 @@ export class TelegramBot extends EventEmitter {
      */
     direct_messages_topic_id?: number;
 
-    media: (InputMediaAudio | InputMediaDocument | InputMediaPhoto | InputMediaVideo)[];
+    media: (InputMediaAudio | InputMediaDocument | InputMediaLivePhoto | InputMediaPhoto | InputMediaVideo)[];
     disable_notification?: boolean;
     protect_content?: boolean;
 
@@ -1316,16 +1383,42 @@ export class TelegramBot extends EventEmitter {
     shuffle_options?: boolean;
     allow_adding_options?: boolean;
     hide_results_until_closes?: boolean;
+
+    /**
+     * Pass True, if voting is limited to users who have been members of the chat where the poll is being sent for more
+     * than 24 hours; for channel chats only
+     */
+    members_only?: boolean;
+
+    /**
+     * A JSON-serialized list of 0-12 two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which
+     * users can vote in the poll; for channel chats only. If omitted or empty, then users from any country can
+     * participate in the poll.
+     */
+    country_codes?: string[];
+
     correct_option_ids?: number[];
     explanation?: string;
     explanation_parse_mode?: ParseMode;
     explanation_entities?: MessageEntity[];
+
+    /**
+     * Media added to the quiz explanation
+     */
+    explanation_media?: InputPollMedia;
+
     open_period?: number;
     close_date?: number;
     is_closed?: boolean;
     description?: string;
     description_parse_mode?: ParseMode;
     description_entities?: MessageEntity[];
+
+    /**
+     * Media added to the poll description
+     */
+    media?: InputPollMedia;
+
     disable_notification?: boolean;
     protect_content?: boolean;
 
@@ -1343,9 +1436,12 @@ export class TelegramBot extends EventEmitter {
       ...options,
       options: new JSONSerialized(options.options),
       question_entities: new JSONSerialized(options.question_entities),
+      country_codes: new JSONSerialized(options.country_codes),
       correct_option_ids: new JSONSerialized(options.correct_option_ids),
       explanation_entities: new JSONSerialized(options.explanation_entities),
+      explanation_media: new JSONSerialized(options.explanation_media),
       description_entities: new JSONSerialized(options.description_entities),
+      media: new JSONSerialized(options.media),
       reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
@@ -1397,8 +1493,9 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## sendMessageDraft
-   * Use this method to stream a partial message to a user while the message is being generated. Returns True on
-   * success.
+   * Use this method to stream a partial message to a user while the message is being generated. Note that the streamed
+   * draft is ephemeral and acts as a temporary 30-second preview - once the output is finalized, you must call
+   * sendMessage with the complete message to persist it in the user's chat. Returns True on success.
    * @see https://core.telegram.org/bots/api#sendmessagedraft
    */
   async sendMessageDraft(options: {
@@ -1418,9 +1515,10 @@ export class TelegramBot extends EventEmitter {
     draft_id: number;
 
     /**
-     * Text of the message to be sent, 1-4096 characters after entities parsing
+     * Text of the message to be sent, 0-4096 characters after entities parsing. Pass an empty text to show a
+     * “Thinking…” placeholder.
      */
-    text: string;
+    text?: string;
 
     /**
      * Mode for parsing entities in the message text. See formatting options for more details.
@@ -1483,6 +1581,51 @@ export class TelegramBot extends EventEmitter {
       ...options,
       reaction: new JSONSerialized(options.reaction),
     });
+  }
+
+  /**
+   * ## deleteMessageReaction
+   * Use this method to remove a reaction from a message in a group or a supergroup chat. The bot must have the
+   * 'can_delete_messages' administrator right in the chat. Returns True on success.
+   * @see https://core.telegram.org/bots/api#deletemessagereaction
+   */
+  async deleteMessageReaction(options: {
+    chat_id: number | string;
+    message_id: number;
+
+    /**
+     * Identifier of the user whose reaction will be removed, if the reaction was added by a user
+     */
+    user_id?: number;
+
+    /**
+     * Identifier of the chat whose reaction will be removed, if the reaction was added by a chat
+     */
+    actor_chat_id?: number;
+  }): Promise<true> {
+    return await this.callApi('deleteMessageReaction', options);
+  }
+
+  /**
+   * ## deleteAllMessageReactions
+   * Use this method to remove up to 10000 recent reactions in a group or a supergroup chat added by a given user or
+   * chat. The bot must have the 'can_delete_messages' administrator right in the chat. Returns True on success.
+   * @see https://core.telegram.org/bots/api#deleteallmessagereactions
+   */
+  async deleteAllMessageReactions(options: {
+    chat_id: number | string;
+
+    /**
+     * Identifier of the user whose reactions will be removed, if the reactions were added by a user
+     */
+    user_id?: number;
+
+    /**
+     * Identifier of the chat whose reactions will be removed, if the reactions were added by a chat
+     */
+    actor_chat_id?: number;
+  }): Promise<true> {
+    return await this.callApi('deleteAllMessageReactions', options);
   }
 
   /**
@@ -1930,7 +2073,15 @@ export class TelegramBot extends EventEmitter {
    * objects.
    * @see https://core.telegram.org/bots/api#getchatadministrators
    */
-  async getChatAdministrators(options: { chat_id: number | string }): Promise<ChatMember[]> {
+  async getChatAdministrators(options: {
+    chat_id: number | string;
+
+    /**
+     * Pass True to additionally receive all bots that are administrators of the chat. By default, bots other than the
+     * current bot are omitted.
+     */
+    return_bots?: boolean;
+  }): Promise<ChatMember[]> {
     return await this.callApi('getChatAdministrators', options);
   }
 
@@ -1951,6 +2102,26 @@ export class TelegramBot extends EventEmitter {
    */
   async getChatMember(options: { chat_id: number | string; user_id: number }): Promise<ChatMember> {
     return await this.callApi('getChatMember', options);
+  }
+
+  /**
+   * ## getUserPersonalChatMessages
+   * Use this method to get the last messages from the personal chat (i.e., the chat currently added to their profile)
+   * of a given user. On success, an array of Message objects is returned.
+   * @see https://core.telegram.org/bots/api#getuserpersonalchatmessages
+   */
+  async getUserPersonalChatMessages(options: {
+    /**
+     * Unique identifier for the target user
+     */
+    user_id: number;
+
+    /**
+     * The maximum number of messages to return; 1-20
+     */
+    limit: number;
+  }): Promise<Message[]> {
+    return await this.callApi('getUserPersonalChatMessages', options);
   }
 
   /**
@@ -2191,6 +2362,48 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## getManagedBotAccessSettings
+   * Use this method to get the access settings of a managed bot. Returns a BotAccessSettings object on success.
+   * @see https://core.telegram.org/bots/api#getmanagedbotaccesssettings
+   */
+  async getManagedBotAccessSettings(options: {
+    /**
+     * User identifier of the managed bot whose access settings will be returned
+     */
+    user_id: number;
+  }): Promise<BotAccessSettings> {
+    return await this.callApi('getManagedBotAccessSettings', options);
+  }
+
+  /**
+   * ## setManagedBotAccessSettings
+   * Use this method to change the access settings of a managed bot. Returns True on success.
+   * @see https://core.telegram.org/bots/api#setmanagedbotaccesssettings
+   */
+  async setManagedBotAccessSettings(options: {
+    /**
+     * User identifier of the managed bot whose access settings will be changed
+     */
+    user_id: number;
+
+    /**
+     * Pass True, if only selected users can access the bot. The bot's owner can always access it.
+     */
+    is_access_restricted: boolean;
+
+    /**
+     * A JSON-serialized list of up to 10 identifiers of users who will have access to the bot in addition to its
+     * owner. Ignored if is_access_restricted is false.
+     */
+    added_user_ids?: number[];
+  }): Promise<true> {
+    return await this.callApi('setManagedBotAccessSettings', {
+      ...options,
+      added_user_ids: new JSONSerialized(options.added_user_ids),
+    });
+  }
+
+  /**
    * ## setMyCommands
    * Use this method to change the list of the bot's commands. See this manual for more details about bot commands.
    * Returns True on success.
@@ -2388,13 +2601,13 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editMessageMedia
-   * Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If
-   * a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document
-   * for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can't be
-   * uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not
-   * an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that
-   * were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time
-   * they were sent.
+   * Use this method to edit animation, audio, document, live photo, photo, or video messages, or to add media to text
+   * messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only
+   * to a document for document albums and to a photo, a live photo, or a video otherwise. When an inline message is
+   * edited, a new file can't be uploaded; use a previously uploaded file via its file_id or specify a URL. On success,
+   * if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note
+   * that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited
+   * within 48 hours from the time they were sent.
    * @see https://core.telegram.org/bots/api#editmessagemedia
    */
   async editMessageMedia(
@@ -2782,6 +2995,28 @@ export class TelegramBot extends EventEmitter {
     result: InlineQueryResult;
   }): Promise<SentWebAppMessage> {
     return await this.callApi('answerWebAppQuery', {
+      ...options,
+      result: new JSONSerialized(options.result),
+    });
+  }
+
+  /**
+   * ## answerGuestQuery
+   * Use this method to reply to a received guest message. On success, a SentGuestMessage object is returned.
+   * @see https://core.telegram.org/bots/api#answerguestquery
+   */
+  async answerGuestQuery(options: {
+    /**
+     * Unique identifier for the query to be answered
+     */
+    guest_query_id: string;
+
+    /**
+     * A JSON-serialized object describing the message to be sent
+     */
+    result: InlineQueryResult;
+  }): Promise<SentGuestMessage> {
+    return await this.callApi('answerGuestQuery', {
       ...options,
       result: new JSONSerialized(options.result),
     });

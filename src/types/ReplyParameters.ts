@@ -1,4 +1,4 @@
-import { ParseMode } from './index';
+import { MessageEntity, ParseMode } from './index';
 
 /**
  * ## ReplyParameters
@@ -40,7 +40,7 @@ export type ReplyParameters = {
    * Optional. A JSON-serialized list of special entities that appear in the quote. It can be specified instead of
    * quote_parse_mode.
    */
-  quote_entities?: string; // todo: JSON 	Array of MessageEntity
+  quote_entities?: MessageEntity[];
 
   /**
    * Optional. Position of the quote in the original message in UTF-16 code units

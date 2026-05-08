@@ -10,7 +10,7 @@ export type ReplyKeyboardMarkup = {
   /**
    * Array of button rows, each represented by an Array of KeyboardButton objects
    */
-  keyboard?: KeyboardButton[][];
+  keyboard: KeyboardButton[][];
 
   /**
    * Optional. Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in

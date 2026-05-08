@@ -22,6 +22,7 @@ import {
   Invoice,
   PaidMediaInfo,
   Checklist,
+  LivePhoto,
 } from './';
 
 /**
@@ -66,6 +67,11 @@ export type ExternalReplyInfo = {
    * Optional. Message is a general file, information about the file
    */
   document?: Document;
+
+  /**
+   * Optional. Message is a live photo, information about the live photo
+   */
+  live_photo?: LivePhoto;
 
   /**
    * Optional. Message contains paid media; information about the paid media

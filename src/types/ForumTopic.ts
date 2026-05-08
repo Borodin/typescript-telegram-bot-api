@@ -17,7 +17,7 @@ export type ForumTopic = {
   /**
    * Color of the topic icon in RGB format
    */
-  icon_color: string;
+  icon_color: number;
 
   /**
    * Optional. Unique identifier of the custom emoji shown as the topic icon

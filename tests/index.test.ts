@@ -521,6 +521,18 @@ describe('.sendVideoNote()', () => {
   });
 });
 
+describe('.sendLivePhoto()', () => {
+  test('should send live photo from files', async () => {
+    await expect(
+      bot.sendLivePhoto({
+        chat_id: USERID,
+        live_photo: createReadStream('tests/data/video.mp4'),
+        photo: createReadStream('tests/data/photo.jpg'),
+      }),
+    ).resolves.toHaveProperty('live_photo');
+  });
+});
+
 describe('.sendPaidMedia()', () => {
   test('should send paid media: photo', async () => {
     await expect(
@@ -745,6 +757,34 @@ describe('.setMessageReaction()', () => {
         chat_id: USERID,
         message_id: message.message_id,
         reaction: [{ type: 'emoji', emoji: '👍' }],
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.deleteMessageReaction()', () => {
+  test('should delete message reaction', async () => {
+    const message = await bot.sendMessage({
+      chat_id: TEST_GROUP_ID,
+      text: 'Message for reaction deletion',
+    });
+
+    await expect(
+      bot.deleteMessageReaction({
+        chat_id: TEST_GROUP_ID,
+        message_id: message.message_id,
+        user_id: TEST_GROUP_MEMBER_ID,
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.deleteAllMessageReactions()', () => {
+  test('should delete all message reactions for a user', async () => {
+    await expect(
+      bot.deleteAllMessageReactions({
+        chat_id: TEST_GROUP_ID,
+        user_id: TEST_GROUP_MEMBER_ID,
       }),
     ).resolves.toBe(true);
   });
@@ -1363,6 +1403,17 @@ describe('.getChatMember()', () => {
   });
 });
 
+describe('.getUserPersonalChatMessages()', () => {
+  test('should get user personal chat messages', async () => {
+    await expect(
+      bot.getUserPersonalChatMessages({
+        user_id: USERID,
+        limit: 5,
+      }),
+    ).rejects.toThrow('Bad Request');
+  });
+});
+
 describe('.setChatStickerSet()', () => {
   test('should set chat sticker set', async () => {
     await expect(
@@ -1716,6 +1767,28 @@ describe('.replaceManagedBotToken()', () => {
   });
 });
 
+describe('.getManagedBotAccessSettings()', () => {
+  test('should get managed bot access settings', async () => {
+    await expect(
+      bot.getManagedBotAccessSettings({
+        user_id: USERID,
+      }),
+    ).rejects.toThrow('Bad Request');
+  });
+});
+
+describe('.setManagedBotAccessSettings()', () => {
+  test('should set managed bot access settings', async () => {
+    await expect(
+      bot.setManagedBotAccessSettings({
+        user_id: USERID,
+        is_access_restricted: true,
+        added_user_ids: [TEST_GROUP_MEMBER_ID],
+      }),
+    ).rejects.toThrow('Bad Request');
+  });
+});
+
 describe('.setChatMenuButton()', () => {
   test('should set chat menu button', async () => {
     await expect(
@@ -2006,6 +2079,24 @@ describe('.answerWebAppQuery()', () => {
         },
       }),
     ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
+  });
+});
+
+describe('.answerGuestQuery()', () => {
+  test('should answer guest query', async () => {
+    await expect(
+      bot.answerGuestQuery({
+        guest_query_id: 'QUERY_ID',
+        result: {
+          type: 'article',
+          id: '1',
+          title: 'Article',
+          input_message_content: {
+            message_text: 'Article content',
+          },
+        },
+      }),
+    ).rejects.toThrow('Bad Request');
   });
 });
 

@@ -19,12 +19,12 @@ export type MessageReactionUpdated = {
   /**
    * Optional. The user that changed the reaction, if the user isn't anonymous
    */
-  user: User;
+  user?: User;
 
   /**
    * Optional. The chat on behalf of which the reaction was changed, if the user is anonymous
    */
-  actor_chat: Chat;
+  actor_chat?: Chat;
 
   /**
    * Date of the change in Unix time

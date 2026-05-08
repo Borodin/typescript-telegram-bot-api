@@ -69,6 +69,7 @@ import {
   ManagedBotCreated,
   PollOptionAdded,
   PollOptionDeleted,
+  LivePhoto,
 } from './';
 
 /**
@@ -127,6 +128,13 @@ export type Message = {
    * Date the message was sent in Unix time. It is always a positive number, representing a valid date.
    */
   date: number;
+
+  /**
+   * Optional. The unique identifier for the guest query. Use this identifier with the method answerGuestQuery to send
+   * a response message. If non-empty, the message belongs to the chat where the guest bot was summoned, which may not
+   * coincide with other existing bot chats sharing the same identifier.
+   */
+  guest_query_id?: string;
 
   /**
    * Optional. Unique identifier of the business connection from which the message was received. If non-empty, the
@@ -190,6 +198,16 @@ export type Message = {
    * Optional. Bot through which the message was sent
    */
   via_bot?: User;
+
+  /**
+   * Optional. For a message sent by a guest bot, this is the user whose original message triggered the bot's response
+   */
+  guest_bot_caller_user?: User;
+
+  /**
+   * Optional. For a message sent by a guest bot, this is the chat whose original message triggered the bot's response
+   */
+  guest_bot_caller_chat?: Chat;
 
   /**
    * Optional. Date the message was last edited in Unix time
@@ -271,6 +289,12 @@ export type Message = {
    * Optional. Message is a general file, information about the file
    */
   document?: Document;
+
+  /**
+   * Optional. Message is a live photo, information about the live photo. For backward compatibility, when this field
+   * is set, the photo field will also be set
+   */
+  live_photo?: LivePhoto;
 
   /**
    * Optional. Message contains paid media; information about the paid media
@@ -667,6 +691,7 @@ export const messageTypes = [
   'animation',
   'audio',
   'document',
+  'live_photo',
   'paid_media',
   'photo',
   'sticker',

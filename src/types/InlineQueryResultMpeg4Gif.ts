@@ -47,7 +47,7 @@ export type InlineQueryResultMpeg4Gif = {
    * Optional. MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to
    * “image/jpeg”
    */
-  thumbnail_mime_type: 'image/jpeg' | 'image/gif' | 'video/mp4';
+  thumbnail_mime_type?: 'image/jpeg' | 'image/gif' | 'video/mp4';
 
   /**
    * Optional. Title for the result

@@ -45,7 +45,7 @@ export type WebhookInfo = {
   /**
    * Optional. The maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
    */
-  max_connections?: string;
+  max_connections?: number;
 
   /**
    * Optional. A list of update types the bot is subscribed to. Defaults to all update types except chat_member

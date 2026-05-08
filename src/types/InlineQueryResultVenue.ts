@@ -49,6 +49,11 @@ export type InlineQueryResultVenue = {
   foursquare_type?: string;
 
   /**
+   * Optional. Google Places identifier of the venue
+   */
+  google_place_id?: string;
+
+  /**
    * Optional. Google Places type of the venue. (See supported types.)
    */
   google_place_type?: string;

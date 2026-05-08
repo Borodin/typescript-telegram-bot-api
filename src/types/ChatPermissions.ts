@@ -56,7 +56,14 @@ export type ChatPermissions = {
   can_add_web_page_previews?: boolean;
 
   /**
-   * Optional. True, if the user is allowed to edit their own tag
+   * Optional. True, if the user is allowed to react to messages. If omitted, defaults to the value of
+   * can_send_messages.
+   */
+  can_react_to_messages?: boolean;
+
+  /**
+   * Optional. True, if the user is allowed to edit their own tag. If omitted, defaults to the value of
+   * can_pin_messages.
    */
   can_edit_tag?: boolean;
 

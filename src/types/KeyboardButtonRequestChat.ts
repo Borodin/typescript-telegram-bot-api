@@ -40,12 +40,12 @@ export type KeyboardButtonRequestChat = {
    * Optional. A JSON-serialized object listing the required administrator rights of the user in the chat. The rights
    * must be a superset of bot_administrator_rights. If not specified, no additional restrictions are applied.
    */
-  user_administrator_rights?: Partial<ChatAdministratorRights>;
+  user_administrator_rights?: ChatAdministratorRights;
   /**
    * Optional. A JSON-serialized object listing the required administrator rights of the bot in the chat. The rights
    * must be a subset of user_administrator_rights. If not specified, no additional restrictions are applied.
    */
-  bot_administrator_rights?: Partial<ChatAdministratorRights>;
+  bot_administrator_rights?: ChatAdministratorRights;
   /**
    * Optional. Pass True to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.
    */

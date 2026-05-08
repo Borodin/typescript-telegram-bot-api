@@ -1,4 +1,4 @@
-import { MessageEntity, ParseMode } from './';
+import { InputPollOptionMedia, MessageEntity, ParseMode } from './';
 
 /**
  * ## InputPollOption
@@ -22,4 +22,9 @@ export type InputPollOption = {
    * instead of text_parse_mode
    */
   text_entities?: MessageEntity[];
+
+  /**
+   * Optional. Media added to the poll option
+   */
+  media?: InputPollOptionMedia;
 };

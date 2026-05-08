@@ -1,13 +1,27 @@
-import { InputMediaAnimation, InputMediaDocument, InputMediaAudio, InputMediaPhoto, InputMediaVideo } from './';
+import {
+  InputMediaAnimation,
+  InputMediaDocument,
+  InputMediaAudio,
+  InputMediaLivePhoto,
+  InputMediaPhoto,
+  InputMediaVideo,
+} from './';
 
 /**
  * ## InputMedia
  * This object represents the content of a media message to be sent. It should be one of
  * - InputMediaAnimation
- * - InputMediaDocument
  * - InputMediaAudio
+ * - InputMediaDocument
+ * - InputMediaLivePhoto
  * - InputMediaPhoto
  * - InputMediaVideo
  * @see https://core.telegram.org/bots/api#inputmedia
  */
-export type InputMedia = InputMediaAnimation | InputMediaDocument | InputMediaAudio | InputMediaPhoto | InputMediaVideo;
+export type InputMedia =
+  | InputMediaAnimation
+  | InputMediaDocument
+  | InputMediaAudio
+  | InputMediaLivePhoto
+  | InputMediaPhoto
+  | InputMediaVideo;

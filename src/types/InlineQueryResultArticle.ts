@@ -44,15 +44,15 @@ export type InlineQueryResultArticle = {
   /**
    * Optional. Url of the thumbnail for the result
    */
-  thumb_url?: string;
+  thumbnail_url?: string;
 
   /**
    * Optional. Thumbnail width
    */
-  thumb_width?: number;
+  thumbnail_width?: number;
 
   /**
    * Optional. Thumbnail height
    */
-  thumb_height?: number;
+  thumbnail_height?: number;
 };

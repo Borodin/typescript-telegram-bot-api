@@ -24,10 +24,10 @@ export type BackgroundTypeWallpaper = {
   /**
    * Optional. True, if the wallpaper is downscaled to fit in a 450x450 square and then box-blurred with radius 12
    */
-  is_blurred: boolean;
+  is_blurred?: true;
 
   /**
    * Optional. True, if the background moves slightly when the device is tilted
    */
-  is_moving: boolean;
+  is_moving?: true;
 };

@@ -1,4 +1,4 @@
-import { MessageEntity, User, Chat } from './';
+import { MessageEntity, PollMedia, User, Chat } from './';
 
 /**
  * ## PollOption
@@ -21,6 +21,11 @@ export type PollOption = {
    * poll option texts
    */
   text_entities?: MessageEntity[];
+
+  /**
+   * Optional. Media added to the poll option
+   */
+  media?: PollMedia;
 
   /**
    * Number of users who voted for this option; may be 0 if unknown

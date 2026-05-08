@@ -1,4 +1,4 @@
-import { MessageEntity, PollOption } from './';
+import { MessageEntity, PollMedia, PollOption } from './';
 
 /**
  * ## Poll
@@ -58,6 +58,18 @@ export type Poll = {
   allows_revoting: boolean;
 
   /**
+   * True if voting is limited to users who have been members of the chat where the poll was originally sent for more
+   * than 24 hours
+   */
+  members_only: boolean;
+
+  /**
+   * Optional. A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which users can vote
+   * in the poll. If omitted, then users from any country can participate in the poll.
+   */
+  country_codes?: string[];
+
+  /**
    * Optional. Array of 0-based identifiers of the correct answer options. Available only for polls in quiz mode which
    * are closed or were sent (not forwarded) by the bot or to the private chat with the bot.
    */
@@ -73,6 +85,11 @@ export type Poll = {
    * Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the explanation
    */
   explanation_entities?: MessageEntity[];
+
+  /**
+   * Optional. Media added to the quiz explanation
+   */
+  explanation_media?: PollMedia;
 
   /**
    * Optional. Amount of time in seconds the poll will be active after creation
@@ -93,4 +110,9 @@ export type Poll = {
    * Optional. Special entities like usernames, URLs, bot commands, etc. that appear in the description
    */
   description_entities?: MessageEntity[];
+
+  /**
+   * Optional. Media added to the poll description; for polls inside the Message object only
+   */
+  media?: PollMedia;
 };

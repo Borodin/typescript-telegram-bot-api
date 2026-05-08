@@ -25,7 +25,7 @@ export type InputInvoiceMessageContent = {
   /**
    * Optional. Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.
    */
-  provider_token: string;
+  provider_token?: string;
 
   /**
    * Three-letter ISO 4217 currency code, see more on currencies. Pass “XTR” for payments in Telegram Stars.

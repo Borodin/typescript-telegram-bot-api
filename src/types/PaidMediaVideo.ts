@@ -14,5 +14,5 @@ export type PaidMediaVideo = {
   /**
    * The video
    */
-  photo: Video[];
+  video: Video;
 };

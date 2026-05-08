@@ -1,16 +1,12 @@
 /**
  * ## PaidMessagePriceChanged
- * This object represents a service message about a change in the price for paid messages in a chat.
+ * Describes a service message about a change in the price of paid messages within a chat.
  * @see https://core.telegram.org/bots/api#paidmessagepricechanged
  */
 export type PaidMessagePriceChanged = {
   /**
-   * New price for paid messages in the chat, in the smallest units of the currency (integer, not float). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json for the number of digits past the decimal point for each currency (https://core.telegram.org/bots/payments/currencies.json), it may be different for each currency.
+   * The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each
+   * sent message
    */
-  amount: number;
-
-  /**
-   * Three-letter ISO 4217 currency code
-   */
-  currency: string;
+  paid_message_star_count: number;
 };

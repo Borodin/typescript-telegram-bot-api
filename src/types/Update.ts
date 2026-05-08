@@ -68,6 +68,12 @@ export type EventTypes = {
   deleted_business_messages: BusinessMessagesDeleted;
 
   /**
+   * New guest message. The bot can use the field Message.guest_query_id and the method answerGuestQuery to send a
+   * message in response.
+   */
+  guest_message: Message;
+
+  /**
    * A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly
    * specify "message_reaction" in the list of allowed_updates to receive these updates. The update isn't received for
    * reactions set by bots.

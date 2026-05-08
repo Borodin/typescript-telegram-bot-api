@@ -9,7 +9,7 @@ export type SwitchInlineQueryChosenChat = {
    * Optional. The default inline query to be inserted in the input field. If left empty, only the bot's username will
    * be inserted
    */
-  query: string;
+  query?: string;
 
   /**
    * Optional. True, if private chats with users can be chosen

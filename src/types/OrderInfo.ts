@@ -24,5 +24,5 @@ export type OrderInfo = {
   /**
    * Optional. User shipping address
    */
-  shipping_address: ShippingAddress;
+  shipping_address?: ShippingAddress;
 };

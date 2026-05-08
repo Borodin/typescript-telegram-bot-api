@@ -12,5 +12,5 @@ export type BackgroundFillSolid = {
   /**
    * The color of the background fill in the RGB24 format
    */
-  color: string;
+  color: number;
 };

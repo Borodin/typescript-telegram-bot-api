@@ -78,6 +78,11 @@ export type ChatMemberRestricted = {
   can_add_web_page_previews: boolean;
 
   /**
+   * True, if the user is allowed to react to messages
+   */
+  can_react_to_messages: boolean;
+
+  /**
    * True, if the user is allowed to edit their own tag
    */
   can_edit_tag: boolean;

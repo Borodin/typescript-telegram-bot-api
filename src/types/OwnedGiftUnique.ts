@@ -1,4 +1,4 @@
-import { Gift, User } from './';
+import { UniqueGift, User } from './';
 
 /**
  * ## OwnedGiftUnique
@@ -14,7 +14,7 @@ export type OwnedGiftUnique = {
   /**
    * Information about the unique gift
    */
-  gift: Gift;
+  gift: UniqueGift;
 
   /**
    * Optional. Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only

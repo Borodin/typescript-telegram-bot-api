@@ -31,10 +31,10 @@ export type BackgroundTypePattern = {
    * Optional. True, if the background fill must be applied only to the pattern itself. All other pixels are black in
    * this case. For dark themes only
    */
-  is_blurred: boolean;
+  is_inverted?: true;
 
   /**
    * Optional. True, if the background moves slightly when the device is tilted
    */
-  is_moving: boolean;
+  is_moving?: true;
 };

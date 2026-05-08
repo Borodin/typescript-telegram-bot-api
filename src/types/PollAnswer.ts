@@ -14,12 +14,12 @@ export type PollAnswer = {
   /**
    * Optional. The chat that changed the answer to the poll, if the voter is anonymous
    */
-  voter_chat: Chat;
+  voter_chat?: Chat;
 
   /**
    * Optional. The user that changed the answer to the poll, if the voter isn't anonymous
    */
-  user: User;
+  user?: User;
 
   /**
    * 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
