@@ -680,6 +680,20 @@ describe('.sendPoll()', () => {
       }),
     ).resolves.toHaveProperty('poll');
   });
+
+  test('should send poll with a link option media', async () => {
+    await expect(
+      bot.sendPoll({
+        chat_id: USERID,
+        question: 'Which link do you prefer?',
+        options: [
+          { text: 'Telegram', media: { type: 'link', url: 'https://telegram.org' } },
+          { text: 'Core', media: { type: 'link', url: 'https://core.telegram.org' } },
+        ],
+        is_anonymous: true,
+      }),
+    ).resolves.toHaveProperty('poll');
+  });
 });
 
 describe('.sendDice()', () => {
@@ -731,6 +745,33 @@ describe('.sendMessageDraft()', () => {
     const result = await bot.sendMessageDraft({ chat_id: USERID, draft_id: draftId, text: 'Done!' });
 
     expect(result).toBe(true);
+  });
+});
+
+describe('.sendRichMessage()', () => {
+  test('should send rich message', async () => {
+    await expect(
+      bot.sendRichMessage({
+        chat_id: USERID,
+        rich_message: {
+          html: '<p>Hello <b>rich</b> world</p>',
+        },
+      }),
+    ).resolves.toHaveProperty('message_id');
+  });
+});
+
+describe('.sendRichMessageDraft()', () => {
+  test('should send rich message draft', async () => {
+    await expect(
+      bot.sendRichMessageDraft({
+        chat_id: USERID,
+        draft_id: 1,
+        rich_message: {
+          html: '<p>Streaming <i>partial</i> message...</p>',
+        },
+      }),
+    ).resolves.toBe(true);
   });
 });
 
@@ -1862,6 +1903,28 @@ describe('.declineChatJoinRequest()', () => {
   });
 });
 
+describe('.answerChatJoinRequestQuery()', () => {
+  test('should answer chat join request query', async () => {
+    await expect(
+      bot.answerChatJoinRequestQuery({
+        chat_join_request_query_id: 'QUERY_ID',
+        result: 'approve',
+      }),
+    ).rejects.toThrow('Bad Request');
+  });
+});
+
+describe('.sendChatJoinRequestWebApp()', () => {
+  test('should send chat join request web app', async () => {
+    await expect(
+      bot.sendChatJoinRequestWebApp({
+        chat_join_request_query_id: 'QUERY_ID',
+        web_app_url: 'https://example.com',
+      }),
+    ).rejects.toThrow('Bad Request');
+  });
+});
+
 describe('.leaveChat()', () => {
   test('should leave chat', async () => {
     await expect(
@@ -1886,6 +1949,23 @@ describe('.editMessageText()', () => {
         text: 'Edited message',
       }),
     ).resolves.toHaveProperty('text', 'Edited message');
+  });
+
+  test('should edit message text into a rich message', async () => {
+    const message = await bot.sendMessage({
+      chat_id: USERID,
+      text: 'Message to edit into rich',
+    });
+
+    await expect(
+      bot.editMessageText({
+        chat_id: USERID,
+        message_id: message.message_id,
+        rich_message: {
+          html: '<p>Edited into a <b>rich</b> message</p>',
+        },
+      }),
+    ).resolves.toHaveProperty('message_id');
   });
 });
 

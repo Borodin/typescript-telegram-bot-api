@@ -82,7 +82,7 @@ export type Sticker = {
    * Optional. True, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium
    * badge in emoji status, white color on chat photos, or another appropriate color in other places
    */
-  needs_repainting?: boolean;
+  needs_repainting?: true;
 
   /**
    * Optional. File size in bytes

@@ -4,6 +4,7 @@ import {
   Venue,
   Location,
   Animation,
+  RichMessage,
   Document,
   MaybeInaccessibleMessage,
   ChatBackground,
@@ -156,12 +157,12 @@ export type Message = {
   /**
    * Optional. True, if the message is sent to a topic in a forum supergroup or a private chat with the bot
    */
-  is_topic_message?: boolean;
+  is_topic_message?: true;
 
   /**
    * Optional. True, if the message is a channel post that was automatically forwarded to the connected discussion group
    */
-  is_automatic_forward?: boolean;
+  is_automatic_forward?: true;
 
   /**
    * Optional. For replies in the same chat and message thread, the original message. Note that the Message object in
@@ -275,6 +276,11 @@ export type Message = {
   effect_id?: string;
 
   /**
+   * Optional. Message is a rich formatted message
+   */
+  rich_message?: RichMessage;
+
+  /**
    * Optional. Message is an animation, information about the animation. For backward compatibility, when this field is
    * set, the document field will also be set
    */
@@ -345,12 +351,12 @@ export type Message = {
   /**
    * Optional. True, if the caption must be shown above the message media
    */
-  show_caption_above_media?: boolean;
+  show_caption_above_media?: true;
 
   /**
    * Optional. True, if the message media is covered by a spoiler animation
    */
-  has_media_spoiler?: boolean;
+  has_media_spoiler?: true;
 
   /**
    * Optional. Optional. Message is a checklist
@@ -422,26 +428,26 @@ export type Message = {
   /**
    * Optional. Service message: the chat photo was deleted
    */
-  delete_chat_photo?: boolean;
+  delete_chat_photo?: true;
 
   /**
    * Optional. Service message: the group has been created
    */
-  group_chat_created?: boolean;
+  group_chat_created?: true;
 
   /**
    * Optional. Service message: the supergroup has been created. This field can't be received in a message coming
    * through updates, because bot can't be a member of a supergroup when it is created. It can only be found in
    * reply_to_message if someone replies to a very first message in a directly created supergroup.
    */
-  supergroup_chat_created?: boolean;
+  supergroup_chat_created?: true;
 
   /**
    * Optional. Service message: the channel has been created. This field can't be received in a message coming through
    * updates, because bot can't be a member of a channel when it is created. It can only be found in reply_to_message
    * if someone replies to a very first message in a channel.
    */
-  channel_chat_created?: boolean;
+  channel_chat_created?: true;
 
   /**
    * Optional. Service message: auto-delete timer settings changed in the chat
@@ -688,6 +694,7 @@ export type Message = {
 export const messageTypes = [
   'text',
   'suggested_post_info',
+  'rich_message',
   'animation',
   'audio',
   'document',

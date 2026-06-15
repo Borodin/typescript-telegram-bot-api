@@ -54,12 +54,12 @@ export type GiveawayWinners = {
   /**
    * Optional. True, if only users who had joined the chats after the giveaway started were eligible to win
    */
-  only_new_members?: boolean;
+  only_new_members?: true;
 
   /**
    * Optional. True, if the giveaway was canceled because the payment for it was refunded
    */
-  was_refunded?: boolean;
+  was_refunded?: true;
 
   /**
    * Optional. Description of additional giveaway prize

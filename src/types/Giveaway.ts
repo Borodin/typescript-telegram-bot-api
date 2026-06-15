@@ -24,12 +24,12 @@ export type Giveaway = {
   /**
    * Optional. True, if only users who join the chats after the giveaway started should be eligible to win
    */
-  only_new_members?: boolean;
+  only_new_members?: true;
 
   /**
    * Optional. True, if the list of giveaway winners will be visible to everyone
    */
-  has_public_winners?: boolean;
+  has_public_winners?: true;
 
   /**
    * Optional. Description of additional giveaway prize

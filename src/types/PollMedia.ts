@@ -1,4 +1,4 @@
-import { Animation, Audio, Document, LivePhoto, Location, PhotoSize, Sticker, Venue, Video } from './';
+import { Animation, Audio, Document, Link, LivePhoto, Location, PhotoSize, Sticker, Venue, Video } from './';
 
 /**
  * ## PollMedia
@@ -20,6 +20,11 @@ export type PollMedia = {
    * Optional. Media is a general file, information about the file; currently, can't be received in a poll option
    */
   document?: Document;
+
+  /**
+   * Optional. The HTTP link attached to the poll option
+   */
+  link?: Link;
 
   /**
    * Optional. Media is a live photo, information about the live photo

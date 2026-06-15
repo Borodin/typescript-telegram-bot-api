@@ -1,5 +1,6 @@
 import {
   Message,
+  User,
   BusinessLocation,
   BusinessIntro,
   ChatPermissions,
@@ -155,24 +156,24 @@ export type ChatFullInfo = {
    * Optional. True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id>
    * links only in chats with the user
    */
-  has_private_forwards?: boolean;
+  has_private_forwards?: true;
 
   /**
    * Optional. True, if the privacy settings of the other party restrict sending voice and video note messages in the
    * private chat
    */
-  has_restricted_voice_and_video_messages?: boolean;
+  has_restricted_voice_and_video_messages?: true;
 
   /**
    * Optional. True, if users need to join the supergroup before they can send messages
    */
-  join_to_send_messages?: boolean;
+  join_to_send_messages?: true;
 
   /**
    * Optional. True, if all users directly joining the supergroup without using an invite link need to be approved by
    * supergroup administrators
    */
-  join_by_request?: boolean;
+  join_by_request?: true;
 
   /**
    * Optional. Description, for groups, supergroups and channel chats
@@ -203,7 +204,7 @@ export type ChatFullInfo = {
    * Optional. True, if paid media messages can be sent or forwarded to the channel chat. The field is available only
    * for channel chats.
    */
-  can_send_paid_media?: boolean;
+  can_send_paid_media?: true;
 
   /**
    * Optional. For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user;
@@ -225,22 +226,22 @@ export type ChatFullInfo = {
    * Optional. True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat
    * administrators.
    */
-  has_aggressive_anti_spam_enabled?: boolean;
+  has_aggressive_anti_spam_enabled?: true;
 
   /**
    * Optional. True, if non-administrators can only get the list of bots and administrators in the chat
    */
-  has_hidden_members?: boolean;
+  has_hidden_members?: true;
 
   /**
    * Optional. True, if messages from the chat can't be forwarded to other chats
    */
-  has_protected_content?: boolean;
+  has_protected_content?: true;
 
   /**
    * Optional. True, if new chat members will have access to old messages; available only to chat administrators
    */
-  has_visible_history?: boolean;
+  has_visible_history?: true;
 
   /**
    * Optional. For supergroups, name of the group sticker set
@@ -250,7 +251,7 @@ export type ChatFullInfo = {
   /**
    * Optional. True, if the bot can change the group sticker set
    */
-  can_set_sticker_set?: boolean;
+  can_set_sticker_set?: true;
 
   /**
    * Optional. For supergroups, the name of the group's custom emoji sticker set. Custom emoji from this set can be used
@@ -291,4 +292,10 @@ export type ChatFullInfo = {
    * Optional. The number of Telegram Stars a general user have to pay to send a message to the chat
    */
   paid_message_star_count?: number;
+
+  /**
+   * Optional. The bot that processes join request queries in the chat. The field is only available to chat
+   * administrators.
+   */
+  guard_bot?: User;
 };

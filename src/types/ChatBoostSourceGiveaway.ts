@@ -31,5 +31,5 @@ export type ChatBoostSourceGiveaway = {
   /**
    * Optional. True, if the giveaway was completed, but there was no user to win the prize
    */
-  is_unclaimed?: boolean;
+  is_unclaimed?: true;
 };

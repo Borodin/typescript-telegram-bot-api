@@ -48,6 +48,7 @@ import {
   MenuButton,
   ChatAdministratorRights,
   InputMedia,
+  InputRichMessage,
   Poll,
   UserChatBoosts,
   PreparedInlineMessage,
@@ -1538,6 +1539,124 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## sendRichMessage
+   * Use this method to send rich messages. If the message contains a block with a media element, then the bot must
+   * have the right to send the media to the chat. On success, the sent Message is returned.
+   * @see https://core.telegram.org/bots/api#sendrichmessage
+   */
+  async sendRichMessage(options: {
+    /**
+     * Unique identifier of the business connection on behalf of which the message will be sent
+     */
+    business_connection_id?: string;
+
+    /**
+     * Unique identifier for the target chat or username of the target bot, supergroup or channel in the format
+     * `@username`
+     */
+    chat_id: number | string;
+
+    /**
+     * Unique identifier for the target message thread (topic) of a forum; for forum supergroups and private chats of
+     * bots with forum topic mode enabled only
+     */
+    message_thread_id?: number;
+
+    /**
+     * Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a
+     * direct messages chat
+     */
+    direct_messages_topic_id?: number;
+
+    /**
+     * The message to be sent
+     */
+    rich_message: InputRichMessage;
+
+    /**
+     * Sends the message silently. Users will receive a notification with no sound.
+     */
+    disable_notification?: boolean;
+
+    /**
+     * Protects the contents of the sent message from forwarding and saving
+     */
+    protect_content?: boolean;
+
+    /**
+     * Pass True to allow up to 1000 messages per second, ignoring
+     * [broadcasting limits](https://core.telegram.org/bots/faq#how-can-i-message-all-of-my-bot-39s-subscribers-at-once)
+     * for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot's balance
+     */
+    allow_paid_broadcast?: boolean;
+
+    /**
+     * Unique identifier of the message effect to be added to the message; for private chats only
+     */
+    message_effect_id?: string;
+
+    /**
+     * A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only.
+     * If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.
+     */
+    suggested_post_parameters?: SuggestedPostParameters;
+
+    /**
+     * Description of the message to reply to
+     */
+    reply_parameters?: ReplyParameters;
+
+    /**
+     * Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard,
+     * instructions to remove a reply keyboard or to force a reply from the user
+     */
+    reply_markup?: InlineKeyboardMarkup | ReplyKeyboardMarkup | ReplyKeyboardRemove | ForceReply;
+  }): Promise<Message> {
+    return await this.callApi('sendRichMessage', {
+      ...options,
+      rich_message: new JSONSerialized(options.rich_message),
+      suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
+      reply_parameters: new JSONSerialized(options.reply_parameters),
+      reply_markup: new JSONSerialized(options.reply_markup),
+    });
+  }
+
+  /**
+   * ## sendRichMessageDraft
+   * Use this method to stream a partial rich message to a user while the message is being generated. Note that the
+   * streamed draft is ephemeral and acts as a temporary 30-second preview - once the output is finalized, you must call
+   * sendRichMessage with the complete message to persist it in the user's chat. Returns True on success.
+   * @see https://core.telegram.org/bots/api#sendrichmessagedraft
+   */
+  async sendRichMessageDraft(options: {
+    /**
+     * Unique identifier for the target private chat
+     */
+    chat_id: number;
+
+    /**
+     * Unique identifier for the target message thread
+     */
+    message_thread_id?: number;
+
+    /**
+     * Unique identifier of the message draft; must be non-zero. Changes to drafts with the same identifier are
+     * animated.
+     */
+    draft_id: number;
+
+    /**
+     * The partial message to be streamed
+     */
+    rich_message: InputRichMessage;
+  }): Promise<true> {
+    return await this.callApi('sendRichMessageDraft', {
+      ...options,
+      rich_message: new JSONSerialized(options.rich_message),
+    });
+  }
+
+  /**
    * ## sendChatAction
    * Use this method when you need to tell the user that something is happening on the bot's side. The status is set for
    * 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on
@@ -1962,6 +2081,46 @@ export class TelegramBot extends EventEmitter {
    */
   async declineChatJoinRequest(options: { chat_id: number | string; user_id: number }): Promise<true> {
     return await this.callApi('declineChatJoinRequest', options);
+  }
+
+  /**
+   * ## answerChatJoinRequestQuery
+   * Use this method to process a received chat join request query. Returns True on success.
+   * @see https://core.telegram.org/bots/api#answerchatjoinrequestquery
+   */
+  async answerChatJoinRequestQuery(options: {
+    /**
+     * Unique identifier of the join request query
+     */
+    chat_join_request_query_id: string;
+
+    /**
+     * Result of the query. Must be either "approve" to allow the user to join the chat, "decline" to disallow the user
+     * to join the chat, or "queue" to leave the decision to other administrators.
+     */
+    result: 'approve' | 'decline' | 'queue';
+  }): Promise<true> {
+    return await this.callApi('answerChatJoinRequestQuery', options);
+  }
+
+  /**
+   * ## sendChatJoinRequestWebApp
+   * Use this method to process a received chat join request query by showing a Mini App to the user before deciding the
+   * outcome. Returns True on success.
+   * @see https://core.telegram.org/bots/api#sendchatjoinrequestwebapp
+   */
+  async sendChatJoinRequestWebApp(options: {
+    /**
+     * Unique identifier of the join request query
+     */
+    chat_join_request_query_id: string;
+
+    /**
+     * The URL of the Mini App to be opened
+     */
+    web_app_url: string;
+  }): Promise<true> {
+    return await this.callApi('sendChatJoinRequestWebApp', options);
   }
 
   /**
@@ -2555,23 +2714,36 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editMessageText
-   * Use this method to edit text and game messages. On success, if the edited message is not an inline message, the
-   * edited Message is returned, otherwise True is returned.
+   * Use this method to edit text, rich and game messages. On success, if the edited message is not an inline message,
+   * the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the
+   * bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.
    * @see https://core.telegram.org/bots/api#editmessagetext
    */
   async editMessageText(
     options: ({ chat_id: number | string; message_id: number } | { inline_message_id: string }) & {
       business_connection_id?: string;
-      text: string;
+
+      /**
+       * New text of the message, 1-4096 characters after entity parsing; required if rich_message isn't specified
+       */
+      text?: string;
+
       parse_mode?: ParseMode;
       entities?: MessageEntity[];
       link_preview_options?: LinkPreviewOptions;
+
+      /**
+       * New rich content of the message; required if text isn't specified
+       */
+      rich_message?: InputRichMessage;
+
       reply_markup?: InlineKeyboardMarkup;
     },
   ): Promise<Message | true> {
     return await this.callApi('editMessageText', {
       ...options,
       entities: new JSONSerialized(options.entities),
+      rich_message: new JSONSerialized(options.rich_message),
       reply_markup: new JSONSerialized(options.reply_markup),
     });
   }

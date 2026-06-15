@@ -39,12 +39,12 @@ export type User = {
   /**
    * Optional. True, if this user is a Telegram Premium user
    */
-  is_premium?: boolean;
+  is_premium?: true;
 
   /**
    * Optional. True, if this user added the bot to the attachment menu
    */
-  added_to_attachment_menu?: boolean;
+  added_to_attachment_menu?: true;
 
   /**
    * Optional. True, if the bot can be invited to groups. Returned only in getMe.
@@ -90,4 +90,10 @@ export type User = {
    * Optional. True, if other bots can be created to be controlled by the bot. Returned only in getMe.
    */
   can_manage_bots?: boolean;
+
+  /**
+   * Optional. True, if the bot supports join request queries and can be assigned to process them. Returned only in
+   * getMe.
+   */
+  supports_join_request_queries?: boolean;
 };

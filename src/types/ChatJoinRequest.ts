@@ -31,7 +31,7 @@ export type ChatJoinRequest = {
   date: number;
 
   /**
-   * Optional. Bio of the user.
+   * Optional. Bio of the user
    */
   bio?: string;
 
@@ -39,4 +39,10 @@ export type ChatJoinRequest = {
    * Optional. Chat invite link that was used by the user to send the join request
    */
   invite_link?: ChatInviteLink;
+
+  /**
+   * Optional. Identifier of the join request query. If present, then the bot must call sendChatJoinRequestWebApp or
+   * directly call answerChatJoinRequestQuery within 10 seconds.
+   */
+  query_id?: string;
 };

@@ -31,12 +31,12 @@ export type SuccessfulPayment = {
   /**
    * Optional. True, if the payment is a recurring payment for a subscription
    */
-  is_recurring?: boolean;
+  is_recurring?: true;
 
   /**
    * Optional. True, if the payment is the first payment for a subscription
    */
-  is_first_recurring?: boolean;
+  is_first_recurring?: true;
 
   /**
    * Optional. Identifier of the shipping option chosen by the user

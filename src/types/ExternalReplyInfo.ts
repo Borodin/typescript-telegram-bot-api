@@ -111,7 +111,7 @@ export type ExternalReplyInfo = {
   /**
    * Optional. True, if the message media is covered by a spoiler animation
    */
-  has_media_spoiler?: boolean;
+  has_media_spoiler?: true;
 
   /**
    * Optional. Message is a checklist
