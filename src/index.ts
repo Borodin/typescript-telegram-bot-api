@@ -465,6 +465,18 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
+
+    /**
      * Text of the message to be sent, 1-4096 characters after entities parsing
      */
     text: string;
@@ -712,6 +724,18 @@ export class TelegramBot extends EventEmitter {
      */
     direct_messages_topic_id?: number;
 
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
+
     photo: InputFile | string;
     caption?: string;
     parse_mode?: ParseMode;
@@ -766,6 +790,18 @@ export class TelegramBot extends EventEmitter {
      */
     direct_messages_topic_id?: number;
 
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
+
     audio: InputFile | string;
     caption?: string;
     parse_mode?: ParseMode;
@@ -818,6 +854,18 @@ export class TelegramBot extends EventEmitter {
      */
     direct_messages_topic_id?: number;
 
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
+
     document: InputFile | string;
     thumbnail?: InputFile | string;
     caption?: string;
@@ -869,6 +917,18 @@ export class TelegramBot extends EventEmitter {
      * forwarded to a direct messages chat
      */
     direct_messages_topic_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
 
     video: InputFile | string;
     duration?: number;
@@ -929,6 +989,18 @@ export class TelegramBot extends EventEmitter {
      */
     direct_messages_topic_id?: number;
 
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
+
     animation: InputFile | string;
     duration?: number;
     width?: number;
@@ -986,6 +1058,18 @@ export class TelegramBot extends EventEmitter {
      */
     direct_messages_topic_id?: number;
 
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
+
     voice: InputFile | string;
     caption?: string;
     parse_mode?: ParseMode;
@@ -1035,6 +1119,18 @@ export class TelegramBot extends EventEmitter {
      * forwarded to a direct messages chat
      */
     direct_messages_topic_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
 
     video_note: InputFile | string;
     duration?: number;
@@ -1133,6 +1229,18 @@ export class TelegramBot extends EventEmitter {
      * direct messages chat
      */
     direct_messages_topic_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
 
     /**
      * Live photo video to send. The video must be no longer than 10 seconds and must not exceed 10 MB in size. Pass a
@@ -1234,6 +1342,18 @@ export class TelegramBot extends EventEmitter {
      */
     direct_messages_topic_id?: number;
 
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
+
     latitude: number;
     longitude: number;
     horizontal_accuracy?: number;
@@ -1282,6 +1402,18 @@ export class TelegramBot extends EventEmitter {
      * forwarded to a direct messages chat
      */
     direct_messages_topic_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
 
     latitude: number;
     longitude: number;
@@ -1332,6 +1464,18 @@ export class TelegramBot extends EventEmitter {
      * forwarded to a direct messages chat
      */
     direct_messages_topic_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
 
     phone_number: string;
     first_name: string;
@@ -2858,6 +3002,184 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## editEphemeralMessageText
+   * Use this method to edit an ephemeral text message. Note that it is not guaranteed that the user will receive the
+   * message edit event, especially if they are offline. On success, True is returned.
+   * @see https://core.telegram.org/bots/api#editephemeralmessagetext
+   */
+  async editEphemeralMessageText(options: {
+    /**
+     * Unique identifier for the target chat or username of the target supergroup in the format `@username`
+     */
+    chat_id: number | string;
+
+    /**
+     * Identifier of the user who received the message
+     */
+    receiver_user_id: number;
+
+    /**
+     * Identifier of the ephemeral message to edit
+     */
+    ephemeral_message_id: number;
+
+    /**
+     * New text of the message, 1-4096 characters after entity parsing
+     */
+    text: string;
+
+    /**
+     * Mode for parsing entities in the message text. See formatting options for more details.
+     */
+    parse_mode?: ParseMode;
+
+    /**
+     * A JSON-serialized list of special entities that appear in message text, which can be specified instead of
+     * parse_mode
+     */
+    entities?: MessageEntity[];
+
+    /**
+     * Link preview generation options for the message
+     */
+    link_preview_options?: LinkPreviewOptions;
+
+    /**
+     * A JSON-serialized object for an inline keyboard
+     */
+    reply_markup?: InlineKeyboardMarkup;
+  }): Promise<true> {
+    return await this.callApi('editEphemeralMessageText', {
+      ...options,
+      entities: new JSONSerialized(options.entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
+    });
+  }
+
+  /**
+   * ## editEphemeralMessageMedia
+   * Use this method to edit the media of an ephemeral message. Note that it is not guaranteed that the user will
+   * receive the message edit event, especially if they are offline. On success, True is returned.
+   * @see https://core.telegram.org/bots/api#editephemeralmessagemedia
+   */
+  async editEphemeralMessageMedia(options: {
+    /**
+     * Unique identifier for the target chat or username of the target supergroup in the format `@username`
+     */
+    chat_id: number | string;
+
+    /**
+     * Identifier of the user who received the message
+     */
+    receiver_user_id: number;
+
+    /**
+     * Identifier of the ephemeral message to edit
+     */
+    ephemeral_message_id: number;
+
+    /**
+     * A JSON-serialized object for the new media content of the message. A new file can't be uploaded; use a
+     * previously uploaded file via its file_id or specify a URL.
+     */
+    media: InputMedia;
+
+    /**
+     * A JSON-serialized object for an inline keyboard
+     */
+    reply_markup?: InlineKeyboardMarkup;
+  }): Promise<true> {
+    return await this.callApi('editEphemeralMessageMedia', {
+      ...options,
+      media: new JSONSerialized(options.media),
+      reply_markup: new JSONSerialized(options.reply_markup),
+    });
+  }
+
+  /**
+   * ## editEphemeralMessageCaption
+   * Use this method to edit the caption of an ephemeral message. Note that it is not guaranteed that the user will
+   * receive the message edit event, especially if they are offline. On success, True is returned.
+   * @see https://core.telegram.org/bots/api#editephemeralmessagecaption
+   */
+  async editEphemeralMessageCaption(options: {
+    /**
+     * Unique identifier for the target chat or username of the target supergroup in the format `@username`
+     */
+    chat_id: number | string;
+
+    /**
+     * Identifier of the user who received the message
+     */
+    receiver_user_id: number;
+
+    /**
+     * Identifier of the ephemeral message to edit
+     */
+    ephemeral_message_id: number;
+
+    /**
+     * New caption of the message, 0-1024 characters after entities parsing
+     */
+    caption?: string;
+
+    /**
+     * Mode for parsing entities in the message caption. See formatting options for more details.
+     */
+    parse_mode?: ParseMode;
+
+    /**
+     * A JSON-serialized list of special entities that appear in the caption, which can be specified instead of
+     * parse_mode
+     */
+    caption_entities?: MessageEntity[];
+
+    /**
+     * A JSON-serialized object for an inline keyboard
+     */
+    reply_markup?: InlineKeyboardMarkup;
+  }): Promise<true> {
+    return await this.callApi('editEphemeralMessageCaption', {
+      ...options,
+      caption_entities: new JSONSerialized(options.caption_entities),
+      reply_markup: new JSONSerialized(options.reply_markup),
+    });
+  }
+
+  /**
+   * ## editEphemeralMessageReplyMarkup
+   * Use this method to edit only the reply markup of an ephemeral message. Note that it is not guaranteed that the
+   * user will receive the message edit event, especially if they are offline. On success, True is returned.
+   * @see https://core.telegram.org/bots/api#editephemeralmessagereplymarkup
+   */
+  async editEphemeralMessageReplyMarkup(options: {
+    /**
+     * Unique identifier for the target chat or username of the target supergroup in the format `@username`
+     */
+    chat_id: number | string;
+
+    /**
+     * Identifier of the user who received the message
+     */
+    receiver_user_id: number;
+
+    /**
+     * Identifier of the ephemeral message to edit
+     */
+    ephemeral_message_id: number;
+
+    /**
+     * A JSON-serialized object for an inline keyboard
+     */
+    reply_markup?: InlineKeyboardMarkup;
+  }): Promise<true> {
+    return await this.callApi('editEphemeralMessageReplyMarkup', {
+      ...options,
+      reply_markup: new JSONSerialized(options.reply_markup),
+    });
+  }
+
+  /**
    * ## stopPoll
    * Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.
    * @see https://core.telegram.org/bots/api#stoppoll
@@ -2905,6 +3227,31 @@ export class TelegramBot extends EventEmitter {
   }
 
   /**
+   * ## deleteEphemeralMessage
+   * Use this method to delete an ephemeral message. Note that it is not guaranteed that the user will receive the
+   * message deletion event, especially if they are offline. Returns True on success.
+   * @see https://core.telegram.org/bots/api#deleteephemeralmessage
+   */
+  async deleteEphemeralMessage(options: {
+    /**
+     * Unique identifier for the target chat or username of the target supergroup in the format `@username`
+     */
+    chat_id: number | string;
+
+    /**
+     * Identifier of the user who received the message
+     */
+    receiver_user_id: number;
+
+    /**
+     * Identifier of the ephemeral message to delete
+     */
+    ephemeral_message_id: number;
+  }): Promise<true> {
+    return await this.callApi('deleteEphemeralMessage', options);
+  }
+
+  /**
    * ## sendSticker
    * Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is
    * returned.
@@ -2920,6 +3267,18 @@ export class TelegramBot extends EventEmitter {
      * forwarded to a direct messages chat
      */
     direct_messages_topic_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
+     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
+     * offline. See ephemeral message sending for more details.
+     */
+    receiver_user_id?: number;
+
+    /**
+     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
+     */
+    callback_query_id?: string;
 
     sticker: InputFile | string;
     emoji?: string;
@@ -3969,7 +4328,7 @@ export class TelegramBot extends EventEmitter {
    * Edits a story previously posted by the bot on behalf of a managed business
    * account. Requires the can_manage_stories business bot right.
    * Returns Story on success.
-   * @see https://core.telegram.org/bots/api#editstory
+   * @see https://core.telegramcl.org/bots/api#editstory
    */
   async editStory(options: {
     business_connection_id: string;

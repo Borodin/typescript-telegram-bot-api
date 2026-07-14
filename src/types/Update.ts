@@ -17,6 +17,7 @@ import {
   ChatBoostRemoved,
   PaidMediaPurchased,
   ManagedBotUpdated,
+  BotSubscriptionUpdated,
 } from './';
 import { AtMostOne } from '../utils';
 
@@ -161,6 +162,11 @@ export type EventTypes = {
    * A new bot was created to be managed by the bot or token of a bot was changed
    */
   managed_bot: ManagedBotUpdated;
+
+  /**
+   * User payment subscription has changed
+   */
+  subscription: BotSubscriptionUpdated;
 };
 
 /**

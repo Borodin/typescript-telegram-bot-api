@@ -10,7 +10,4 @@ import { BackgroundTypeFill, BackgroundTypeWallpaper, BackgroundTypePattern, Bac
  * @see https://core.telegram.org/bots/api#backgroundtype
  */
 export type BackgroundType =
-  | BackgroundTypeFill
-  | BackgroundTypeWallpaper
-  | BackgroundTypePattern
-  | BackgroundTypeChatTheme;
+  BackgroundTypeFill | BackgroundTypeWallpaper | BackgroundTypePattern | BackgroundTypeChatTheme;

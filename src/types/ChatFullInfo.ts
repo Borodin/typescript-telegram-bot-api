@@ -14,6 +14,7 @@ import {
   UserRating,
   UniqueGiftColors,
   Audio,
+  Community,
 } from './';
 
 /**
@@ -298,4 +299,9 @@ export type ChatFullInfo = {
    * administrators.
    */
   guard_bot?: User;
+
+  /**
+   * Optional. The Community to which the chat belongs
+   */
+  community?: Community;
 };

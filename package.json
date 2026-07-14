@@ -1,7 +1,7 @@
 {
   "type": "commonjs",
   "name": "typescript-telegram-bot-api",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Telegram Bot API wrapper for Node.js written in TypeScript",
   "repository": "github:Borodin/typescript-telegram-bot-api",
   "main": "dist/index.js",
@@ -40,7 +40,7 @@
     "eslint-plugin-jsdoc": "^48.10.2",
     "https-proxy-agent": "^5.0.1",
     "nock": "^13.5.4",
-    "prettier": "^3.3.2",
+    "prettier": "3.9.5",
     "socks-proxy-agent": "^7.0.0",
     "ts-jest": "^29.1.4",
     "ts-node": "^10.9.2",

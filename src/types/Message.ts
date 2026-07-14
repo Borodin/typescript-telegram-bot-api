@@ -71,6 +71,8 @@ import {
   PollOptionAdded,
   PollOptionDeleted,
   LivePhoto,
+  CommunityChatAdded,
+  CommunityChatRemoved,
 } from './';
 
 /**
@@ -124,6 +126,17 @@ export type Message = {
    * Optional. Tag or custom title of the sender of the message; for supergroups only
    */
   sender_tag?: string;
+
+  /**
+   * Optional. For ephemeral messages, the user who received the message
+   */
+  receiver_user?: User;
+
+  /**
+   * Optional. For ephemeral messages, identifier of the ephemeral message inside this chat. The identifier may be
+   * reused for another ephemeral message after the message is deleted or expires.
+   */
+  ephemeral_message_id?: number;
 
   /**
    * Date the message was sent in Unix time. It is always a positive number, representing a valid date.
@@ -560,6 +573,16 @@ export type Message = {
   checklist_tasks_added?: ChecklistTasksAdded;
 
   /**
+   * Optional. Service message: chat added to a Community
+   */
+  community_chat_added?: CommunityChatAdded;
+
+  /**
+   * Optional. Service message: chat removed from a Community
+   */
+  community_chat_removed?: CommunityChatRemoved;
+
+  /**
    * Optional. Service message: the price for paid messages in the corresponding
    * direct messages chat of a channel has changed
    */
@@ -743,6 +766,8 @@ export const messageTypes = [
   'chat_background_set',
   'checklist_tasks_done',
   'checklist_tasks_added',
+  'community_chat_added',
+  'community_chat_removed',
   'direct_message_price_changed',
   'forum_topic_created',
   'forum_topic_edited',

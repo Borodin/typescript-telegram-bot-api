@@ -216,6 +216,16 @@ describe('.sendMessage()', () => {
     ).resolves.toHaveProperty('text', 'Reply message');
   });
 
+  test('should send ephemeral message', async () => {
+    await expect(
+      bot.sendMessage({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        text: 'Ephemeral message',
+      }),
+    ).resolves.toHaveProperty('ephemeral_message_id');
+  });
+
   test('should fail when chat_id is 1', async () => {
     await expect(
       bot.sendMessage({
@@ -755,6 +765,28 @@ describe('.sendRichMessage()', () => {
         chat_id: USERID,
         rich_message: {
           html: '<p>Hello <b>rich</b> world</p>',
+        },
+      }),
+    ).resolves.toHaveProperty('message_id');
+  });
+
+  test('should send rich message with blocks', async () => {
+    await expect(
+      bot.sendRichMessage({
+        chat_id: USERID,
+        rich_message: {
+          blocks: [
+            { type: 'heading', text: 'Rich message heading', size: 1 },
+            { type: 'paragraph', text: 'Hello rich blocks world' },
+            { type: 'divider' },
+            {
+              type: 'list',
+              items: [
+                { blocks: [{ type: 'paragraph', text: 'First item' }] },
+                { blocks: [{ type: 'paragraph', text: 'Second item' }], has_checkbox: true, is_checked: true },
+              ],
+            },
+          ],
         },
       }),
     ).resolves.toHaveProperty('message_id');
@@ -2068,6 +2100,91 @@ describe('.editMessageReplyMarkup()', () => {
   });
 });
 
+describe('.editEphemeralMessageText()', () => {
+  test('should edit ephemeral message text', async () => {
+    const message = await bot.sendMessage({
+      chat_id: TEST_GROUP_ID,
+      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      text: 'Ephemeral message to edit',
+    });
+
+    await expect(
+      bot.editEphemeralMessageText({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_id: message.ephemeral_message_id as number,
+        text: 'Edited ephemeral message',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.editEphemeralMessageMedia()', () => {
+  test('should edit ephemeral message media', async () => {
+    const message = await bot.sendPhoto({
+      chat_id: TEST_GROUP_ID,
+      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      photo: 'https://unsplash.it/640/480',
+    });
+
+    await expect(
+      bot.editEphemeralMessageMedia({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_id: message.ephemeral_message_id as number,
+        media: {
+          type: 'photo',
+          media: 'https://unsplash.it/480/640',
+        },
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.editEphemeralMessageCaption()', () => {
+  test('should edit ephemeral message caption', async () => {
+    const message = await bot.sendPhoto({
+      chat_id: TEST_GROUP_ID,
+      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      photo: 'https://unsplash.it/640/480',
+      caption: 'Caption',
+    });
+
+    await expect(
+      bot.editEphemeralMessageCaption({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_id: message.ephemeral_message_id as number,
+        caption: 'Edited ephemeral caption',
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.editEphemeralMessageReplyMarkup()', () => {
+  test('should edit ephemeral message reply markup', async () => {
+    const message = await bot.sendMessage({
+      chat_id: TEST_GROUP_ID,
+      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      text: 'Ephemeral message to edit reply markup',
+      reply_markup: {
+        inline_keyboard: [[{ text: 'Button', callback_data: 'button' }]],
+      },
+    });
+
+    await expect(
+      bot.editEphemeralMessageReplyMarkup({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_id: message.ephemeral_message_id as number,
+        reply_markup: {
+          inline_keyboard: [[{ text: 'Edited button', callback_data: 'edited_button' }]],
+        },
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
 describe('.stopPoll()', () => {
   test('should stop poll', async () => {
     const message = await bot.sendPoll({
@@ -2119,6 +2236,24 @@ describe('.deleteMessages()', () => {
       bot.deleteMessages({
         chat_id: USERID,
         message_ids: [message1.message_id, message2.message_id],
+      }),
+    ).resolves.toBe(true);
+  });
+});
+
+describe('.deleteEphemeralMessage()', () => {
+  test('should delete ephemeral message', async () => {
+    const message = await bot.sendMessage({
+      chat_id: TEST_GROUP_ID,
+      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      text: 'Ephemeral message to delete',
+    });
+
+    await expect(
+      bot.deleteEphemeralMessage({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_id: message.ephemeral_message_id as number,
       }),
     ).resolves.toBe(true);
   });
@@ -2253,14 +2388,15 @@ describe('.createInvoiceLink()', () => {
 });
 
 describe('.answerShippingQuery()', () => {
-  test('should throw an error for outdated or invalid query ID on error response', async () => {
+  test('should throw an error for missing shipping options on error response', async () => {
+    // Since Bot API 10.2 the server validates shipping options before the query ID, even when ok is false
     await expect(
       bot.answerShippingQuery({
         shipping_query_id: 'QUERY_ID',
         ok: false,
         error_message: 'Error message',
       }),
-    ).rejects.toThrow('400 Bad Request: query is too old and response timeout expired or query ID is invalid');
+    ).rejects.toThrow('400 Bad Request: there must be at least one shipping option');
   });
 
   test('should throw an error for outdated or invalid query ID on success response', async () => {

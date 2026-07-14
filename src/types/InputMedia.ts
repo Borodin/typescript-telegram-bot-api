@@ -19,9 +19,4 @@ import {
  * @see https://core.telegram.org/bots/api#inputmedia
  */
 export type InputMedia =
-  | InputMediaAnimation
-  | InputMediaDocument
-  | InputMediaAudio
-  | InputMediaLivePhoto
-  | InputMediaPhoto
-  | InputMediaVideo;
+  InputMediaAnimation | InputMediaDocument | InputMediaAudio | InputMediaLivePhoto | InputMediaPhoto | InputMediaVideo;

@@ -7,27 +7,37 @@ import { MessageEntity, ParseMode } from './index';
  */
 export type ReplyParameters = {
   /**
-   * Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified
+   * Optional. Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is
+   * specified. Required if ephemeral_message_id isn't specified.
    */
-  message_id: number;
+  message_id?: number;
 
   /**
    * Optional. If the message to be replied to is from a different chat, unique identifier for the chat or username of
-   * the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account.
+   * the bot, supergroup or channel in the format @username. Not supported for messages sent on behalf of a business
+   * account, messages from channel direct messages chats and ephemeral messages.
    */
   chat_id?: number | string;
 
   /**
+   * Optional. Identifier of the incoming ephemeral message that will be replied to in the current chat. A reply to an
+   * ephemeral message must itself be an ephemeral message. An ephemeral message may only be replied to within
+   * 15 seconds of being sent. Required if message_id isn't specified.
+   */
+  ephemeral_message_id?: number;
+
+  /**
    * Optional. Pass True if the message should be sent even if the specified message to be replied to is not found.
-   * Always False for replies in another chat or forum topic. Always True for messages sent on behalf of a business
-   * account.
+   * Always False for replies in another chat or forum topic, and sent ephemeral messages. Always True for messages
+   * sent on behalf of a business account.
    */
   allow_sending_without_reply?: boolean;
 
   /**
    * Optional. Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be
-   * an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and
-   * custom_emoji entities. The message will fail to send if the quote isn't found in the original message.
+   * an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler,
+   * custom_emoji, and date_time entities. The message will fail to send if the quote isn't found in the original
+   * message. Ignored for ephemeral messages.
    */
   quote?: string;
 

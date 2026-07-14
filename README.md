@@ -4,7 +4,7 @@
 [![npm](https://img.shields.io/npm/dt/typescript-telegram-bot-api)](https://www.npmjs.com/package/typescript-telegram-bot-api)
 [![codecov](https://codecov.io/github/Borodin/typescript-telegram-bot-api/graph/badge.svg?token=509N5AZDTV)](https://codecov.io/github/Borodin/typescript-telegram-bot-api)
 [![codesandbox](https://img.shields.io/badge/Open_in-sandbox-eaff96)](https://codesandbox.io/p/sandbox/interesting-wave-qgspfs)
-[![GitHub](https://img.shields.io/badge/Bot_API-v10.1-0088cc)](https://core.telegram.org/bots/api#june-11-2026)
+[![GitHub](https://img.shields.io/badge/Bot_API-v10.2-0088cc)](https://core.telegram.org/bots/api#july-14-2026)
 
 
 This is a TypeScript wrapper for the [Telegram Bot API](https://core.telegram.org/bots/api) Node.js and browsers. It allows you to easily interact with the Telegram Bot API using TypeScript.

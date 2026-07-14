@@ -8,6 +8,4 @@ import { RevenueWithdrawalStateFailed } from './RevenueWithdrawalStateFailed';
  * @see https://core.telegram.org/bots/api#revenuewithdrawalstate
  */
 export type RevenueWithdrawalState =
-  | RevenueWithdrawalStatePending
-  | RevenueWithdrawalStateSucceeded
-  | RevenueWithdrawalStateFailed;
+  RevenueWithdrawalStatePending | RevenueWithdrawalStateSucceeded | RevenueWithdrawalStateFailed;

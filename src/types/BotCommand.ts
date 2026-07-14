@@ -13,4 +13,10 @@ export type BotCommand = {
    * Description of the command; 1-256 characters.
    */
   description: string;
+
+  /**
+   * Optional. True, if the command sends an ephemeral message, which can be seen only by the sender of the message and
+   * the bot
+   */
+  is_ephemeral?: boolean;
 };

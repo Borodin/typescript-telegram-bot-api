@@ -20,11 +20,7 @@ export type TransactionPartnerUser = {
    * - "business_account_transfer" for direct transfers from managed business accounts
    */
   transaction_type:
-    | 'invoice_payment'
-    | 'paid_media_payment'
-    | 'gift_purchase'
-    | 'premium_purchase'
-    | 'business_account_transfer';
+    'invoice_payment' | 'paid_media_payment' | 'gift_purchase' | 'premium_purchase' | 'business_account_transfer';
 
   /**
    * Information about the user
