@@ -27,6 +27,11 @@ export type InputRichBlockTable = {
   is_striped?: true;
 
   /**
+   * Optional. Pass True if table cells must have smaller indents
+   */
+  is_compact?: true;
+
+  /**
    * Optional. Caption of the table
    */
   caption?: RichText;

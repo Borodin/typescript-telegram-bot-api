@@ -72,6 +72,7 @@ import {
   PollOptionDeleted,
   LivePhoto,
   CommunityChatAdded,
+  CommunityChatJoined,
   CommunityChatRemoved,
 } from './';
 
@@ -578,6 +579,11 @@ export type Message = {
   community_chat_added?: CommunityChatAdded;
 
   /**
+   * Optional. Service message: chat was joined by a user from a Community
+   */
+  community_chat_joined?: CommunityChatJoined;
+
+  /**
    * Optional. Service message: chat removed from a Community
    */
   community_chat_removed?: CommunityChatRemoved;
@@ -767,6 +773,7 @@ export const messageTypes = [
   'checklist_tasks_done',
   'checklist_tasks_added',
   'community_chat_added',
+  'community_chat_joined',
   'community_chat_removed',
   'direct_message_price_changed',
   'forum_topic_created',

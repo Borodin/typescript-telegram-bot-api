@@ -26,7 +26,7 @@ export type InputRichMessage = AtMostOne<{
 }> & {
   /**
    * Optional. List of media that are specified in the markdown or html fields using tg://photo?id=, tg://video?id=,
-   * and tg://audio?id= links
+   * tg://document?id=, and tg://audio?id= links
    */
   media?: InputRichMessageMedia[];
 

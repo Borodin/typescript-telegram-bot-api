@@ -28,6 +28,14 @@ describe('Types', () => {
       poll.id.toUpperCase();
     });
 
+    bot.on('stopped_message_generation', (messageGenerationStopped) => {
+      messageGenerationStopped.draft_id.toFixed();
+    });
+
+    bot.on('message:community_chat_joined', (message) => {
+      message.community_chat_joined.community.name.toUpperCase();
+    });
+
     const title: MethodParameters<'sendInvoice'>['title'] = 'title';
     title.toUpperCase();
 

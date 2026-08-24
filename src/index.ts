@@ -83,6 +83,7 @@ import {
   StoryArea,
   InputChecklist,
   SuggestedPostParameters,
+  EphemeralMessageParameters,
 } from './types/';
 import * as TelegramTypes from './types/';
 import { ExactlyOne } from './utils';
@@ -465,16 +466,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     /**
      * Text of the message to be sent, 1-4096 characters after entities parsing
@@ -538,6 +532,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendMessage', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
@@ -725,16 +720,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     photo: InputFile | string;
     caption?: string;
@@ -764,6 +752,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendPhoto', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
@@ -791,16 +780,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     audio: InputFile | string;
     caption?: string;
@@ -832,6 +814,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendAudio', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
@@ -855,16 +838,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     document: InputFile | string;
     thumbnail?: InputFile | string;
@@ -894,6 +870,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendDocument', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
@@ -919,16 +896,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     video: InputFile | string;
     duration?: number;
@@ -965,6 +935,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVideo', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
@@ -990,16 +961,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     animation: InputFile | string;
     duration?: number;
@@ -1033,6 +997,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendAnimation', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
@@ -1059,16 +1024,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     voice: InputFile | string;
     caption?: string;
@@ -1097,6 +1055,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVoice', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
@@ -1121,16 +1080,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     video_note: InputFile | string;
     duration?: number;
@@ -1158,6 +1110,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVideoNote', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
@@ -1231,16 +1184,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     /**
      * Live photo video to send. The video must be no longer than 10 seconds and must not exceed 10 MB in size. Pass a
@@ -1283,6 +1229,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendLivePhoto', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       caption_entities: new JSONSerialized(options.caption_entities),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
@@ -1343,16 +1290,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     latitude: number;
     longitude: number;
@@ -1382,6 +1322,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendLocation', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
@@ -1404,16 +1345,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     latitude: number;
     longitude: number;
@@ -1445,6 +1379,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendVenue', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
@@ -1466,16 +1401,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     phone_number: string;
     first_name: string;
@@ -1503,6 +1431,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendContact', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });
@@ -1675,6 +1604,18 @@ export class TelegramBot extends EventEmitter {
      * parse_mode
      */
     entities?: MessageEntity[];
+
+    /**
+     * Pass True to show the user a button to stop further drafts. The bot will receive an Update
+     * "stopped_message_generation" if the user presses the button.
+     */
+    can_stop?: boolean;
+
+    /**
+     * Pass True to keep the draft in the chat when the button is pressed. The draft will still disappear after a short
+     * time or if the bot sends a message. To fully preserve the partial draft, the bot should send it as a new message.
+     */
+    keep_on_stop?: boolean;
   }): Promise<true> {
     return await this.callApi('sendMessageDraft', {
       ...options,
@@ -1711,6 +1652,11 @@ export class TelegramBot extends EventEmitter {
      * direct messages chat
      */
     direct_messages_topic_id?: number;
+
+    /**
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
+     */
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     /**
      * The message to be sent
@@ -1758,6 +1704,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendRichMessage', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       rich_message: new JSONSerialized(options.rich_message),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
       reply_parameters: new JSONSerialized(options.reply_parameters),
@@ -1790,9 +1737,22 @@ export class TelegramBot extends EventEmitter {
     draft_id: number;
 
     /**
-     * The partial message to be streamed
+     * The partial message to be streamed. Direct upload of new files and explicit upload of files by a URL isn't
+     * supported.
      */
     rich_message: InputRichMessage;
+
+    /**
+     * Pass True to show the user a button to stop further drafts. The bot will receive an Update
+     * "stopped_message_generation" if the user presses the button.
+     */
+    can_stop?: boolean;
+
+    /**
+     * Pass True to keep the draft in the chat when the button is pressed. The draft will still disappear after a short
+     * time or if the bot sends a message. To fully preserve the partial draft, the bot should send it as a new message.
+     */
+    keep_on_stop?: boolean;
   }): Promise<true> {
     return await this.callApi('sendRichMessageDraft', {
       ...options,
@@ -2055,6 +2015,11 @@ export class TelegramBot extends EventEmitter {
      * Pass True if the administrator can edit the tags of regular members; for groups and supergroups only
      */
     can_manage_tags?: boolean;
+
+    /**
+     * Pass True if the administrator can manage chat welcome messages or directly send them in the case of bots
+     */
+    can_send_welcome_messages?: boolean;
   }): Promise<true> {
     return await this.callApi('promoteChatMember', options);
   }
@@ -3003,8 +2968,8 @@ export class TelegramBot extends EventEmitter {
 
   /**
    * ## editEphemeralMessageText
-   * Use this method to edit an ephemeral text message. Note that it is not guaranteed that the user will receive the
-   * message edit event, especially if they are offline. On success, True is returned.
+   * Use this method to edit an ephemeral text or rich message. Note that it is not guaranteed that the user will
+   * receive the message edit event, especially if they are offline. On success, True is returned.
    * @see https://core.telegram.org/bots/api#editephemeralmessagetext
    */
   async editEphemeralMessageText(options: {
@@ -3024,9 +2989,9 @@ export class TelegramBot extends EventEmitter {
     ephemeral_message_id: number;
 
     /**
-     * New text of the message, 1-4096 characters after entity parsing
+     * New text of the message, 1-4096 characters after entity parsing; required if rich_message isn't specified
      */
-    text: string;
+    text?: string;
 
     /**
      * Mode for parsing entities in the message text. See formatting options for more details.
@@ -3038,6 +3003,11 @@ export class TelegramBot extends EventEmitter {
      * parse_mode
      */
     entities?: MessageEntity[];
+
+    /**
+     * New rich content of the message; required if text isn't specified
+     */
+    rich_message?: InputRichMessage;
 
     /**
      * Link preview generation options for the message
@@ -3052,6 +3022,7 @@ export class TelegramBot extends EventEmitter {
     return await this.callApi('editEphemeralMessageText', {
       ...options,
       entities: new JSONSerialized(options.entities),
+      rich_message: new JSONSerialized(options.rich_message),
       reply_markup: new JSONSerialized(options.reply_markup),
     });
   }
@@ -3079,8 +3050,7 @@ export class TelegramBot extends EventEmitter {
     ephemeral_message_id: number;
 
     /**
-     * A JSON-serialized object for the new media content of the message. A new file can't be uploaded; use a
-     * previously uploaded file via its file_id or specify a URL.
+     * A JSON-serialized object for the new media content of the message
      */
     media: InputMedia;
 
@@ -3133,6 +3103,12 @@ export class TelegramBot extends EventEmitter {
      * parse_mode
      */
     caption_entities?: MessageEntity[];
+
+    /**
+     * Pass True if the caption must be shown above the message media. Supported only for animation, photo and video
+     * messages.
+     */
+    show_caption_above_media?: boolean;
 
     /**
      * A JSON-serialized object for an inline keyboard
@@ -3269,16 +3245,9 @@ export class TelegramBot extends EventEmitter {
     direct_messages_topic_id?: number;
 
     /**
-     * For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and
-     * supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are
-     * offline. See ephemeral message sending for more details.
+     * A JSON-serialized object containing the parameters of the ephemeral message to send
      */
-    receiver_user_id?: number;
-
-    /**
-     * For outgoing ephemeral messages, identifier of the callback query which triggerred the message if any
-     */
-    callback_query_id?: string;
+    ephemeral_message_parameters?: EphemeralMessageParameters;
 
     sticker: InputFile | string;
     emoji?: string;
@@ -3304,6 +3273,7 @@ export class TelegramBot extends EventEmitter {
   }): Promise<Message> {
     return await this.callApi('sendSticker', {
       ...options,
+      ephemeral_message_parameters: new JSONSerialized(options.ephemeral_message_parameters),
       reply_markup: new JSONSerialized(options.reply_markup),
       suggested_post_parameters: new JSONSerialized(options.suggested_post_parameters),
     });

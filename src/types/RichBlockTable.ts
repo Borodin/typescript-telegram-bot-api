@@ -27,6 +27,11 @@ export type RichBlockTable = {
   is_striped?: true;
 
   /**
+   * Optional. True, if table cells have smaller indents
+   */
+  is_compact?: true;
+
+  /**
    * Optional. Caption of the table
    */
   caption?: RichText;

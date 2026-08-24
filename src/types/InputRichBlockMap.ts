@@ -18,19 +18,19 @@ export type InputRichBlockMap = {
   location: Location;
 
   /**
-   * Map zoom level; 0-24
+   * Optional. Map zoom level; 0-24
    */
-  zoom: number;
+  zoom?: number;
 
   /**
-   * Map width; 0-10000
+   * Optional. Map width; 0-10000
    */
-  width: number;
+  width?: number;
 
   /**
-   * Map height; 0-10000
+   * Optional. Map height; 0-10000
    */
-  height: number;
+  height?: number;
 
   /**
    * Optional. Caption of the block

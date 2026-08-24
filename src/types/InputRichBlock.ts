@@ -8,14 +8,17 @@ import {
   InputRichBlockAnchor,
   InputRichBlockList,
   InputRichBlockBlockQuotation,
+  InputRichBlockExpandableBlockQuotation,
   InputRichBlockPullQuotation,
   InputRichBlockCollage,
   InputRichBlockSlideshow,
   InputRichBlockTable,
   InputRichBlockDetails,
   InputRichBlockMap,
+  InputRichBlockButtons,
   InputRichBlockAnimation,
   InputRichBlockAudio,
+  InputRichBlockDocument,
   InputRichBlockPhoto,
   InputRichBlockVideo,
   InputRichBlockVoiceNote,
@@ -35,14 +38,17 @@ import {
  * - InputRichBlockAnchor
  * - InputRichBlockList
  * - InputRichBlockBlockQuotation
+ * - InputRichBlockExpandableBlockQuotation
  * - InputRichBlockPullQuotation
  * - InputRichBlockCollage
  * - InputRichBlockSlideshow
  * - InputRichBlockTable
  * - InputRichBlockDetails
  * - InputRichBlockMap
+ * - InputRichBlockButtons
  * - InputRichBlockAnimation
  * - InputRichBlockAudio
+ * - InputRichBlockDocument
  * - InputRichBlockPhoto
  * - InputRichBlockVideo
  * - InputRichBlockVoiceNote
@@ -59,14 +65,17 @@ export type InputRichBlock =
   | InputRichBlockAnchor
   | InputRichBlockList
   | InputRichBlockBlockQuotation
+  | InputRichBlockExpandableBlockQuotation
   | InputRichBlockPullQuotation
   | InputRichBlockCollage
   | InputRichBlockSlideshow
   | InputRichBlockTable
   | InputRichBlockDetails
   | InputRichBlockMap
+  | InputRichBlockButtons
   | InputRichBlockAnimation
   | InputRichBlockAudio
+  | InputRichBlockDocument
   | InputRichBlockPhoto
   | InputRichBlockVideo
   | InputRichBlockVoiceNote

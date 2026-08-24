@@ -95,4 +95,9 @@ export type ChatAdministratorRights = {
    * omitted defaults to the value of can_pin_messages.
    */
   can_manage_tags?: boolean;
+
+  /**
+   * True, if the administrator can manage chat welcome messages or directly send them in the case of bots
+   */
+  can_send_welcome_messages: boolean;
 };

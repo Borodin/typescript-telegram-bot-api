@@ -1,4 +1,4 @@
-import { CallbackGame, WebAppInfo, LoginUrl, SwitchInlineQueryChosenChat, CopyTextButton } from './';
+import { CallbackGame, WebAppInfo, LoginUrl, SwitchInlineQueryChosenChat, CopyTextButton, DisabledButton } from './';
 
 /**
  * ## InlineKeyboardButton
@@ -45,7 +45,7 @@ export type InlineKeyboardButton = {
 
   /**
    * Optional. An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram
-   * Login Widget.
+   * Login Widget. Not supported for ephemeral messages.
    */
   login_url?: LoginUrl;
 
@@ -93,4 +93,9 @@ export type InlineKeyboardButton = {
    * messages.
    */
   pay?: boolean;
+
+  /**
+   * Optional. If set, then the button is disabled and does nothing
+   */
+  disabled?: DisabledButton;
 };

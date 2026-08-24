@@ -220,10 +220,37 @@ describe('.sendMessage()', () => {
     await expect(
       bot.sendMessage({
         chat_id: TEST_GROUP_ID,
-        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
         text: 'Ephemeral message',
       }),
     ).resolves.toHaveProperty('ephemeral_message_id');
+  });
+
+  test('should send message with disabled button and force_reply', async () => {
+    await expect(
+      bot.sendMessage({
+        chat_id: USERID,
+        text: 'Message with disabled button',
+        reply_markup: {
+          inline_keyboard: [[{ text: 'Disabled button', disabled: {} }]],
+          force_reply: true,
+        },
+      }),
+    ).resolves.toHaveProperty('reply_markup');
+  });
+
+  test('should send message with reply keyboard and force_reply', async () => {
+    await expect(
+      bot.sendMessage({
+        chat_id: USERID,
+        text: 'Message with reply keyboard',
+        reply_markup: {
+          keyboard: [[{ text: 'Reply option' }]],
+          one_time_keyboard: true,
+          force_reply: true,
+        },
+      }),
+    ).resolves.toHaveProperty('text', 'Message with reply keyboard');
   });
 
   test('should fail when chat_id is 1', async () => {
@@ -756,6 +783,17 @@ describe('.sendMessageDraft()', () => {
 
     expect(result).toBe(true);
   });
+
+  test('should send message draft with stop button', async () => {
+    const result = await bot.sendMessageDraft({
+      chat_id: USERID,
+      draft_id: 3,
+      text: 'Draft message with stop button',
+      can_stop: true,
+      keep_on_stop: true,
+    });
+    expect(result).toBe(true);
+  });
 });
 
 describe('.sendRichMessage()', () => {
@@ -791,6 +829,91 @@ describe('.sendRichMessage()', () => {
       }),
     ).resolves.toHaveProperty('message_id');
   });
+
+  test('should send rich message with expandable blockquote, compact table and buttons', async () => {
+    await expect(
+      bot.sendRichMessage({
+        chat_id: USERID,
+        rich_message: {
+          blocks: [
+            { type: 'expandable_blockquote', text: 'Expandable quote', credit: 'Credit' },
+            {
+              type: 'table',
+              cells: [
+                [{ text: 'Header', is_header: true, align: 'center', valign: 'middle' }],
+                [{ text: 'Cell', align: 'left', valign: 'top' }],
+              ],
+              is_compact: true,
+            },
+            {
+              type: 'buttons',
+              buttons: [
+                { text: 'Open', url: 'https://telegram.org' },
+                { text: 'Callback', callback_data: 'rich_button', style: 'primary' },
+              ],
+              align: 'center',
+            },
+          ],
+        },
+      }),
+    ).resolves.toHaveProperty('message_id');
+  });
+
+  test('should send ephemeral rich message', async () => {
+    await expect(
+      bot.sendRichMessage({
+        chat_id: TEST_GROUP_ID,
+        ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
+        rich_message: {
+          html: '<p>Ephemeral <b>rich</b> message</p>',
+        },
+      }),
+    ).resolves.toHaveProperty('ephemeral_message_id');
+  });
+
+  test('should send rich message with document block', async () => {
+    await expect(
+      bot.sendRichMessage({
+        chat_id: USERID,
+        rich_message: {
+          blocks: [
+            {
+              type: 'document',
+              document: { type: 'document', media: createReadStream('tests/data/photo.jpg') },
+              caption: { text: 'Attached document' },
+            },
+          ],
+        },
+      }),
+    ).resolves.toHaveProperty('message_id');
+  });
+
+  test('should send rich message with inline text button', async () => {
+    await expect(
+      bot.sendRichMessage({
+        chat_id: USERID,
+        rich_message: {
+          blocks: [
+            {
+              type: 'paragraph',
+              text: ['Press this: ', { type: 'button', button: { text: 'Inline button', callback_data: 'text_btn' } }],
+            },
+          ],
+        },
+      }),
+    ).resolves.toHaveProperty('message_id');
+  });
+
+  test('should send rich message with map block without optional dimensions', async () => {
+    await expect(
+      bot.sendRichMessage({
+        chat_id: USERID,
+        rich_message: {
+          blocks: [{ type: 'map', location: { latitude: 40.758, longitude: -73.9855 } }],
+        },
+      }),
+    ).resolves.toHaveProperty('message_id');
+  });
 });
 
 describe('.sendRichMessageDraft()', () => {
@@ -802,6 +925,20 @@ describe('.sendRichMessageDraft()', () => {
         rich_message: {
           html: '<p>Streaming <i>partial</i> message...</p>',
         },
+      }),
+    ).resolves.toBe(true);
+  });
+
+  test('should send rich message draft with stop button', async () => {
+    await expect(
+      bot.sendRichMessageDraft({
+        chat_id: USERID,
+        draft_id: 2,
+        rich_message: {
+          html: '<p>Streaming with stop button...</p>',
+        },
+        can_stop: true,
+        keep_on_stop: true,
       }),
     ).resolves.toBe(true);
   });
@@ -1133,6 +1270,21 @@ describe('.promoteChatMember()', () => {
       }),
     ).resolves.toBe(true);
   });
+
+  test('should promote chat member with welcome messages right', async () => {
+    try {
+      const result = await bot.promoteChatMember({
+        chat_id: TEST_GROUP_ID,
+        user_id: TEST_GROUP_MEMBER_ID,
+        is_anonymous: true,
+        can_send_welcome_messages: true,
+      });
+      expect(result).toBe(true);
+    } catch (error) {
+      expect(error).toBeInstanceOf(TelegramError);
+      expect((error as TelegramError).message).toMatch('Bad Request');
+    }
+  });
 });
 
 describe('.SetChatAdministratorCustomTitle()', () => {
@@ -1191,8 +1343,8 @@ describe('.unbanChatSenderChat()', () => {
 
 describe('.setChatPermissions()', () => {
   test('should set chat permissions', async () => {
-    await expect(
-      bot.setChatPermissions({
+    try {
+      const result = await bot.setChatPermissions({
         chat_id: TEST_GROUP_ID,
         permissions: {
           can_send_messages: true,
@@ -1210,8 +1362,12 @@ describe('.setChatPermissions()', () => {
           can_pin_messages: true,
           can_manage_topics: true,
         },
-      }),
-    ).resolves.toBe(true);
+      });
+      expect(result).toBe(true);
+    } catch (error) {
+      expect(error).toBeInstanceOf(TelegramError);
+      expect((error as TelegramError).message).toMatch('400 Bad Request: CHAT_NOT_MODIFIED');
+    }
   });
 });
 
@@ -1901,6 +2057,7 @@ describe('.setMyDefaultAdministratorRights()', () => {
           can_post_stories: true,
           can_edit_stories: true,
           can_delete_stories: true,
+          can_send_welcome_messages: true,
         },
       }),
     ).resolves.toBe(true);
@@ -2104,7 +2261,7 @@ describe('.editEphemeralMessageText()', () => {
   test('should edit ephemeral message text', async () => {
     const message = await bot.sendMessage({
       chat_id: TEST_GROUP_ID,
-      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
       text: 'Ephemeral message to edit',
     });
 
@@ -2117,13 +2274,32 @@ describe('.editEphemeralMessageText()', () => {
       }),
     ).resolves.toBe(true);
   });
+
+  test('should edit ephemeral message with rich message', async () => {
+    const message = await bot.sendMessage({
+      chat_id: TEST_GROUP_ID,
+      ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
+      text: 'Ephemeral message to edit with rich content',
+    });
+
+    await expect(
+      bot.editEphemeralMessageText({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_id: message.ephemeral_message_id as number,
+        rich_message: {
+          html: '<p>Edited <b>rich</b> ephemeral message</p>',
+        },
+      }),
+    ).resolves.toBe(true);
+  });
 });
 
 describe('.editEphemeralMessageMedia()', () => {
   test('should edit ephemeral message media', async () => {
     const message = await bot.sendPhoto({
       chat_id: TEST_GROUP_ID,
-      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
       photo: 'https://unsplash.it/640/480',
     });
 
@@ -2135,6 +2311,28 @@ describe('.editEphemeralMessageMedia()', () => {
         media: {
           type: 'photo',
           media: 'https://unsplash.it/480/640',
+          caption: 'Edited media',
+        },
+      }),
+    ).resolves.toBe(true);
+  });
+
+  test('should edit ephemeral message media with uploaded file', async () => {
+    const message = await bot.sendPhoto({
+      chat_id: TEST_GROUP_ID,
+      ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
+      photo: 'https://unsplash.it/640/480',
+    });
+
+    await expect(
+      bot.editEphemeralMessageMedia({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_id: message.ephemeral_message_id as number,
+        media: {
+          type: 'photo',
+          media: createReadStream('tests/data/photo.jpg'),
+          caption: 'Uploaded media',
         },
       }),
     ).resolves.toBe(true);
@@ -2145,7 +2343,7 @@ describe('.editEphemeralMessageCaption()', () => {
   test('should edit ephemeral message caption', async () => {
     const message = await bot.sendPhoto({
       chat_id: TEST_GROUP_ID,
-      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
       photo: 'https://unsplash.it/640/480',
       caption: 'Caption',
     });
@@ -2159,13 +2357,32 @@ describe('.editEphemeralMessageCaption()', () => {
       }),
     ).resolves.toBe(true);
   });
+
+  test('should edit ephemeral message caption shown above media', async () => {
+    const message = await bot.sendPhoto({
+      chat_id: TEST_GROUP_ID,
+      ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
+      photo: 'https://unsplash.it/640/480',
+      caption: 'Caption',
+    });
+
+    await expect(
+      bot.editEphemeralMessageCaption({
+        chat_id: TEST_GROUP_ID,
+        receiver_user_id: TEST_GROUP_MEMBER_ID,
+        ephemeral_message_id: message.ephemeral_message_id as number,
+        caption: 'Edited caption above media',
+        show_caption_above_media: true,
+      }),
+    ).resolves.toBe(true);
+  });
 });
 
 describe('.editEphemeralMessageReplyMarkup()', () => {
   test('should edit ephemeral message reply markup', async () => {
     const message = await bot.sendMessage({
       chat_id: TEST_GROUP_ID,
-      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
       text: 'Ephemeral message to edit reply markup',
       reply_markup: {
         inline_keyboard: [[{ text: 'Button', callback_data: 'button' }]],
@@ -2245,7 +2462,7 @@ describe('.deleteEphemeralMessage()', () => {
   test('should delete ephemeral message', async () => {
     const message = await bot.sendMessage({
       chat_id: TEST_GROUP_ID,
-      receiver_user_id: TEST_GROUP_MEMBER_ID,
+      ephemeral_message_parameters: { receiver_user_id: TEST_GROUP_MEMBER_ID },
       text: 'Ephemeral message to delete',
     });
 

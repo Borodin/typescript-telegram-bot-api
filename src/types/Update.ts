@@ -18,6 +18,7 @@ import {
   PaidMediaPurchased,
   ManagedBotUpdated,
   BotSubscriptionUpdated,
+  MessageGenerationStopped,
 } from './';
 import { AtMostOne } from '../utils';
 
@@ -167,6 +168,11 @@ export type EventTypes = {
    * User payment subscription has changed
    */
   subscription: BotSubscriptionUpdated;
+
+  /**
+   * A user asked the bot to stop the generation of a message
+   */
+  stopped_message_generation: MessageGenerationStopped;
 };
 
 /**

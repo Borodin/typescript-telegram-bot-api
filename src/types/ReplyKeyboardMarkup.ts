@@ -46,4 +46,10 @@ export type ReplyKeyboardMarkup = {
    * new language. Other users in the group don't see the keyboard.
    */
   selective?: boolean;
+
+  /**
+   * Optional. Pass True if the reply interface must be shown to the user, as if they had manually selected the bot's
+   * message and tapped 'Reply'
+   */
+  force_reply?: boolean;
 };

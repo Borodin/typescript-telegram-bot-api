@@ -20,6 +20,7 @@ import {
   RichTextHashtag,
   RichTextCashtag,
   RichTextBotCommand,
+  RichTextButton,
   RichTextAnchor,
   RichTextAnchorLink,
   RichTextReference,
@@ -51,6 +52,7 @@ import {
  * - RichTextHashtag
  * - RichTextCashtag
  * - RichTextBotCommand
+ * - RichTextButton
  * - RichTextAnchor
  * - RichTextAnchorLink
  * - RichTextReference
@@ -81,6 +83,7 @@ export type RichText =
   | RichTextHashtag
   | RichTextCashtag
   | RichTextBotCommand
+  | RichTextButton
   | RichTextAnchor
   | RichTextAnchorLink
   | RichTextReference

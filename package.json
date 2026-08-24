@@ -1,7 +1,7 @@
 {
   "type": "commonjs",
   "name": "typescript-telegram-bot-api",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Telegram Bot API wrapper for Node.js written in TypeScript",
   "repository": "github:Borodin/typescript-telegram-bot-api",
   "main": "dist/index.js",
@@ -53,6 +53,21 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": {
+            "baseUrl": ".",
+            "paths": {
+              "axios": [
+                "node_modules/axios/index.d.ts"
+              ]
+            }
+          }
+        }
+      ]
+    },
     "testTimeout": 60000,
     "collectCoverage": true,
     "coverageReporters": [

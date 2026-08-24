@@ -1,4 +1,4 @@
-import { UniqueGift } from './';
+import { MessageEntity, UniqueGift } from './';
 
 /**
  * ## UniqueGiftInfo
@@ -17,6 +17,22 @@ export type UniqueGiftInfo = {
    * upgrades purchased after the gift was sent, or "offer" for gifts bought or sold through gift purchase offers
    */
   origin: string;
+
+  /**
+   * Optional. Text of the message that was added to the gift
+   */
+  text?: string;
+
+  /**
+   * Optional. Special entities that appear in the text
+   */
+  entities?: MessageEntity[];
+
+  /**
+   * Optional. True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able
+   * to see them
+   */
+  is_private?: true;
 
   /**
    * Optional. For gifts bought from other users, the currency in which the payment for the gift was done.
